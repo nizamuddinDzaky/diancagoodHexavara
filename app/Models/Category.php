@@ -20,8 +20,8 @@ class Category extends Model
         $this->attributes['slug'] = Str::slug($value);
     }
 
-    public function product()
+    public function subcategory()
     {
-        return $this->hasMany(Product::class);
+        return $this->hasMany(Subcategory::class);
     }
 }
