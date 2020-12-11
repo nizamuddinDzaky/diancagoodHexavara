@@ -165,6 +165,13 @@
                 "security",
                 "symmetric key cryptography"
             ],
+<<<<<<< Updated upstream
+=======
+            "support": {
+                "issues": "https://github.com/defuse/php-encryption/issues",
+                "source": "https://github.com/defuse/php-encryption/tree/master"
+            },
+>>>>>>> Stashed changes
             "time": "2018-07-24T23:27:56+00:00"
         },
         {
@@ -550,6 +557,13 @@
                 "jwt",
                 "php"
             ],
+<<<<<<< Updated upstream
+=======
+            "support": {
+                "issues": "https://github.com/firebase/php-jwt/issues",
+                "source": "https://github.com/firebase/php-jwt/tree/master"
+            },
+>>>>>>> Stashed changes
             "time": "2020-03-25T18:49:23+00:00"
         },
         {
@@ -1107,6 +1121,13 @@
                 "oauth",
                 "passport"
             ],
+<<<<<<< Updated upstream
+=======
+            "support": {
+                "issues": "https://github.com/laravel/passport/issues",
+                "source": "https://github.com/laravel/passport"
+            },
+>>>>>>> Stashed changes
             "time": "2020-11-26T07:57:30+00:00"
         },
         {
@@ -1174,6 +1195,7 @@
             "time": "2020-10-29T13:07:12+00:00"
         },
         {
+<<<<<<< Updated upstream
             "name": "lcobucci/jwt",
             "version": "3.4.1",
             "source": {
@@ -1185,11 +1207,86 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/lcobucci/jwt/zipball/958a9873a63b0244a72f6e354ccc86019ee674a5",
                 "reference": "958a9873a63b0244a72f6e354ccc86019ee674a5",
+=======
+            "name": "lcobucci/clock",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/lcobucci/clock.git",
+                "reference": "353d83fe2e6ae95745b16b3d911813df6a05bfb3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/lcobucci/clock/zipball/353d83fe2e6ae95745b16b3d911813df6a05bfb3",
+                "reference": "353d83fe2e6ae95745b16b3d911813df6a05bfb3",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.4 || ^8.0"
+            },
+            "require-dev": {
+                "infection/infection": "^0.17",
+                "lcobucci/coding-standard": "^6.0",
+                "phpstan/extension-installer": "^1.0",
+                "phpstan/phpstan": "^0.12",
+                "phpstan/phpstan-deprecation-rules": "^0.12",
+                "phpstan/phpstan-phpunit": "^0.12",
+                "phpstan/phpstan-strict-rules": "^0.12",
+                "phpunit/php-code-coverage": "9.1.4",
+                "phpunit/phpunit": "9.3.7"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Lcobucci\\Clock\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Luís Cobucci",
+                    "email": "lcobucci@gmail.com"
+                }
+            ],
+            "description": "Yet another clock abstraction",
+            "support": {
+                "issues": "https://github.com/lcobucci/clock/issues",
+                "source": "https://github.com/lcobucci/clock/tree/2.0.x"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/lcobucci",
+                    "type": "github"
+                },
+                {
+                    "url": "https://www.patreon.com/lcobucci",
+                    "type": "patreon"
+                }
+            ],
+            "time": "2020-08-27T18:56:02+00:00"
+        },
+        {
+            "name": "lcobucci/jwt",
+            "version": "4.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/lcobucci/jwt.git",
+                "reference": "6d8665ccd924dc076a9b65d1ea8abe21d68f6958"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/lcobucci/jwt/zipball/6d8665ccd924dc076a9b65d1ea8abe21d68f6958",
+                "reference": "6d8665ccd924dc076a9b65d1ea8abe21d68f6958",
+>>>>>>> Stashed changes
                 "shasum": ""
             },
             "require": {
                 "ext-mbstring": "*",
                 "ext-openssl": "*",
+<<<<<<< Updated upstream
                 "php": "^5.6 || ^7.0"
             },
             "require-dev": {
@@ -1201,22 +1298,47 @@
             },
             "suggest": {
                 "lcobucci/clock": "*"
+=======
+                "lcobucci/clock": "^2.0",
+                "php": "^7.4 || ^8.0"
+            },
+            "require-dev": {
+                "infection/infection": "^0.20",
+                "lcobucci/coding-standard": "^6.0",
+                "mikey179/vfsstream": "^1.6",
+                "phpbench/phpbench": "^0.17",
+                "phpstan/extension-installer": "^1.0",
+                "phpstan/phpstan": "^0.12",
+                "phpstan/phpstan-deprecation-rules": "^0.12",
+                "phpstan/phpstan-phpunit": "^0.12",
+                "phpstan/phpstan-strict-rules": "^0.12",
+                "phpunit/php-invoker": "^3.1",
+                "phpunit/phpunit": "^9.4"
+>>>>>>> Stashed changes
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
+<<<<<<< Updated upstream
                     "dev-master": "3.1-dev"
+=======
+                    "dev-master": "4.0-dev"
+>>>>>>> Stashed changes
                 }
             },
             "autoload": {
                 "psr-4": {
                     "Lcobucci\\JWT\\": "src"
+<<<<<<< Updated upstream
                 },
                 "files": [
                     "compat/class-aliases.php",
                     "compat/json-exception-polyfill.php",
                     "compat/lcobucci-clock-polyfill.php"
                 ]
+=======
+                }
+>>>>>>> Stashed changes
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -1224,7 +1346,11 @@
             ],
             "authors": [
                 {
+<<<<<<< Updated upstream
                     "name": "Luís Otávio Cobucci Oblonczyk",
+=======
+                    "name": "Luís Cobucci",
+>>>>>>> Stashed changes
                     "email": "lcobucci@gmail.com",
                     "role": "Developer"
                 }
@@ -1234,7 +1360,25 @@
                 "JWS",
                 "jwt"
             ],
+<<<<<<< Updated upstream
             "time": "2020-11-27T01:17:14+00:00"
+=======
+            "support": {
+                "issues": "https://github.com/lcobucci/jwt/issues",
+                "source": "https://github.com/lcobucci/jwt/tree/4.0.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/lcobucci",
+                    "type": "github"
+                },
+                {
+                    "url": "https://www.patreon.com/lcobucci",
+                    "type": "patreon"
+                }
+            ],
+            "time": "2020-11-25T02:06:12+00:00"
+>>>>>>> Stashed changes
         },
         {
             "name": "league/commonmark",
@@ -1353,6 +1497,13 @@
                 "event",
                 "listener"
             ],
+<<<<<<< Updated upstream
+=======
+            "support": {
+                "issues": "https://github.com/thephpleague/event/issues",
+                "source": "https://github.com/thephpleague/event/tree/master"
+            },
+>>>>>>> Stashed changes
             "time": "2018-11-26T11:52:41+00:00"
         },
         {
@@ -1556,6 +1707,19 @@
                 "secure",
                 "server"
             ],
+<<<<<<< Updated upstream
+=======
+            "support": {
+                "issues": "https://github.com/thephpleague/oauth2-server/issues",
+                "source": "https://github.com/thephpleague/oauth2-server/tree/8.2.3"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/sephster",
+                    "type": "github"
+                }
+            ],
+>>>>>>> Stashed changes
             "time": "2020-12-03T21:32:29+00:00"
         },
         {
@@ -1831,6 +1995,83 @@
                 "psr-17",
                 "psr-7"
             ],
+            "support": {
+                "issues": "https://github.com/Nyholm/psr7/issues",
+                "source": "https://github.com/Nyholm/psr7/tree/1.3.2"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/Zegnat",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nyholm",
+                    "type": "github"
+                }
+            ],
+            "time": "2020-11-14T17:35:34+00:00"
+        },
+        {
+            "name": "nyholm/psr7",
+            "version": "1.3.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Nyholm/psr7.git",
+                "reference": "a272953743c454ac4af9626634daaf5ab3ce1173"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Nyholm/psr7/zipball/a272953743c454ac4af9626634daaf5ab3ce1173",
+                "reference": "a272953743c454ac4af9626634daaf5ab3ce1173",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1",
+                "php-http/message-factory": "^1.0",
+                "psr/http-factory": "^1.0",
+                "psr/http-message": "^1.0"
+            },
+            "provide": {
+                "psr/http-factory-implementation": "1.0",
+                "psr/http-message-implementation": "1.0"
+            },
+            "require-dev": {
+                "http-interop/http-factory-tests": "^0.8",
+                "php-http/psr7-integration-tests": "^1.0",
+                "phpunit/phpunit": "^7.5 || 8.5 || 9.4",
+                "symfony/error-handler": "^4.4"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Nyholm\\Psr7\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tobias Nyholm",
+                    "email": "tobias.nyholm@gmail.com"
+                },
+                {
+                    "name": "Martijn van der Ven",
+                    "email": "martijn@vanderven.se"
+                }
+            ],
+            "description": "A fast PHP7 implementation of PSR-7",
+            "homepage": "https://tnyholm.se",
+            "keywords": [
+                "psr-17",
+                "psr-7"
+            ],
             "time": "2020-11-14T17:35:34+00:00"
         },
         {
@@ -1937,6 +2178,14 @@
                 "pseudorandom",
                 "random"
             ],
+<<<<<<< Updated upstream
+=======
+            "support": {
+                "email": "info@paragonie.com",
+                "issues": "https://github.com/paragonie/random_compat/issues",
+                "source": "https://github.com/paragonie/random_compat"
+            },
+>>>>>>> Stashed changes
             "time": "2020-10-15T08:29:30+00:00"
         },
         {
@@ -1987,6 +2236,13 @@
                 "stream",
                 "uri"
             ],
+<<<<<<< Updated upstream
+=======
+            "support": {
+                "issues": "https://github.com/php-http/message-factory/issues",
+                "source": "https://github.com/php-http/message-factory/tree/master"
+            },
+>>>>>>> Stashed changes
             "time": "2015-12-19T14:08:53+00:00"
         },
         {
@@ -2133,6 +2389,27 @@
                 "x.509",
                 "x509"
             ],
+<<<<<<< Updated upstream
+=======
+            "support": {
+                "issues": "https://github.com/phpseclib/phpseclib/issues",
+                "source": "https://github.com/phpseclib/phpseclib/tree/2.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/terrafrost",
+                    "type": "github"
+                },
+                {
+                    "url": "https://www.patreon.com/phpseclib",
+                    "type": "patreon"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/phpseclib/phpseclib",
+                    "type": "tidelift"
+                }
+            ],
+>>>>>>> Stashed changes
             "time": "2020-09-08T04:24:43+00:00"
         },
         {
@@ -2329,6 +2606,12 @@
                 "request",
                 "response"
             ],
+<<<<<<< Updated upstream
+=======
+            "support": {
+                "source": "https://github.com/php-fig/http-factory/tree/master"
+            },
+>>>>>>> Stashed changes
             "time": "2019-04-30T12:38:16+00:00"
         },
         {
@@ -4157,6 +4440,27 @@
                 "psr-17",
                 "psr-7"
             ],
+<<<<<<< Updated upstream
+=======
+            "support": {
+                "issues": "https://github.com/symfony/psr-http-message-bridge/issues",
+                "source": "https://github.com/symfony/psr-http-message-bridge/tree/v2.0.2"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+>>>>>>> Stashed changes
             "time": "2020-09-29T08:17:46+00:00"
         },
         {
@@ -6872,5 +7176,6 @@
     "platform": {
         "php": "^7.3|^8.0"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "2.0.0"
 }
