@@ -49,8 +49,14 @@ class BrandController extends Controller
      * @param  \App\Models\Brand  $brand
      * @return \Illuminate\Http\Response
      */
-    public function show(Brand $brand)
+    public function show($id)
     {
+        $brand = Brand::find($id);
+  
+        if (is_null($brand)) {
+            return $this->sendError('Brand not found.');
+        }
+        
         return response(['brand' => new BrandResource($brand), 'message' => 'Brand retrieved successfully.'], 200);
     }
 
