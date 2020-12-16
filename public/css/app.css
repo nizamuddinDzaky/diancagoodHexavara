@@ -3005,6 +3005,17 @@ fieldset:disabled a.btn {
   border-color: #3490dc;
 }
 
+.btn-outline-orange {
+  color: #f6993f;
+  border-color: #f6993f;
+}
+
+.btn-outline-orange:hover {
+  color: #fff;
+  background-color: #f6993f;
+  border-color: #f6993f;
+}
+
 .btn-outline-primary:focus,
 .btn-outline-primary.focus {
   box-shadow: 0 0 0 0.2rem rgba(52, 144, 220, 0.5);
