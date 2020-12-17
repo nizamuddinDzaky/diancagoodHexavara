@@ -6976,6 +6976,17 @@ button.bg-primary:focus {
   background-color: #2176bd !important;
 }
 
+.bg-orange {
+  background-color: #eb7c32 !important;
+}
+
+a.bg-orange:hover,
+a.bg-orange:focus,
+button.bg-orange:hover,
+button.bg-orange:focus {
+  background-color: #eb7c32 !important;
+}
+
 .bg-secondary {
   background-color: #6c757d !important;
 }
