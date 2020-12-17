@@ -11,17 +11,25 @@
 <section class="feature_product_area section_gap">
     <div class="main_box">
         <div class="container">
-            <div class="row">
-                <div class="main_title">
-                    <h4>Kategori apa yang kamu cari?</h4>
+            <div class="row py-4">
+                <div class="f_p_img">
+                    <img class="hero" src="{{ asset('img/hero-2x.png') }}">
                 </div>
             </div>
-            <div class="row">
+
+            <br><br><hr class="pb-4" style="border-color:F2F2F2"><br>
+            
+            <div class="row my-2">
+                <div class="main_title">
+                    <h2>Kategori apa yang kamu cari?</h2>
+                </div>
+            </div>
+            <div class="row my-2">
                 <div class="col">
                     <div class="f_p_item">
                         <div class="f_p_img">
                             <a href="#">
-                                <img id="image" class="home-product-center-cropped" src="img/A1.jpg" alt="kategori">
+                                <img id="image" class="home-product-center-cropped" src="{{ asset('img/A1.jpg') }}" alt="kategori">
                             </a>
                         </div>
                         <h6>Nama Kategori</h6>
