@@ -24,3 +24,7 @@ Route::get('/register', function () {
 Route::get('/login', function () {
     return view('/dianca/login');
 });
+
+Route::get('/verifikasi', function () {
+    return view('/dianca/verify');
+});

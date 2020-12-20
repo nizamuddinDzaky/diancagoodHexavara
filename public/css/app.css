@@ -7138,6 +7138,10 @@ button.bg-dark:focus {
   border-color: #e3342f !important;
 }
 
+.border-orange {
+  border-color: #eb7c32 !important;
+}
+
 .border-light {
   border-color: #f8f9fa !important;
 }
