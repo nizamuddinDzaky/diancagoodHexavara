@@ -61,7 +61,7 @@
                                     aria-disabled="true"><i class="material-icons md-24">shopping_cart</i></a>
                             </li>
                             <li class="nav-item">
-                                <a type="button" class=" btn btn-outline-orange" href="#"
+                                <a type="button" class=" btn btn-outline-orange" href="{{ route('show.login') }}"
                                     tabindex="-1" aria-disabled="true">Login</a>
                             </li>
                         </ul>
@@ -80,11 +80,10 @@
             <!-- Grid row -->
             <div class="row pl-4">
                 <!-- Grid column -->
-                <div class="col-md-3 mt-md-0 mt-3">
-
-                    <!-- Content -->
-                    <h5 class="text-uppercase"></h5>
-                    <p>Logo</p>
+                <div class="col-md-3 mt-md-0">
+                    <a class="navbar-brand logo_h pr-3" href="{{ url('/') }}">
+                        <img src="{{ asset('img/logo-1x.png') }}" alt="logo" style="width: 150px">
+                    </a>
                 </div>
                 <!-- Grid column -->
                 <hr class="clearfix w-100 d-md-none pb-3">
@@ -105,7 +104,7 @@
                     <h5 class="text-uppercase">ABOUT US</h5>
                     <ul class="list-unstyled">
                         <li><a href="#!">Tentang DiancaGoods</a></li>
-                        <li><a href="#!">Term & Condition</a></li>
+                        <li><a href="#!">Terms & Condition</a></li>
                     </ul>
                 </div>
                 <!-- Grid column -->
@@ -116,8 +115,8 @@
                     <ul class="list-unstyled">
                         <li>
                             <div class="input-group lg-form form-2 pl-0 pr-5">
-                                <input class="form-control my-0 py-1 red-border" type="text" placeholder="Search"
-                                    aria-label="Search">
+                                <input class="form-control my-0 py-1 red-border" type="text" placeholder="Email"
+                                    aria-label="Email">
                                 <div class="input-group-append">
                                     <span class="input-group-text red lighten-3" id="basic-text1">Daftar</span>
                                 </div>
@@ -125,7 +124,14 @@
                         </li>
                         <br>
                         <li>
-                            <h5 class="text-uppercase">SOSIAL MEDIA</h5>
+                            <h5 class="text-uppercase">Media Sosial</h5>
+                            <div class="btn-toolbar">
+                                <div class="btn-group">
+                                    <a><img style="width:1.5vw; margin-right:0.5rem;" src="{{ asset('img/fb.png') }}"></a>
+                                    <a><img style="width:1.5vw;margin-right:0.5rem;" src="{{ asset('img/ig.png') }}"></a>
+                                    <a><img style="width:1.5vw; margin-right:0.5rem;" src="{{ asset('img/yt.png') }}"></a>
+                                </div>
+                            </div>
                         </li>
                     </ul>
                 </div>
@@ -136,7 +142,7 @@
         <!-- Footer Links -->
 
         <!-- Copyright -->
-        <div class="footer-copyright text-center py-3">© 2020 Copyright</div>
+        <div class="footer-copyright text-center py-3">Copyright ©2020 DiancaGoods</div>
         <!-- Copyright -->
     </footer>
 

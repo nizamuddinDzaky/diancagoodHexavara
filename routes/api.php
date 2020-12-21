@@ -18,14 +18,14 @@ use App\Http\Controllers\API\BrandController;
 |
 */
 
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
 
 Route::post('register', [RegisterController::class, 'register']);
 Route::post('login', [RegisterController::class, 'login']);
 
-Route::middleware('auth:api')->group( function() {
+Route::middleware('auth:sanctum')->group( function() {
     Route::resource('categories', CategoryController::class);
     Route::resource('subcategories', SubcategoryController::class);
     Route::apiResource('brand', BrandController::class);

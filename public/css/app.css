@@ -2126,7 +2126,7 @@ pre code {
   background-color: #fff;
   background-clip: padding-box;
   border: 1px solid #f7f8f8;
-  border-radius: 10px 0px 0px 10px;
+  border-radius: 10px;
   transition: border-color 0.3s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
@@ -4954,8 +4954,8 @@ input[type=button].btn-block {
   word-wrap: break-word;
   background-color: #fff;
   background-clip: border-box;
-  border: 1px solid rgba(0, 0, 0, 0.125);
-  border-radius: 0.25rem;
+  border: 0.5px solid #4f4f4f;
+  border-radius: 1rem;
 }
 
 .card > hr {

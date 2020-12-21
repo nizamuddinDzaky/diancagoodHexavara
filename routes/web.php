@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\CustomerRegisterController;
+use App\Http\Controllers\CustomerLoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,18 +16,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('home');
-});
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::get('/register', function () {
-    return view('/dianca/register');
-});
+Route::get('/register', [CustomerRegisterController::class, 'index'])->name('show.register');
 
-Route::get('/login', function () {
-    return view('/dianca/login');
-});
-
-Route::get('/verifikasi', function () {
-    return view('/dianca/verify');
-});
+Route::get('/login', [CustomerLoginController::class, 'index'])->name('show.login');
+Route::get('/verifikasi', [CustomerLoginController::class, 'showVerificationForm'])->name('show.verification');
