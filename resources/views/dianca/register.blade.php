@@ -46,7 +46,7 @@
                                     <input type="submit" value="Daftar Sekarang" name="register_submit"
                                         id="register_submit" class="form-control form-control-lg bg-orange"
                                         style="color: white">
-                                    <label class="text-muted text-center pt-2">Sudah punya akun? <a href="#"
+                                    <label class="text-muted text-center pt-2">Sudah punya akun? <a href="{{ route('customer.login') }}"
                                             style="color:orange;font-weight:bold">Masuk Sekarang</a></label><br>
                                 </div>
                             </form>

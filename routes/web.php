@@ -18,7 +18,9 @@ use App\Http\Controllers\CustomerLoginController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::get('/register', [CustomerRegisterController::class, 'index'])->name('show.register');
+Route::get('/register', [CustomerRegisterController::class, 'index'])->name('customer.register');
 
-Route::get('/login', [CustomerLoginController::class, 'index'])->name('show.login');
+Route::get('/login', [CustomerLoginController::class, 'index'])->name('customer.login');
+Route::post('/login', [CustomerLoginController::class, 'login'])->name('customer.post_login');
+
 Route::get('/verifikasi', [CustomerLoginController::class, 'showVerificationForm'])->name('show.verification');

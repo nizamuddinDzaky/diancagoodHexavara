@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     @yield('title')
 
@@ -61,7 +62,7 @@
                                     aria-disabled="true"><i class="material-icons md-24">shopping_cart</i></a>
                             </li>
                             <li class="nav-item">
-                                <a type="button" class=" btn btn-outline-orange" href="{{ route('show.login') }}"
+                                <a type="button" class=" btn btn-outline-orange" href="{{ route('customer.login') }}"
                                     tabindex="-1" aria-disabled="true">Login</a>
                             </li>
                         </ul>
