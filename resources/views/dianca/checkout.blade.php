@@ -80,7 +80,7 @@
                 <div class="row pt-2 pl-2">
                     <div class="col-lg-8">
                         <div class="row py-2">
-                            <div class="col-lg-12 pb-2">
+                            <div class="col-lg-12 pb-1">
                                 <div class="card shadow-1" style="width: 47rem">
                                     <div class="row px-4 py-4">
                                         <div class="col-lg-3">
@@ -217,7 +217,7 @@
                                         </div>
                                     </div>
                                     <div class="row justify-content-center pt-4">
-                                        <a type="button" class="btn btn-outline-orange bg-orange" style="color: white; width:20rem" href="#" aria-disabled="true">Pilih Pembayaran</a>
+                                        <a type="button" class="btn btn-outline-orange bg-orange" style="color: white; width:20rem" href="{{ route('payment') }}" aria-disabled="true">Pilih Pembayaran</a>
                                     </div>
                                 </div>
                             </div>
