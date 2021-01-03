@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CustomerRegisterController;
 use App\Http\Controllers\CustomerLoginController;
+use App\Http\Controllers\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,3 +25,6 @@ Route::get('/login', [CustomerLoginController::class, 'index'])->name('customer.
 Route::post('/login', [CustomerLoginController::class, 'login'])->name('customer.post_login');
 
 Route::get('/verifikasi', [CustomerLoginController::class, 'showVerificationForm'])->name('show.verification');
+
+Route::get('/checkout', [OrderController::class, 'index'])->name('checkout');
+Route::get('/payment', [OrderController::class, 'payment'])->name('payment');

@@ -93,9 +93,9 @@
                     <!-- Links -->
                     <h5 class="text-uppercase">CUSTOMER CARE</h5>
                     <ul class="list-unstyled">
-                        <li><a href="#!">FAQ</a></li>
-                        <li><a href="#!">How to Order</a></li>
-                        <li><a href="#!">Contact Us</a></li>
+                        <li><a href="#!" style="color: black">FAQ</a></li>
+                        <li><a href="#!" style="color: black">How to Order</a></li>
+                        <li><a href="#!" style="color: black">Contact Us</a></li>
                     </ul>
                 </div>
                 <!-- Grid column -->
@@ -104,8 +104,8 @@
                     <!-- Links -->
                     <h5 class="text-uppercase">ABOUT US</h5>
                     <ul class="list-unstyled">
-                        <li><a href="#!">Tentang DiancaGoods</a></li>
-                        <li><a href="#!">Terms & Condition</a></li>
+                        <li><a href="#!" style="color: black">Tentang DiancaGoods</a></li>
+                        <li><a href="#!" style="color: black">Terms & Condition</a></li>
                     </ul>
                 </div>
                 <!-- Grid column -->
@@ -116,10 +116,10 @@
                     <ul class="list-unstyled">
                         <li>
                             <div class="input-group lg-form form-2 pl-0 pr-5">
-                                <input class="form-control my-0 py-1 red-border" type="text" placeholder="Email"
+                                <input class="form-control my-0 py-1 border border-dark" type="text" placeholder="Email"
                                     aria-label="Email">
-                                <div class="input-group-append">
-                                    <span class="input-group-text red lighten-3" id="basic-text1">Daftar</span>
+                                <div class="input-group-append bg-black">
+                                    <span class="input-group-text" id="basic-text1">Daftar</span>
                                 </div>
                             </div>
                         </li>

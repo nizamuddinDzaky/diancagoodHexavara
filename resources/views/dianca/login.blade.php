@@ -32,11 +32,11 @@
                             @csrf
                                 <div class="form-group">
                                     <label>Email</label><br>
-                                    <input type="text" name="email" id="email" class="form-control bg-light" required>
+                                    <input type="text" name="email" id="email" class="form-control" style="background: #F2F2F2" required>
                                 </div>
                                 <div class="form-group">
                                     <label>Password</label><br>
-                                    <input type="password" name="password" id="password" class="form-control bg-light"
+                                    <input type="password" name="password" id="password" class="form-control" style="background: #F2F2F2"
                                         required>
                                 </div>
                                 <div class="form-group pt-4 text-center">

@@ -1,14 +1,10 @@
 <?php
-   
-namespace App\Http\Controllers\API;
-   
+
+namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
-use App\Http\Controllers\API\BaseController as BaseController;
-use App\Models\Subcategory;
-use Validator;
-use App\Http\Resources\Subcategory as SubcategoryResource;
-   
-class SubcategoryController extends BaseController
+
+class SubcategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,10 +13,19 @@ class SubcategoryController extends BaseController
      */
     public function index()
     {
-        $subcategories = Subcategory::all();
-    
-        return $this->sendResponse(SubcategoryResource::collection($subcategories), 'Subcategories retrieved successfully.');
+        //
     }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -47,9 +52,9 @@ class SubcategoryController extends BaseController
             'slug' => $request->name
         ]);
    
-        return $this->sendResponse(new SubcategoryResource($subcategory), 'Subcategory created successfully.');
-    } 
-   
+        // return $this->sendResponse(new SubcategoryResource($subcategory), 'Subcategory created successfully.');
+    }
+
     /**
      * Display the specified resource.
      *
@@ -58,15 +63,20 @@ class SubcategoryController extends BaseController
      */
     public function show($id)
     {
-        $subcategory = Subcategory::find($id);
-  
-        if (is_null($subcategory)) {
-            return $this->sendError('Subcategory not found.');
-        }
-   
-        return $this->sendResponse(new SubcategoryResource($subcategory), 'Subcategory retrieved successfully.');
+        //
     }
-    
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
+    }
+
     /**
      * Update the specified resource in storage.
      *
@@ -74,7 +84,7 @@ class SubcategoryController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Subcategory $subcategory)
+    public function update(Request $request, $id)
     {
         $input = $request->all();
    
@@ -92,19 +102,17 @@ class SubcategoryController extends BaseController
         $subcategory->slug = $input['name'];
         $subcategory->save();
    
-        return $this->sendResponse(new SubcategoryResource($subcategory), 'Subcategory updated successfully.');
+        // return $this->sendResponse(new SubcategoryResource($subcategory), 'Subcategory updated successfully.');
     }
-   
+
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Subcategory $subcategory)
+    public function destroy($id)
     {
-        $subcategory->delete();
-   
-        return $this->sendResponse([], 'Subcategory deleted successfully.');
+        //
     }
 }
