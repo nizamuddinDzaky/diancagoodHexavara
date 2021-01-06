@@ -21,11 +21,6 @@ class OrderController extends Controller
         return view('dianca.payment');
     }
 
-    public function paymentDone()
-    {
-        return view('dianca.paymentDone');
-    }
-
     /**
      * Show the form for creating a new resource.
      *
