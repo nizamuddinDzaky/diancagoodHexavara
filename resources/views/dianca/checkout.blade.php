@@ -164,17 +164,6 @@
                                                 <h6 style="color: black">24 - 25 Desember 2020</h6>
                                             </div>
                                         </div>
-                                        <!-- <div class="col-lg-6">
-                                            <div class="row mr-2 float-right">
-                                                <h6>JNT (Regular)</h6>
-                                            </div>
-                                            <div class="row mr-2 pt-1 float-right">
-                                                <h6>4 - 5 hari</h6>
-                                            </div>
-                                            <div class="row mr-2 pt-1 float-right">
-                                                <h6>24 - 25 Desember 2020</h6>
-                                            </div>
-                                        </div> -->
                                     </div>
                             </div>
                         </div>
