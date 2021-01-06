@@ -7,8 +7,10 @@ use Illuminate\Http\Request;
 use App\Http\Resources\Cart as CartResource;
 use Validator;
 use App\Models\Cart;
+use App\Models\Product;
+use App\Models\ProductVariant;
 
-class BrandController extends Controller
+class CartController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -30,60 +32,60 @@ class BrandController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:50',
-            'logo' => 'nullable|images|max:500|mimes:png,jpeg,jpg'
+            'customer_id' => 'required|integer',
+            'total_cost' => 'required|integer'
         ]);
 
         if($validator->fails()) {
             return response(['error' => $validator->errors(), 'Validation Error.']);
         }
 
-        $brand = Brand::create($request->all());
+        $cart = Cart::create($request->all());
 
-        return response(['brand' => new BrandResource($brand), 'message' => 'Brand created successfully.'], 201);
+        return response(['cart' => new CartResource($cart), 'message' => 'Cart created successfully.'], 201);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Brand  $brand
+     * @param  \App\Models\Cart  $cart
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        $brand = Brand::find($id);
+        $cart = Cart::find($id);
   
-        if (is_null($brand)) {
-            return $this->sendError('Brand not found.');
+        if (is_null($cart)) {
+            return $this->sendError('Cart not found.');
         }
         
-        return response(['brand' => new BrandResource($brand), 'message' => 'Brand retrieved successfully.'], 200);
+        return response(['cart' => new CartResource($cart), 'message' => 'Cart retrieved successfully.'], 200);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Brand  $brand
+     * @param  \App\Models\Cart  $cart
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Brand $brand)
+    public function update(Request $request, Cart $cart)
     {
-        $brand->update($request->all());
+        $cart->update($request->all());
 
-        return response(['brand' => new BrandResource($brand), 'message' => 'Brand Updated Successfully.'], 200);
+        return response(['cart' => new CartResource($cart), 'message' => 'Cart Updated Successfully.'], 200);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Brand  $brand
+     * @param  \App\Models\Cart  $cart
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Brand $brand)
+    public function destroy(Cart $cart)
     {
-        $brand->delete();
+        $cart->delete();
 
-        return response(['message' => 'Brand Deleted']);
+        return response(['message' => 'Cart Deleted']);
     }
 }
