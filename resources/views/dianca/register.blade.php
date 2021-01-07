@@ -28,19 +28,54 @@
                         <div class="card-body">
                             <h3 class="card-title text-center pb-1"><strong>Daftar akun baru</strong></h3>
                             <h6 class="card-subtitle mb-2 text-muted text-center">Lorem ipsum is simply dummy text</h6>
-                            <form action="" class="form pl-3 pr-3 pt-4" id="register-form" method="post">
+                            @if (session('error'))
+                                <div class="alert alert-danger">{{ session('error') }}</div>
+                            @endif
+                            <form action="{{ route('customer.post_register') }}" class="form pl-3 pr-3 pt-4" id="register-form" method="post">
+                                @csrf
                                 <div class="form-group">
-                                    <label>Nama</label><br>
-                                    <input type="text" name="name" id="name" class="form-control" style="background: #F2F2F2" required>
+                                    <label for="name">Nama</label><br>
+                                    <input type="text" name="name" id="name" class="form-control bg-light @error('name') is-invalid @enderror" value="{{ old('name') }}" required autocomplete="name" autofocus>
+
+                                    @error('name')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label>Email</label><br>
-                                    <input type="text" name="email" id="email" class="form-control" style="background: #F2F2F2" required>
+                                    <label for="email">Email</label><br>
+                                    <input type="text" name="email" id="email" class="form-control bg-light @error('email') is-invalid @enderror" value="{{ old('email') }}" required autocomplete="email">
+
+                                    @error('email')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label>Password</label><br>
-                                    <input type="password" name="password" id="password" class="form-control" style="background: #F2F2F2"
-                                        required>
+                                    <label for="phone">Nomor Telepon</label><br>
+                                    <input type="phone" name="phone" id="phone" class="form-control bg-light @error('phone') is-invalid @enderror" required autocomplete="new-phone">
+
+                                    @error('phone')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                                <div class="form-group">
+                                    <label for="password">Password</label><br>
+                                    <input type="password" name="password" id="password" class="form-control bg-light @error('password') is-invalid @enderror" required autocomplete="new-password">
+
+                                    @error('password')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                                <div class="form-group">
+                                    <label for="password_confirmation">Konfirmasi Password</label><br>
+                                    <input type="password" name="password_confirmation" id="password_confirmation" class="form-control bg-light" required autocomplete="new-password">
                                 </div>
                                 <div class="form-group pt-4 text-center">
                                     <input type="submit" value="Daftar Sekarang" name="register_submit"

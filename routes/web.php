@@ -20,11 +20,13 @@ use App\Http\Controllers\OrderController;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/register', [CustomerRegisterController::class, 'index'])->name('customer.register');
+Route::post('/register', [CustomerRegisterController::class, 'register'])->name('customer.post_register');
+Route::get('/register/verify/{id}', [CustomerRegisterController::class, 'showVerificationForm'])->name('customer.sms_verification');
+Route::post('/register/verify/', [CustomerRegisterController::class, 'verify'])->name('customer.post_sms_verification');
 
 Route::get('/login', [CustomerLoginController::class, 'index'])->name('customer.login');
 Route::post('/login', [CustomerLoginController::class, 'login'])->name('customer.post_login');
-
-Route::get('/verifikasi', [CustomerLoginController::class, 'showVerificationForm'])->name('show.verification');
+Route::get('/logout', [CustomerLoginController::class, 'logout'])->name('customer.logout');
 
 Route::get('/checkout', [OrderController::class, 'index'])->name('checkout');
 Route::get('/payment', [OrderController::class, 'payment'])->name('payment');

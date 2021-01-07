@@ -58,19 +58,46 @@
                     <div>
                         <ul class="nav">
                             <li class="nav-item">
-                                <a type="button" class=" btn" href="#" tabindex="-1"
+                                <a type="button" class="btn" href="#" tabindex="-1"
                                     aria-disabled="true"><i class="material-icons md-24">shopping_cart</i></a>
                             </li>
+                            @if (auth()->guard('customer')->check())
+                            <li class="nav-item"><a type="button" class="btn" style="margin-left=0px" tabindex="-1" aria-disabled="true" href="#">Akun Saya</a></li>
+                            <li class="nav-item"><a type="button" class="btn" style="margin-left=0px" tabindex="-1" aria-disabled="true" href="{{ route('customer.logout') }}">Logout</a></li>
+                            @else
                             <li class="nav-item">
-                                <a type="button" class=" btn btn-outline-orange" href="{{ route('customer.login') }}"
-                                    tabindex="-1" aria-disabled="true">Login</a>
+                                <a type="button" class="btn btn-outline-orange" href="{{ route('customer.login') }}">Masuk</a>
                             </li>
+                            <li class="nav-item">
+                                <a type="button" class="btn" style="margin-left=0px" tabindex="-1" aria-disabled="true" href="{{ route('customer.register') }}">Daftar</a>
+                            </li>
+                            @endif
                         </ul>
                     </div>
                 </div>
             </nav>
         </div>
     </header>
+
+    {{-- Success Alert --}}
+    @if(session('status'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{session('status')}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
+
+    {{-- Error Alert --}}
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{session('error')}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
 
     @yield('content')
 
@@ -147,6 +174,14 @@
         <!-- Copyright -->
     </footer>
 
+    <script>
+        //close the alert after 3 seconds.
+        $(document).ready(function(){
+	    setTimeout(function() {
+	        $(".alert").alert('close');
+	    }, 3000);
+    	});
+    </script>
     <script src="{{ asset('js/bootstrap.js') }}"></script>
     <script src="{{ asset('js/app.js') }}"></script>
     @yield('js')

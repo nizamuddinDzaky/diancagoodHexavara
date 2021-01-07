@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Customer;
 
@@ -11,11 +12,6 @@ class CustomerLoginController extends Controller
     public function index()
     {
         return view('dianca.login');
-    }
-
-    public function showVerificationForm()
-    {
-        return view('dianca.verify');
     }
 
     public function login(Request $request)
@@ -31,10 +27,21 @@ class CustomerLoginController extends Controller
             return redirect()->back()->with(['error' => 'Email salah.']);
         }
 
-        if(Hash::check($request->password, $customer->password)) {
+        // if customer->status 0 return not activated
+
+        $credentials = $request->only('email', 'password');
+
+        if(Auth::guard('customer')->attempt($credentials)) {
             return redirect()->intended(route('home'));
         } else {
             return redirect()->back()->with(['error' => 'Password salah.']);
         }
+    }
+
+    public function logout()
+    {
+        auth()->guard('customer')->logout();
+
+        return redirect(route('home'));
     }
 }
