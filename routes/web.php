@@ -30,3 +30,4 @@ Route::get('/logout', [CustomerLoginController::class, 'logout'])->name('custome
 
 Route::get('/checkout', [OrderController::class, 'index'])->name('checkout');
 Route::get('/payment', [OrderController::class, 'payment'])->name('payment');
+Route::get('/finish-payment', [OrderController::class, 'paymentDone'])->name('paymentDone');
