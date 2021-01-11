@@ -80,9 +80,9 @@
     </header>
 
     {{-- Success Alert --}}
-    @if(session('status'))
+    @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{session('status')}}
+            {{session('success')}}
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
@@ -103,21 +103,15 @@
 
     <!-- Footer -->
     <footer class="page-footer font-small pt-4 pl-5 pr-5">
-        <!-- Footer Links -->
-        <div class="container-fluid text-center text-md-left">
-            <!-- Grid row -->
+        <div class="container-fluid text-center text-md-left text-gray-2">
             <div class="row pl-4">
-                <!-- Grid column -->
                 <div class="col-md-3 mt-md-0">
                     <a class="navbar-brand logo_h pr-3" href="{{ url('/') }}">
                         <img src="{{ asset('img/logo-1x.png') }}" alt="logo" style="width: 150px">
                     </a>
                 </div>
-                <!-- Grid column -->
                 <hr class="clearfix w-100 d-md-none pb-3">
-                <!-- Grid column -->
                 <div class="col-md-3 mb-md-0 mb-3">
-                    <!-- Links -->
                     <h5 class="text-uppercase">CUSTOMER CARE</h5>
                     <ul class="list-unstyled">
                         <li><a href="#!" style="color: black">FAQ</a></li>
@@ -125,20 +119,14 @@
                         <li><a href="#!" style="color: black">Contact Us</a></li>
                     </ul>
                 </div>
-                <!-- Grid column -->
-                <!-- Grid column -->
                 <div class="col-md-3 mb-md-0 mb-3">
-                    <!-- Links -->
                     <h5 class="text-uppercase">ABOUT US</h5>
                     <ul class="list-unstyled">
                         <li><a href="#!" style="color: black">Tentang DiancaGoods</a></li>
                         <li><a href="#!" style="color: black">Terms & Condition</a></li>
                     </ul>
                 </div>
-                <!-- Grid column -->
-                <!-- Grid column -->
                 <div class="col-md-3 mb-md-0 mb-3">
-                    <!-- Links -->
                     <h5 class="text-uppercase">DAFTAR UNTUK INFO TERBARU</h5>
                     <ul class="list-unstyled">
                         <li>
@@ -163,19 +151,12 @@
                         </li>
                     </ul>
                 </div>
-                <!-- Grid column -->
             </div>
-            <!-- Grid row -->
         </div>
-        <!-- Footer Links -->
-
-        <!-- Copyright -->
         <div class="footer-copyright text-center py-3">Copyright ©2020 DiancaGoods</div>
-        <!-- Copyright -->
     </footer>
 
     <script>
-        //close the alert after 3 seconds.
         $(document).ready(function(){
 	    setTimeout(function() {
 	        $(".alert").alert('close');

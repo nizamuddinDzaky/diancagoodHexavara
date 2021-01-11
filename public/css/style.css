@@ -95,7 +95,7 @@ body {
     font-size: 14px;
     font-family: "Proxima Nova", sans-serif;
     font-weight: normal;
-    color: #777777;
+    color: #4f4f4f;
 }
 
 h1,
@@ -2185,6 +2185,10 @@ a:focus {
 /*============== Elements Area css ================*/
 .mb-20 {
     margin-bottom: 20px;
+}
+
+.mb-half {
+    margin-bottom: 0.5rem !important;
 }
 
 .mb-30 {
@@ -4742,6 +4746,20 @@ h6 {
     border-radius: 3px;
 }
 
+.media .d-flex {
+    padding-right: 30px;
+    display: inline-block;
+}
+
+.media .d-flex img {
+    border-radius: 15px;
+}
+
+.media .media-body {
+    vertical-align: middle;
+    align-self: center;
+}
+
 .cart_inner .table tbody tr td .media .media-body {
     vertical-align: middle;
     align-self: center;
@@ -6106,4 +6124,66 @@ h6 {
     width: 100%;
     object-position: center;
     border-radius: 2rem;
+}
+
+.text-gray-2 {
+    color: #4F4F4F !important;
+}
+
+.text-gray-3 {
+    color: #828282 !important;
+}
+
+.text-orange-main {
+    color: #F37020 !important;
+}
+
+.btn-filter{
+    background: #FFFFFF;;
+    border: 1px solid #e0e0e0;
+    box-sizing: border-box;
+    border-radius: 50px;
+    color: #828282;
+    font-size: 14px;
+    padding: 7px 25px 7px 25px;
+    margin-right: 10px;
+    transition: color 0.3s ease-in-out background-color 0.3s ease-in-out;
+  }
+  
+.btn-filter:focus {
+    color: #fff;
+    background-color: #f37020;
+    border-color: #f37020;
+}
+
+.filter-active {
+    color: #fff;
+    background-color: #f37020;
+    border-color: #f37020;
+}
+
+.weight-500 {
+    font-weight: 500 !important;
+}
+
+.weight-600 {
+    font-weight: 600 !important;
+}
+
+.btn-orange {
+    background: #f37020;
+    border: 1px solid #f37020;
+    box-sizing: border-box;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 14px;
+    padding: 7px 25px 7px 25px;
+    margin-right: 10px;
+    transition: color 0.3s ease-in-out background-color 0.3s ease-in-out;
+}
+
+.btn-orange:hover {
+    background: #ec6e1f;
+    border: 1px solid #ec6e1f;
+    color: #fff;
 }

@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CustomerRegisterController;
 use App\Http\Controllers\CustomerLoginController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\TransactionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,3 +32,5 @@ Route::get('/logout', [CustomerLoginController::class, 'logout'])->name('custome
 Route::get('/checkout', [OrderController::class, 'index'])->name('checkout');
 Route::get('/payment', [OrderController::class, 'payment'])->name('payment');
 Route::get('/finish-payment', [OrderController::class, 'paymentDone'])->name('paymentDone');
+
+Route::get('/transactions', [TransactionController::class, 'index'])->name('transaction.list');

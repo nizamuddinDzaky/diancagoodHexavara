@@ -4,9 +4,6 @@
 <title>DiancaGoods</title>
 @endsection
 
-@section('css')
-@endsection
-
 @section('content')
 <section class="feature_product_area section_gap mt-4">
     <div class="main_box">
