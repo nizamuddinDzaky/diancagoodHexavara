@@ -64,15 +64,20 @@
                 <div class="col">
                     <div class="f_p_item">
                         <div class="f_p_img pl-3">
-                            <a href="{{ url('/product/' . $row->slug) }}">
+                            <a href="{{ url('/product/' . $row->id) }}">
                                 <img id="pic{{ $row }}" class="home-product-center-cropped" src="{{ asset('storage/products/' . $row->image) }}" alt="{{ $row->name }}">
                             </a>
                         </div>
-                        <a href="{{ url('/product/' . $row->slug) }}">
-                            <h4 style="color: black" class="pl-3">{{ $row->name }}</h4>
+                        <a href="{{ url('/product/' . $row->id) }}">
+                            <h4 class="text-gray-2" class="pl-3">{{ $row->name }}</h4>
                         </a>
-                        
-                        <h6 style="color: black"><strong>Rp 780.000</strong></h6>
+                        @if( number_format($row->variant->first()->price) != number_format($row->variant->last()->price)
+                        )
+                        <h5 class="text-gray-1">Rp {{ number_format($row->variant->first()->price) }} - Rp
+                            {{ number_format($row->variant->last()->price) }}</h5>
+                        @else
+                        <h5 class="text-gray-1">Rp {{ number_format($row->variant->first()->price) }}</h5>
+                        @endif
                     </div>
                 </div>
                 @empty
@@ -107,18 +112,23 @@
                             <div class="card shadow-1" style="width: 32rem">
                                 <div class="row px-4 py-4">
                                     <div class="col-lg-4">
-                                        <a href="{{ url('/product/' . $row->slug) }}">
+                                        <a href="{{ url('/product/' . $row->id) }}">
                                             <img id="pic{{ $row }}" class="product-img-sm" src="{{ asset('storage/products/' . $row->image) }}" alt="{{ $row->name }}">
                                         </a>
                                     </div>
                                     <div class="col-lg-7">
                                         <div class="row ml-2 pt-3">
-                                            <a href="{{ url('/product/' . $row->slug) }}">
-                                                <h4 style="color: black">{{ $row->name }}</h4>
+                                            <a href="{{ url('/product/' . $row->id) }}">
+                                                <h4 class="text-gray-2">{{ $row->name }}</h4>
                                             </a>
                                         </div>
                                         <div class="row ml-2 pt-2">
-                                            <h3><strong>Rp 299.000</strong></h3>
+                                        @if( number_format($row->variant->first()->price) != number_format($row->variant->last()->price))
+                                        <h5 class="text-gray-2 weight-700 font-20">Rp {{ number_format($row->variant->first()->price) }} - Rp
+                                            {{ number_format($row->variant->last()->price) }}</h5>
+                                        @else
+                                        <h5 class="text-gray-2 weight-700 font-20">Rp {{ number_format($row->variant->first()->price) }}</h5>
+                                        @endif
                                         </div>
                                         <div class="row ml-2">
                                             <p>722 Terjual</p>
@@ -138,18 +148,24 @@
                             <div class="card shadow-1" style="width: 32rem">
                                 <div class="row px-4 py-4">
                                     <div class="col-lg-4">
-                                        <a href="{{ url('/product/' . $row->slug) }}">
+                                        <a href="{{ url('/product/' . $row->id) }}">
                                             <img id="pic{{ $row }}" class="product-img-sm" src="{{ asset('storage/products/' . $row->image) }}" alt="{{ $row->name }}">
                                         </a>
                                     </div>
                                     <div class="col-lg-7">
                                         <div class="row ml-2 pt-3">
-                                            <a href="{{ url('/product/' . $row->slug) }}">
+                                            <a href="{{ url('/product/' . $row->id) }}">
                                                 <h4 style="color: black">{{ $row->name }}</h4>
                                             </a>
                                         </div>
                                         <div class="row ml-2 pt-2">
-                                            <h3><strong>Rp 149.000</strong></h3>
+                                        @if( number_format($row->variant->first()->price) != number_format($row->variant->last()->price)
+                                        )
+                                        <h5 class="text-gray-2 weight-700 font-20">Rp {{ number_format($row->variant->first()->price) }} - Rp
+                                            {{ number_format($row->variant->last()->price) }}</h5>
+                                        @else
+                                        <h5 class="text-gray-2 weight-700 font-20">Rp {{ number_format($row->variant->first()->price) }}</h5>
+                                        @endif
                                         </div>
                                         <div class="row ml-2">
                                             <p>378 Terjual</p>

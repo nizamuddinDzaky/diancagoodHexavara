@@ -24,13 +24,25 @@ class UserSeeder extends Seeder
             'password' => 'asdasdasd'
         ]);
 
-        Customer::create([
-            'name' => 'cust verif',
-            'email' => 'butsherlock@gmail.com',
-            'password' => 'asdasdasd',
-            'phone_number' => '123123123',
-            'address' => 'Jalan Mulyosari 37',
-            'district_id' => 6145
-        ]);
+        $customers = [
+            [
+                'name' => 'cust verif',
+                'email' => 'butsherlock@gmail.com',
+                'password' => 'asdasdasd',
+                'phone_number' => '123123123',
+                'address' => 'Jalan Mulyosari 37',
+                'district_id' => 6145
+            ],
+            [
+                'name' => 'Rizal Adam',
+                'email' => 'rizaladam@gmail.com',
+                'password' => 'asdasdasd',
+                'phone_number' => '123123123',
+                'address' => 'Jalan Mulyosari 37',
+                'district_id' => 6145
+            ],
+        ];
+
+        Customer::insert($customers);
     }
 }

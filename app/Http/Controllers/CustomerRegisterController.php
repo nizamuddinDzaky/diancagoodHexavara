@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 use App\Models\Customer;
 use App\Models\Cart;
@@ -31,14 +32,12 @@ class CustomerRegisterController extends Controller
             return redirect()->back()->with(['error' => 'Akun sudah terdaftar, silakan Login']);
         }
 
-        $array = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-
         $customer = Customer::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => $request->password,
             'phone_number' => $request->phone,
-            'activate_token' => rand(0000, 9999)
+            'activate_token' => Str::random(4)
         ]);
 
         // dd($customer);
@@ -60,47 +59,40 @@ class CustomerRegisterController extends Controller
     {
         $customer = Customer::where('id', $id)->first();
 
-        // dd($customer);
-
-        $basic  = new \Vonage\Client\Credentials\Basic('979dab84', '8HHo1vBuxKedJlpR');
-        $client = new \Vonage\Client(new \Vonage\Client\Credentials\Container($basic));
-
-        $response = $client->sms()->send(
-            new \Vonage\SMS\Message\SMS($customer->phone_number, 'DiancaGoods', $customer->activate_token)
-        );
+        Nexmo::message()->send([
+            'to' => '6281286930463',
+            'from' => 'Vonage APIs',
+            'text' => 'Verification code : ' . $customer->activate_token
+        ]);
         
-        $message = $response->current();
-        
-        if ($message->getStatus() == 0) {
-            echo "The message was sent successfully\n";
-        } else {
-            echo "The message failed with status: " . $message->getStatus() . "\n";
-        }
-
-        // $verification = Nexmo::message()->send([
-        //     'to' => $customer->phone_number,
-        //     'from' => 'DiancaGoods',
-        //     'text' => $customer->activate_token
-        // ]);
-
-        // session(['nexmo_request_id' => $verification->getRequestId()]);
-
-        // $response = $client->verify()->start($request);
-
-        // $message = $gateway->message()->send([
-        //     'to' => $customer-> 
-        //     'from' => 'Vonage APIs',
-        //     'text' => $customer->activate_token
-        // ]);
-
         return view('dianca.verify', compact('customer'));
     }
 
-    // public function verify(Request $request)
-    // {
-    //     $this->validate($request, [
+    public function verify(Request $request)
+    {
+        $this->validate($request, [
+            'digit_a' => 'required',
+            'digit_b' => 'required',
+            'digit_c' => 'required',
+            'digit_d' => 'required',
+            'customer_id' => 'required|exists:customers,id'
+        ]);
 
-    //     ])
-        
-    // }
+        $customer = Customer::where('id', $request->customer_id)->first();
+
+        $a = str_split($customer->activate_token, 1);
+
+        if($request->digit_a == $a[0] &&
+            $request->digit_b == $a[1] &&
+            $request->digit_c == $a[2] &&
+            $request->digit_d == $a[3]) {
+                
+                $customer->update(['status' => true]);
+                Auth::login($customer);
+                return redirect()->intended(route('home'));
+            }
+
+            return redirect()->back()->with(['error' => 'Kode verifikasi salah.']);
+    }
+
 }

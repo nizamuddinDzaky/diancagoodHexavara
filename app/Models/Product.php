@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Product extends Model
 {
@@ -41,5 +42,15 @@ class Product extends Model
     public function variant()
     {
         return $this->hasMany(ProductVariant::class)->orderBy('price', 'ASC');;
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class)->orderBy('created_at', 'DESC');
+    }
+
+    public function images()
+    {
+        return $this->hasMany(Image::class);
     }
 }

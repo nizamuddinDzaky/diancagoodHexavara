@@ -3933,7 +3933,7 @@ h6 {
 
 .f_p_item h4 {
     color: #222222;
-    font-size: 16px;
+    font-size: 24px;
     margin-top: 15px;
     transition: all 300ms linear 0s;
 }
@@ -3945,7 +3945,7 @@ h6 {
 .f_p_item h5 {
     margin-bottom: 0px;
     font-size: 18px;
-    color: #777777;
+    font-weight: 700;
 }
 
 .f_p_item:hover .f_p_img .p_icon {
@@ -4363,22 +4363,30 @@ h6 {
 }
 
 .s_product_text {
-    margin-left: -15px;
-    margin-top: 65px;
+    margin-left: -10px;
 }
 
-.s_product_text h3 {
-    font-size: 24px;
-    font-weight: 500;
-    color: #222222;
+.s_product_text h5 {
+    font-size: 18px;
     margin-bottom: 10px;
 }
 
+.s_product_text h3 {
+    font-size: 30px;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.s_product_text h4 {
+    font-size: 20px;
+    font-weight: 400;
+    margin-bottom: 3rem;
+}
+
 .s_product_text h2 {
-    font-size: 24px;
+    font-size: 36px;
     font-weight: bold;
-    color: #1641ff;
-    margin-bottom: 15px;
+    margin-bottom: 1.5rem;
 }
 
 .s_product_text .list li {
@@ -4414,10 +4422,7 @@ h6 {
 }
 
 .s_product_text p {
-    padding-top: 20px;
-    border-top: 1px dotted #d5d5d5;
-    margin-top: 20px;
-    margin-bottom: 70px;
+    margin-bottom: 10px;
 }
 
 .s_product_text .card_area .main_btn {
@@ -6082,9 +6087,10 @@ h6 {
 .slider-center-cropped {
     object-fit: cover;
     object-position: center; 
-    height: 500px;
+    height: 490px;
     width: 100%;
-  }
+    border-radius: 15px 15px 0px 0px;
+}
 
 .home-product-center-cropped {
   object-fit: cover;
@@ -6124,6 +6130,10 @@ h6 {
     width: 100%;
     object-position: center;
     border-radius: 2rem;
+}
+
+.text-gray-1 {
+    color: #333333 !important;
 }
 
 .text-gray-2 {
@@ -6170,12 +6180,40 @@ h6 {
     font-weight: 600 !important;
 }
 
+.weight-700 {
+    font-weight: 700 !important;
+}
+
+.font-24 {
+    font-size: 24px;
+}
+
+.font-20 {
+    font-size: 20px;
+}
+
+.font-18 {
+    font-size: 18px;
+}
+
 .btn-orange {
     background: #f37020;
     border: 1px solid #f37020;
     box-sizing: border-box;
     border-radius: 10px;
     color: #fff;
+    font-size: 14px;
+    padding: 7px 25px 7px 25px;
+    margin-right: 10px;
+    transition: color 0.3s ease-in-out background-color 0.3s ease-in-out;
+}
+
+.btn-outline-gray {
+    background: #fff;
+    border: 1px solid #4f4f4f;
+    box-sizing: border-box;
+    border-radius: 10px;
+    color: #4f4f4f;
     font-size: 14px;
     padding: 7px 25px 7px 25px;
     margin-right: 10px;

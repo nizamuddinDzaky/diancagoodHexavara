@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Category;
+use App\Models\Subcategory;
+use App\Models\Product;
 
 class ProductController extends Controller
 {
@@ -112,8 +115,9 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $product = Product::where('id', $id)->with('variant', 'category', 'subcategory')->first();
-        // return view('products.show', compact('product'));
+        $product = Product::where('id', $id)->with('brand', 'reviews', 'images', 'variant', 'category', 'subcategory')->first();
+        
+        return view('dianca.product-detail', compact('product'));
     }
 
     /**
