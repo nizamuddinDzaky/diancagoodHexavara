@@ -59,7 +59,7 @@
                                                     <h3 class="pl-3" style="color: black"><strong>Rp 287.002</strong></h3>
                                                     <h6 class="pl-3 pb-3">Transfer tepat sampai 2 digit terakhir agar mempercepat proses verifikasi</h6>
                                                     <div class="pl-3">
-                                                        <a type="button" class="btn btn-outline-orange" href="#" aria-disabled="true" style="width: 30rem">Upload Bukti Pembayaran</a>
+                                                        <a type="button" class="btn btn-outline-orange" href="#" aria-disabled="true" style="width: 30rem" data-toggle="modal" data-target="#uploadPaymentModal">Upload Bukti Pembayaran</a>
                                                     </div>
                                                     
                                                 </div>
@@ -103,7 +103,74 @@
             </div>
         </div>
     </section>
-    <section class="feature_product_area">
+    <!-- Modal -->
+    <div class="modal fade w-100" id="uploadPaymentModal" role="dialog">
+        <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header pl-0 pb-4">
+                    <h3 class="modal-title w-100 text-center position-absolute" style="color: black">Bukti Pembayaran</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="cart_inner">
+                            <form action="">
+                                <div class="form-group pl-2 pr-2">
+                                    <label style="color: #4F4F4F">Nomor Pemesanan</label><br>
+                                    <input type="text" name="nomorpemesanan" id="nomorpemesanan" class="form-control" style="background: #F2F2F2" placeholder="DG01232020AV" disabled>
+                                </div>
+                                <div class="form-group pl-2 pr-2 pb-1">
+                                    <label style="color: #4F4F4F">Bank Tujuan</label>
+                                    <select class="form-control border" style="boder-color: #EOEOEO">
+                                        <option>Bank BNI (800 152 6846) - A/n. Toko Diancagoods</option>
+                                    </select>
+                                    <!-- <input type="select" class="form-control border" style="boder-color: #EOEOEO" id="banktujuan" placeholder="Bank BNI (800 152 6846) - A/n. Toko Diancagoods" required> -->
+                                </div>
+                                <div class="form-group pl-2 pr-2 pb-1">
+                                    <label style="color: #4F4F4F">Bank Pengirim</label>
+                                    <select class="form-control border" style="boder-color: #EOEOEO">
+                                        <option>Pilih Bank</option>
+                                    </select>
+                                    <!-- <input type="text" class="form-control border" style="boder-color: #EOEOEO" id="bankpengirim" placeholder="Pilih Bank" required> -->
+                                </div>
+                                <div class="form-group pl-2 pr-2 pb-1">
+                                    <label style="color: #4F4F4F">Nomor Rekening Pengirim</label>
+                                    <input type="text" class="form-control border" style="boder-color: #EOEOEO" id="norekpengirim" placeholder="" required>
+                                </div>
+                                <div class="form-group pl-2 pr-2 pb-1">
+                                    <label style="color: #4F4F4F">Nama Pemilik Rekening</label>
+                                    <input type="text" class="form-control border" style="boder-color: #EOEOEO" id="narekpengirim" placeholder="" required>
+                                </div>
+                                <div class="form-group pl-2 pr-2 pb-1">
+                                    <label style="color: #4F4F4F">Jumlah Transfer</label><br>
+                                    <input type="text" name="jumlahtrf" id="jumlahtrf" class="form-control border" style="boder-color: #EOEOEO" required>
+                                </div>
+                                <div class="form-group pl-2 pr-2 pb-1">
+                                    <label style="color: #4F4F4F">Tanggal Transfer</label><br>
+                                    <input type="text" name="tgltrf" id="tgltrf" class="form-control border" style="boder-color: #EOEOEO" placeholder="29 Desember 2020" required>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="row float-right">
+                            <div class="col-md-12">
+                                <div class="cart-inner">
+                                    <div class="out_button_area">
+                                        <div class="checkout_btn_inner">
+                                            <a class="btn btn-outline-secondary" style="width: 7rem; height:40px" href="#">Cancel</a>
+                                            <a class="btn btn-outline-orange bg-orange" style="color: white" href="#">Upload</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <section class="feature_product_area"> -->
         <!-- <div class="main_box">
             <div class="container">
                 <div class="row pt-2 pl-2">
@@ -180,7 +247,7 @@
                 </div>
             </div>
         </div> -->
-    </section>
+    <!-- </section> -->
     <script src="{{ asset('js/bootstrap.js') }}"></script>
     <script src="{{ asset('js/app.js') }}"></script>
 </body>
