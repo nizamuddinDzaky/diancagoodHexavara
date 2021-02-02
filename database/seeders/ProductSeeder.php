@@ -11,6 +11,10 @@ use App\Models\Image;
 use App\Models\ProductVariant;
 use App\Models\Promo;
 use App\Models\Review;
+use App\Models\Cart;
+use App\Models\CartDetail;
+use App\Models\Order;
+use App\Models\OrderDetail;
 use Carbon\Carbon;
 
 class ProductSeeder extends Seeder
@@ -157,6 +161,33 @@ class ProductSeeder extends Seeder
             ]
         ];
 
+        $carts = [
+            [
+                'customer_id' => 1,
+                'total_cost' => 558000,
+                
+            ]
+        ];
+
+        $cartdetails = [
+            [
+                'cart_id' => 1,
+                'product_variant_id' => 1,
+                'price' => 258000,
+                'qty' => 1,
+                'is_avail' => 1,
+                
+            ],
+            [
+                'cart_id' => 1,
+                'product_variant_id' => 2,
+                'price' => 300000,
+                'qty' => 1,
+                'is_avail' => 1,
+                
+            ],
+        ];
+
         Category::insert($categories);
         Subcategory::insert($subcategories);
         Brand::insert($brands);
@@ -164,5 +195,7 @@ class ProductSeeder extends Seeder
         ProductVariant::insert($variants);
         Image::insert($images);
         Review::insert($reviews);
+        Cart::insert($carts);
+        CartDetail::insert($cartdetails);
     }
 }

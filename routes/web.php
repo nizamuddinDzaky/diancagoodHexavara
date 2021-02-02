@@ -7,6 +7,7 @@ use App\Http\Controllers\CustomerLoginController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,3 +38,7 @@ Route::get('/finish-payment', [OrderController::class, 'paymentDone'])->name('pa
 Route::get('/transactions', [TransactionController::class, 'index'])->name('transaction.list');
 
 Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
+
+Route::get('/profil', [ProfileController::class, 'index'])->name('profile');
+Route::get('/profil/alamat', [ProfileController::class, 'address'])->name('profile-address');
+Route::get('/profil/rekening', [ProfileController::class, 'rekening'])->name('profile-rekening');

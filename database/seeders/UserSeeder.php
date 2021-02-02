@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\Customer;
+use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
@@ -21,14 +22,14 @@ class UserSeeder extends Seeder
         User::create([
             'name' => 'admin1',
             'email' => 'admin1@dianca.id',
-            'password' => 'asdasdasd'
+            'password' => Hash::make('asdasdasd')
         ]);
 
         $customers = [
             [
                 'name' => 'cust verif',
                 'email' => 'butsherlock@gmail.com',
-                'password' => 'asdasdasd',
+                'password' => Hash::make('asdasdasd'),
                 'phone_number' => '123123123',
                 'address' => 'Jalan Mulyosari 37',
                 'district_id' => 6145
@@ -36,7 +37,7 @@ class UserSeeder extends Seeder
             [
                 'name' => 'Rizal Adam',
                 'email' => 'rizaladam@gmail.com',
-                'password' => 'asdasdasd',
+                'password' => Hash::make('asdasdasd'),
                 'phone_number' => '123123123',
                 'address' => 'Jalan Mulyosari 37',
                 'district_id' => 6145

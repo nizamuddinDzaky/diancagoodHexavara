@@ -62,7 +62,7 @@
                                     aria-disabled="true"><i class="material-icons md-24">shopping_cart</i></a>
                             </li>
                             @if (auth()->guard('customer')->check())
-                            <li class="nav-item"><a type="button" class="btn" style="margin-left=0px" tabindex="-1" aria-disabled="true" href="#">Akun Saya</a></li>
+                            <li class="nav-item"><a type="button" class="btn" style="margin-left=0px" tabindex="-1" aria-disabled="true" href="{{ route('profile') }}">Akun Saya</a></li>
                             <li class="nav-item"><a type="button" class="btn" style="margin-left=0px" tabindex="-1" aria-disabled="true" href="{{ route('customer.logout') }}">Logout</a></li>
                             @else
                             <li class="nav-item">

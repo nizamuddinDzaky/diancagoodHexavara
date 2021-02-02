@@ -81,7 +81,7 @@
                                                 </div>
                                                 <div class="col-lg-2">
                                                     {{-- if order is being delivered --}}
-                                                    <button class="btn btn-orange weight-600" style="padding:9px 20px">Lacak Pengiriman</button>
+                                                    <button class="btn btn-orange weight-600" style="padding:9px 20px" data-toggle="modal" data-target="#trackModal">Lacak Pengiriman</button>
                                                 </div>
                                             </div>
                                             <hr class="mt-2 mb-3"/>
@@ -101,6 +101,48 @@
         </div>
     </div>
 </section>
+<!-- Modal -->
+<div class="modal fade w-100" id="trackModal" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document" style="width:1000rem">
+        <div class="modal-content">
+            <div class="modal-header pl-0 pb-4">
+                <h3 class="modal-title w-100 text-center position-absolute" style="color: #4F4F4F">Lacak Pengiriman</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row" style="color: #828282">
+                        <div class="col-md-4">
+                            <h6>Jasa Pengiriman</h6>
+                        </div>
+                        <div class="col-md-4">
+                            <h6>Lama Pengiriman</h6>
+                        </div>
+                        <div class="col-md-4">
+                            <h6>Estimasi Sampai</h6>
+                        </div>
+                    </div>
+                    <div class="row" style="color: #4F4F4F">
+                        <div class="col-md-4">
+                            <h5>JNT</h5>
+                        </div>
+                        <div class="col-md-4">
+                            <h5>Regular (4 - 5 hari)</h5>
+                        </div>
+                        <div class="col-md-4">
+                            <h5>24 - 25 Des 2020</h5>
+                        </div>
+                    </div>
+                    <div class="row pl-3 pt-2">
+                        <h5 style="color: #4F4F4F">Nomor Resi : </h5><h5 style="color: #F37020"><strong>#JB0019791132</strong></h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('js')
