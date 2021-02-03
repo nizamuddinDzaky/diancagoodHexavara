@@ -22,4 +22,9 @@ class Customer extends Authenticatable
     {
         return $this->belongsTo('App\District', 'district_id');
     }
+
+    public function address()
+    {
+        return $this->hasMany(Address::class);
+    }
 }

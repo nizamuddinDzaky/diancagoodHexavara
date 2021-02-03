@@ -20,24 +20,20 @@
                     <div class="card shadow-1">
                         <div class="card-body">
                             <div class="row text-center" style="color: #4F4F4F">
-                                <!-- <h4>Biodata Diri</h4> -->
                                 <div class="col-lg-4 md-4 sm-4">
                                     <h6>Biodata Diri</h6>
                                 </div>
                                 <div class="col-lg-4 md-4 sm-4">
                                     <a href="{{ route('profile-address') }}" style="color: #4F4F4F">Daftar Alamat</a>
-                                    <!-- <h5>Daftar Alamat</h5> -->
                                 </div>
                                 <div class="col-lg-4 md-4 sm-4">
                                     <a href="{{ route('profile-rekening') }}" style="color: #4F4F4F">Rekening Bank</a>
-                                    <!-- <h5>Rekening Bank</h5> -->
                                 </div>
                             </div>
                             <div class="container">
                                 <hr class="pb-2" style="border-color:F2F2F2">
                             </div>
                             <div class="row">
-                                <!-- <h4>Biodata Diri</h4> -->
                                 <div class="col-lg-4 md-4 sm-4">
                                     <h5>Biodata Diri</h5>
                                 </div>
@@ -60,7 +56,7 @@
                                             <h5 class="mt-4" style="color: white"><strong>.</strong></h5>
                                             <h6 class="mt-4" style="color: #828282">ranawidjannaim@gmail.com</h6>
                                             <h6 class="mt-4" style="color: #828282">Tambah Nomor Ponsel</h6>
-                                            <button class="btn btn-outline-orange bg-orange" style="color: white; width:30rem; height:2rem" aria-disabled="true"><h6>Jaga akun anda agar tetap aman dengan <strong>Verifikasi nomor ponsel</strong></h6></button>
+                                            <button class="btn btn-outline-orange bg-orange mt-3" style="color: white; width:30rem; height:2rem" aria-disabled="true"><h6>Jaga akun anda agar tetap aman dengan <strong>Verifikasi nomor ponsel</strong></h6></button>
                                             <h6 class="mt-3" style="color: #828282">Untuk kelancaran transaksi anda, silahkan tambahkan nomor yang dapat kami hubungi.</h6>
                                         </div>
                                     </div>

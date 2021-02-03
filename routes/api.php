@@ -7,6 +7,7 @@ use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\SubcategoryController;
 use App\Http\Controllers\API\BrandController;
 use App\Http\Controllers\API\CartController;
+use App\Http\Controllers\API\AddressController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,4 +32,5 @@ Route::middleware('auth:sanctum')->group( function() {
     Route::resource('subcategories', SubcategoryController::class);
     Route::resource('carts', CartController::class);
     Route::apiResource('brand', BrandController::class);
+    Route::apiResource('address', AddressController::class);
 });
