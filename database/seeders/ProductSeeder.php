@@ -166,7 +166,12 @@ class ProductSeeder extends Seeder
                 'customer_id' => 1,
                 'total_cost' => 558000,
                 
-            ]
+            ],
+            [
+                'customer_id' => 3,
+                'total_cost' => 558000,
+                
+            ],
         ];
 
         $cartdetails = [
@@ -180,6 +185,22 @@ class ProductSeeder extends Seeder
             ],
             [
                 'cart_id' => 1,
+                'product_variant_id' => 2,
+                'price' => 300000,
+                'qty' => 1,
+                'is_avail' => 1,
+                
+            ],
+            [
+                'cart_id' => 2,
+                'product_variant_id' => 1,
+                'price' => 258000,
+                'qty' => 1,
+                'is_avail' => 1,
+                
+            ],
+            [
+                'cart_id' => 2,
                 'product_variant_id' => 2,
                 'price' => 300000,
                 'qty' => 1,

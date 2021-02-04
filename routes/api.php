@@ -8,6 +8,7 @@ use App\Http\Controllers\API\SubcategoryController;
 use App\Http\Controllers\API\BrandController;
 use App\Http\Controllers\API\CartController;
 use App\Http\Controllers\API\AddressController;
+use App\Http\Controllers\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,3 +35,5 @@ Route::middleware('auth:sanctum')->group( function() {
     Route::apiResource('brand', BrandController::class);
     Route::apiResource('address', AddressController::class);
 });
+
+Route::post('cost', [OrderController::class, 'getCourier']);

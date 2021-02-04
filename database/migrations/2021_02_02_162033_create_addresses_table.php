@@ -22,6 +22,7 @@ class CreateAddressesTable extends Migration
             $table->string('city');
             $table->string('postal_code');
             $table->string('address');
+            $table->boolean('is_main')->default(false);
             $table->timestamps();
         });
     }

@@ -34,8 +34,8 @@
                                 <hr class="pb-2" style="border-color:F2F2F2">
                             </div>
                             <div class="row">
-                                <div class="col-lg-4 md-4 sm-4">
-                                    <h5>Biodata Diri</h5>
+                                <div class="col-lg-4 md-4 sm-4 text-center">
+                                    <div class="container" style="background: #727272; height:20rem; width:18rem">.</div>
                                 </div>
                                 <div class="col-lg-8 md-8 sm-8">
                                     <div class="row">
