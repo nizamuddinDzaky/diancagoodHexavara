@@ -23,7 +23,7 @@ class ProductVariantController extends Controller
      */
     public function create()
     {
-        $product = Product::get();
+        
         // return view('products.variant.create', compact('product'));
     }
 

@@ -59,6 +59,8 @@ class CustomerRegisterController extends Controller
     {
         $customer = Customer::where('id', $id)->first();
 
+        $customer->update('activate_token', Str::random(4));
+
         Nexmo::message()->send([
             'to' => '6281286930463',
             'from' => 'Vonage APIs',
@@ -88,6 +90,12 @@ class CustomerRegisterController extends Controller
             $request->digit_d == $a[3]) {
                 
                 $customer->update(['status' => true]);
+                
+                $cart = Cart::create([
+                    'customer_id' => $customer->id,
+                    'total_cost'=> 0
+                ]);
+                
                 Auth::login($customer);
                 return redirect()->intended(route('home'));
             }

@@ -20,6 +20,7 @@ class CreateProductVariantsTable extends Migration
             $table->integer('price');
             $table->integer('weight');
             $table->integer('stock');
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }

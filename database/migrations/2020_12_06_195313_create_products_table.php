@@ -21,7 +21,6 @@ class CreateProductsTable extends Migration
             $table->string('name');
             $table->string('slug');
             $table->text('description')->nullable();
-            $table->string('image')->nullable();
             $table->boolean('status')->default(true);
             $table->boolean('is_featured')->default(false);
             $table->integer('promo')->nullable();

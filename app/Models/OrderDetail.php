@@ -11,7 +11,7 @@ class OrderDetail extends Model
 
     public function variant()
     {
-        return $this->belongsTo('App\ProductVariant', 'product_variant_id');
+        return $this->belongsTo('App\Models\ProductVariant', 'product_variant_id');
     }
 
     public function order()

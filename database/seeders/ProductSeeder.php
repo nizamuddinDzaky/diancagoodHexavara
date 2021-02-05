@@ -7,7 +7,7 @@ use App\Models\Category;
 use App\Models\Subcategory;
 use App\Models\Brand;
 use App\Models\Product;
-use App\Models\Image;
+use App\Models\ProductImage;
 use App\Models\ProductVariant;
 use App\Models\Promo;
 use App\Models\Review;
@@ -103,7 +103,6 @@ class ProductSeeder extends Seeder
                 TIDAK MENJUAL BARANG YANG TIDAK ORIGINAL!
                 
                 -Dianca Goods-',
-                'image' => 'yuja niacin brightening sleeping mask 1.png',
                 'status' => 1,
                 'is_featured' => 1,
                 'promo' => 0
@@ -129,6 +128,10 @@ class ProductSeeder extends Seeder
 
         $images = [
             [
+                'filename' => 'yuja niacin brightening sleeping mask 1.png',
+                'product_id' => 1
+            ],
+            [
                 'filename' => 'somebymi yuja niacin 1.png',
                 'product_id' => 1
             ],
@@ -144,10 +147,6 @@ class ProductSeeder extends Seeder
                 'filename' => 'somebymi yuja niacin 4.png',
                 'product_id' => 1
             ],
-            [
-                'filename' => 'yuja niacin brightening sleeping mask 1.png.png',
-                'product_id' => 1
-            ],
         ];
 
         $reviews = [
@@ -157,7 +156,6 @@ class ProductSeeder extends Seeder
                 'text' => 'Barang udah sampe dan original, pacar juga seneng banget dibeliin ini',
                 'rate' => 4.5,
                 'status' => 1,
-                
             ]
         ];
 
@@ -165,7 +163,6 @@ class ProductSeeder extends Seeder
             [
                 'customer_id' => 1,
                 'total_cost' => 558000,
-                
             ]
         ];
 
@@ -193,7 +190,7 @@ class ProductSeeder extends Seeder
         Brand::insert($brands);
         Product::insert($products);
         ProductVariant::insert($variants);
-        Image::insert($images);
+        ProductImage::insert($images);
         Review::insert($reviews);
         Cart::insert($carts);
         CartDetail::insert($cartdetails);

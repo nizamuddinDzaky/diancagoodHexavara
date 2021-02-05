@@ -20,7 +20,6 @@ class CreateOrderDetailsTable extends Migration
             $table->integer('price');
             $table->integer('qty');
             $table->integer('weight');
-            $table->integer('order_status')->default(0);
             $table->timestamps();
         });
     }

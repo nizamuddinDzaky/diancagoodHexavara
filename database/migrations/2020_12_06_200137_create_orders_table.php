@@ -26,10 +26,9 @@ class CreateOrdersTable extends Migration
             $table->integer('shipping_cost')->default(0);
             $table->integer('total_cost')->default(0);
             $table->string('shipping')->nullable();
-            $table->char('status', 1)->default(0);
+            $table->integer('status')->default(0);
             $table->string('tracking_number')->nullable();
             $table->timestamp('invalid_at')->nullable();
-            $table->boolean('free_access')->default(false);
             $table->timestamps();
         });
     }

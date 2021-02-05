@@ -19,7 +19,7 @@ use App\Http\Controllers\ProfileController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+URL::forceRootUrl(getenv('APP_URL'));
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/register', [CustomerRegisterController::class, 'index'])->name('customer.register');
@@ -35,10 +35,16 @@ Route::get('/checkout', [OrderController::class, 'index'])->name('checkout');
 Route::get('/payment', [OrderController::class, 'payment'])->name('payment');
 Route::get('/finish-payment', [OrderController::class, 'paymentDone'])->name('paymentDone');
 
-Route::get('/transactions', [TransactionController::class, 'index'])->name('transaction.list');
+Route::get('/transactions/{status}', [TransactionController::class, 'index'])->name('transaction.list');
+
+Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
 
 Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
 
 Route::get('/profil', [ProfileController::class, 'index'])->name('profile');
 Route::get('/profil/alamat', [ProfileController::class, 'address'])->name('profile-address');
 Route::get('/profil/rekening', [ProfileController::class, 'rekening'])->name('profile-rekening');
+
+Route::get('/cart', [OrderController::class, 'showCart'])->name('cart.show');
+Route::post('/cart/add', [OrderController::class, 'addToCart'])->name('cart.add');
+Route::post('/cart/update', [OrderController::class, 'updateCart'])->name('cart.update');

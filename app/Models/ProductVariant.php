@@ -33,4 +33,9 @@ class ProductVariant extends Model
     {
         return $this->hasMany(OrderDetail::class);
     }
+
+    public function image()
+    {
+        return $this->hasOne(ProductImage::class, 'product_variant_id');
+    }
 }

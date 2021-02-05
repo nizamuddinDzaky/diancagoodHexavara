@@ -65,7 +65,7 @@
                     <div class="f_p_item">
                         <div class="f_p_img pl-3">
                             <a href="{{ url('/product/' . $row->id) }}">
-                                <img id="pic{{ $row }}" class="home-product-center-cropped" src="{{ asset('storage/products/' . $row->image) }}" alt="{{ $row->name }}">
+                                <img id="pic{{ $row }}" class="home-product-center-cropped" src="{{ asset('storage/products/' . $row->images->first()->filename) }}" alt="{{ $row->name }}">
                             </a>
                         </div>
                         <a href="{{ url('/product/' . $row->id) }}">
