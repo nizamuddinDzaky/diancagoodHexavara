@@ -111,19 +111,19 @@
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="row mr-2 float-right">
-                                                <h5 style="color: black">Rp 270.000</h5>
+                                                <h5 style="color: black">Rp {{number_format($total_cost, 2, ',', '.')}}</h5>
                                             </div>
                                             <div class="row mr-2 pt-1 pb-2 float-right">
                                                 <h5 style="color: black">Rp 17.000</h5>
                                             </div>
                                             <br>
                                             <div class="row mr-2 pt-3 float-right">
-                                                <h5 style="color: black"><strong>Rp 287.000</strong></h5>
+                                                <h5 style="color: black"><strong>Rp {{number_format($total_cost + 17000, 2, ',', '.')}}</strong></h5>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row justify-content-center pt-4">
-                                        <a type="button" class="btn btn-outline-orange bg-orange" style="color: white; width:20rem" href="#" aria-disabled="true">Bayar (1)</a>
+                                        <a type="button" class="btn btn-outline-orange bg-orange" style="color: white; width:20rem" href="{{ route('payment.done') }}" aria-disabled="true">Bayar (<span>{{ $qty }}</span>)</a>
                                     </div>
                                 </div>
                             </div>

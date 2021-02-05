@@ -1,16 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.store')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
+@section('title')
+    <title>Registrasi</title>
+@endsection
 
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-</head>
-
-<body>
+@section('content')
     <div class="align-items-center d-flex min-vh-100">
         <div class="container-fluid pt-5 mt-5">
             <div class="row justify-content-center align-items-center">
@@ -91,6 +85,4 @@
             </div>
         </div>
     </div>
-</body>
-
-</html>
+@endsection

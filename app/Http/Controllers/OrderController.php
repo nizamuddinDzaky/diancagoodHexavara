@@ -28,9 +28,9 @@ class OrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        if(auth()->guard('customer')->check()) {
+        if(Auth::guard('customer')->check()) {
             $carts = Cart::where('customer_id', auth()->guard('customer')->user()->id)->first();
             $carts_detail = CartDetail::with('variant.product')->where('is_avail', 1)->where('cart_id', $carts->id)->get();
 
@@ -45,11 +45,14 @@ class OrderController extends Controller
         
     }
 
-    public function payment($invoice)
+    public function payment()
     {
-        $order = Order::where('invoice', $invoice)->first();
-        // return view('ecommerce.checkout_finish', compact('order'));
-        return view('dianca.payment');
+        if(Auth::guard('customer')->check()) {
+            $cart = Cart::where('customer_id', Auth::guard('customer')->user()->id)->first();
+            $total_cost = $cart->total_cost;
+            $qty = CartDetail::where('cart_id', $cart->id)->sum('qty');
+            return view('dianca.payment', compact('total_cost', 'qty'));
+        }
     }
 
     public function paymentDone()
@@ -119,7 +122,6 @@ class OrderController extends Controller
                 'total_cost' => $carts->total_cost + 17000,
                 'shipping_cost' => $request->shipping_cost,
                 'shipping' => 'JNT',
-                'free_access' => false
             ]);
 
             foreach ($carts_detail as $row) {
@@ -139,6 +141,13 @@ class OrderController extends Controller
             }
 
             DB::commit();
+
+            foreach($variants as $v) {
+                CartDetail::where('cart_id', $carts->id)->where('product_variant_id', $v->id)->delete();
+            }
+
+            $carts->total_cost = CartDetail::where('cart_id', $carts->id)->sum('price');
+            $carts->save();
 
             return redirect(route('payment'));
             // return redirect(route('payment', $order->invoice));
@@ -187,7 +196,7 @@ class OrderController extends Controller
                     $cart_variant->price += $variant->price * $request->qty;
                     $cart_variant->save();
 
-                    $cart->total_cost += $variant->price * $request->qty;
+                    $cart->total_cost = CartDetail::where('cart_id', $cart_id)->sum('price');
                     $cart->save();
                 }
                 
@@ -223,9 +232,10 @@ class OrderController extends Controller
         $cart->save();
 
         $return = array();
-        $return['total_cost'] = $cart->total_cost;
+        $return['totalcost'] = $cart->total_cost;
         $return['subtotal'] = $carts_variant->price;
         $return['variant'] = $carts_variant;
+        $return['qty'] = $carts_variant->sum('qty');
 
         return json_encode($return);
     }

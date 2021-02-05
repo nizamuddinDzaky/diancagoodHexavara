@@ -8,18 +8,18 @@
 <section class="section_gap mt-4">
     <div class="main_box pt-4">
         <div class="container text-gray-2">
-            <div class="row my-2">
-                <div class="col-lg-8">
-                    <div class="form-check text-gray-2">
-                        <input class="form-check-input primary-checkbox" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label font-16 align-middle" for="flexCheckDefault">
-                            Pilih Semua Barang
-                        </label>
-                        <span class="float-right font-16 weight-600" style="color:#EB5757">Hapus</span>
-                    </div>
-                    <hr>
-                    <form method="POST" action="{{ route('cart.update') }}">
-                        @csrf
+            <form method="POST" action="{{ route('checkout') }}">
+                @csrf
+                <div class="row my-2">
+                    <div class="col-lg-8">
+                        <div class="form-check text-gray-2">
+                            <input class="form-check-input primary-checkbox" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label font-16 align-middle" for="flexCheckDefault">
+                                Pilih Semua Barang
+                            </label>
+                            <span class="float-right font-16 weight-600" style="color:#EB5757">Hapus</span>
+                        </div>
+                        <hr>
                         @forelse($cart->details as $cd)
                         <div class="form-check text-gray-2 my-4">
                             <input class="form-check-input position-static align-top primary-checkbox" type="checkbox" name="cd[]" value="{{ $cd->id }}">
@@ -42,20 +42,20 @@
                                     <hr>
                                     <div class="row">
                                         <div class="col-lg-6 font-16">
-                                            <p class="align-items-center">Sub Total Harga: <strong><span id="subtotal{{ $cd->id }}">Rp {{ number_format($cd->variant->price * $cd->qty, 2, ',', '.') }}</span></strong></p>
+                                            <p class="align-items-center">Sub Total Harga: <strong><span id="subtotal{{ $cd->variant->id }}">Rp {{ number_format($cd->variant->price * $cd->qty, 2, ',', '.') }}</span></strong></p>
                                         </div>
                                         <div class="col-lg-6 align-middle">
                                             <div class="btn-group btn-group-vertical-center float-right">
                                                 <span class="product_count">
-                                                    <button class="reduced items-count font-10" type="button" onclick="decrement({{ $cd->id}})">
+                                                    <button class="reduced items-count font-10" type="button" onclick="decrement({{ $cd->variant->id }})">
                                                         <span class="material-icons md-10">remove</span>
                                                     </button>
                                                 </span>
                                                 <span class="product_count">
-                                                    <input type="text" name="qty[]" id="qty{{ $cd->id }}" maxlength="12" value="{{ $cd->qty }}" style="height:26px;width:70px" class="input-text" required>
+                                                    <input type="text" name="qty[]" id="qty{{ $cd->variant->id }}" maxlength="12" value="{{ $cd->qty }}" style="height:26px;width:70px" class="input-text" required>
                                                 </span>
                                                 <span class="product_count">
-                                                    <button class="increase items-count font-10" type="button" onclick="increment({{ $cd->id}})">
+                                                    <button class="increase items-count font-10" type="button" onclick="increment({{ $cd->variant->id }})">
                                                         <span class="material-icons md-10">add</span>
                                                     </button>
                                                 </span>
@@ -69,19 +69,19 @@
                         </div>
                         @empty
                         @endforelse
-                    </form>
-                </div>
-                <div class="col-lg-4">
-                    <div class="card shadow-1">
-                        <div class="card-body font-18">
-                            <h4>Ringkasan Belanja</h4>
-                            <hr>
-                            <p>Total Harga<span class="float-right"><strong>Rp {{ number_format($cart->total_cost, 2, ',', '.') }}</strong></span></p>
-                            <a type="button" href="#" class="btn btn-orange weight-600 btn-block font-18 py-2">Beli Sekarang (<span>{{ $cart->details->sum('qty') }}</span>)</a>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card shadow-1">
+                            <div class="card-body font-18">
+                                <h4>Ringkasan Belanja</h4>
+                                <hr>
+                                <p>Total Harga<strong><span class="float-right" id="total_cost">Rp {{ number_format($cart->total_cost, 2, ',', '.') }}</span></strong></p>
+                                <button class="btn btn-orange weight-600 btn-block font-18 py-2">Beli Sekarang (<span id="qty">{{ $cart->details->sum('qty') }}</span>)</a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 </section>
@@ -108,6 +108,8 @@
             dataType: "JSON",
             success: function(res) {
                 $("#subtotal"+id).html(res.subtotal.toLocaleString("id-ID", myObj));
+                $("#total_cost").html(res.totalcost.toLocaleString("id-ID", myObj));
+                $("#qty").html(res.qty);
             },
             error: function (xhr, status, err) {
                 console.log(err);
@@ -130,6 +132,8 @@
                 dataType: "JSON",
                 success: function(res) {
                     $("#subtotal"+id).html(res.subtotal.toLocaleString("id-ID", myObj));
+                    $("#total_cost").html(res.totalcost.toLocaleString("id-ID", myObj));
+                    $("#qty").html(res.qty);
                 },
                 error: function (xhr, status, err) {
                     console.log(err);

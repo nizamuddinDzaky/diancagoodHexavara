@@ -1,39 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.store')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+@section('title')
+    <title>Pembelian</title>
+@endsection
 
-    <title>Checkout</title>
-
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/responsive.css') }}">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
-</head>
-
-<body>
-    <header class="header_area">
-        <div class="main_menu">
-            <nav class="navbar navbar-expand-lg">
-                <div class="container-fluid pr-5 pl-5">
-                    <a class="navbar-brand logo_h pr-3" href="{{ url('/') }}">
-                        <img src="{{ asset('img/logo-1x.png') }}" alt="logo" style="width: 150px">
-                    </a>
-                </div>
-            </nav>
-        </div>
-    </header>
+@section('content')
     <section class="feature_product_area section_gap mt-4" style="height: 240px">
         <div class="main_box pt-4">
             <div class="container">           
                 <div class="row my-2">
                     <div class="main_title">
-                        <h2 class="pl-3" style="color: black">Pembayaran</h2>
-                        <h5 class="pl-3 pt-2" style="color: black">1 dari 2 langkah</h5>
+                        <h2 class="pl-3" >Pembayaran</h2>
+                        <h5 class="pl-3 pt-2" >1 dari 2 langkah</h5>
                         <!-- <div class="container">
                             <hr class="rounded" style="border-color:F2F2F2">
                         </div> -->
@@ -57,11 +35,11 @@
     </div>
     <section class="feature_product_area">
         <div class="main_box">
-            <div class="container">
+            <div class="container text-gray-2">
                 <div id="#no-address">
                     <div class="row my-2">
-                        <div class="main_title">
-                            <h3 class="pl-3" style="color: black">Alamat Pengiriman</h3>
+                        <div class="main_title text-gray-2">
+                            <h3 class="pl-3">Alamat Pengiriman</h3>
                         </div>
                     </div>
                     @if (auth()->guard('customer')->user()->address == 0)
@@ -73,8 +51,7 @@
                     @endif
                     @if (auth()->guard('customer')->user()->address != 0)
                     <div class="row my-2 pl-3">
-                        <h5><strong>{{ $address->receiver_name }}</strong></h5>
-                        <h5> ({{ $address->address_type }})</h5>
+                        <h5><strong>{{ $address->receiver_name }}</strong> ({{ $address->address_type }})</h5>
                     </div>
                     <div class="row my-2 pl-3" style="color: #333333">
                         <h5>{{ $address->receiver_phone }}</h5>
@@ -110,17 +87,17 @@
                                     <div class="row px-4 py-4">
                                         <div class="col-lg-3">
                                             <a href="#">
-                                                <img id="image" class="product-img-sm" src="{{ asset('storage/products/' . $val->variant->product->image) }}" alt="Starterkit">
+                                                <img id="image" class="product-img-sm" src="{{ asset('storage/products/' . $val->variant->product->images->first()->filename) }}" alt="Starterkit">
                                             </a>
                                         </div>
                                         <div class="col-lg-8">
                                             <div class="row ml-2 pt-3">
                                                 <a href="#">
-                                                    <h4 style="color: black">{{ $val->variant->product->name }}</h4>
+                                                    <h4 class="text-gray-2 weight-600 font-24">{{ $val->variant->product->name }}</h4>
                                                 </a>
                                             </div>
                                             <div class="row ml-2 pt-2">
-                                                <h5 style="color: black">{{ $val->qty }} Barang</h5>
+                                                <h5 >{{ $val->qty }} Barang</h5>
                                                 <h5>({{ $val->variant->weight }} gr)</h5>
                                             </div>
                                         </div>
@@ -130,7 +107,7 @@
                                     </div>
                                     <div class="row px-4 py-2" style="height: 60px">
                                         <div class="col-lg-9">
-                                            <h5 class="ml-2" style="color: black">Sub Total Harga: <strong>Rp {{ number_format($val['price'] * $val['qty']) }}</strong></h5>
+                                            <h5 class="ml-2" >Sub Total Harga: <strong>Rp {{ number_format($val['price'] * $val['qty'], 2, ',', '.') }}</strong></h5>
                                         </div>
                                         <div class="col-lg-3">
                                             <a type="button" class="btn btn-outline-orange float-right" href="#" aria-disabled="true">Edit</a>
@@ -202,51 +179,29 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4">
-                        <div class="row py-2">
-                            <div class="col-lg-12 pb-4">
-                                <div class="card shadow-1" style="width: 22rem; height:20rem">
-                                    <div class="row px-4 py-4 ml-2" style="height: 50px">
-                                        <div class="">
-                                            <h4 style="color: #828282"><strong>Ringkasan Belanja</strong></h4>
-                                        </div>
-                                    </div>
-                                    <div class="container">
-                                        <hr class="" style="border-color:F2F2F2">
-                                    </div>
-                                    <div class="row px-4 py-2">
+                    <div class="col-lg-4">>
+                        <div class="card shadow-1">
+                            <div class="card-body font-18">
+                                <h4 style="color: #828282"><strong>Ringkasan Belanja</strong></h4>
+                                <hr>
+                                <form action="{{ route('checkout.process') }}" method="post">
+                                @csrf
+                                    <div class="row py-2">
                                         <div class="col-lg-6" style="color: #828282">
-                                            <div class="row ml-2">
-                                                <h5>Total Harga</h5>
-                                            </div>
-                                            <div class="row ml-2 pt-1 pb-2">
-                                                <h5>Ongkos Kirim</h5>
-                                            </div>
-                                            <div class="row ml-2 pt-3">
-                                                <h5>Total Tagihan</h5>
-                                            </div>
+                                            <h5>Total Harga</h5>
+                                            <h5>Ongkos Kirim</h5>
+                                            <h5>Total Tagihan</h5>
                                         </div>
-                                        <div class="col-lg-6" style="color: #828282">
-                                            <div class="row mr-2 float-right">
-                                                <h5>Rp {{ number_format($carts['total_cost']) }}</h5>
-                                            </div>
-                                            <div class="row mr-2 pt-1 pb-2 float-right">
-                                                <h5 id="ongkir">Rp 17000</h5>
-                                                <form action="" method="post">
-                                                @csrf
-                                                    <input type="hidden" value="17000" name="shipping_cost">
-                                                </form>
-                                            </div>
-                                            <br>
-                                            <div class="row mr-2 pt-3 float-right">
-                                                <h5 id="total"><strong>Rp {{ number_format($carts['total_cost'] + 17000) }}</strong></h5>
-                                            </div>
+                                        <div class="col-lg-6 float-right" style="text-align: right">
+                                            <h5>Rp {{ number_format($carts['total_cost']) }}</h5>
+                                            <h5 id="ongkir">Rp 17,000</h5>
+                                            <input type="hidden" value="17000" name="shipping_cost">
+                                            <h5 id="total"><strong>Rp {{ number_format($carts['total_cost'] + 17000) }}</strong></h5>
                                         </div>
                                     </div>
-                                    <div class="row justify-content-center pt-4">
-                                        <a type="button" class="btn btn-outline-orange bg-orange" style="color: white; width:20rem" href="" aria-disabled="true">Pilih Pembayaran</a>
-                                    </div>
-                                </div>
+                                    <button class="btn btn-orange weight-600 btn-block font-18 py-2" href="{{ route('payment') }}" aria-disabled="true">Pilih Pembayaran</a>
+                                </form>
+                                
                             </div>
                         </div>
                     </div>
@@ -258,7 +213,7 @@
         <div class="modal-dialog modal-dialog-centered modal-md" role="document">
             <div class="modal-content">
                 <div class="modal-header pl-0 pb-4">
-                    <h3 class="modal-title w-100 text-center position-absolute" style="color: black">Buat Alamat Baru</h3>
+                    <h3 class="modal-title w-100 text-center position-absolute" >Buat Alamat Baru</h3>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -269,35 +224,35 @@
                             <form action="{{ route('checkout.address') }}" method="post" id="checkout-form">
                                 @csrf
                                 <div class="form-group pl-2 pr-2 pb-3">
-                                    <label style="color: black">Jenis Alamat</label><br>
+                                    <label >Jenis Alamat</label><br>
                                     <input type="text" name="address_type" id="address_type" class="form-control" style="background: #F6F6F6" required>
                                     <input type="hidden" value="{{ auth()->guard('customer')->user()->id }}" name="customer_id">
                                     <p class="text ml-1" style="color: #828282">Contoh : Alamat Kantor, Alamat Rumah, Apartemen</p>
                                 </div>
                                 <div class="form-row pl-2 pr-2 pb-3">
                                     <div class="form-group col-md-6">
-                                        <label style="color: black">Nama Penerima</label>
+                                        <label >Nama Penerima</label>
                                         <input type="text" class="form-control" id="receiver_name" name="receiver_name" style="background: #F6F6F6" required>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label style="color: black">Nomor Telepon</label>
+                                        <label >Nomor Telepon</label>
                                         <input type="text" class="form-control" id="receiver_phone" name="receiver_phone" style="background: #F6F6F6" required>
                                         <p class="text ml-1" style="color: #828282">Contoh : 081234567890</p>
                                     </div>
                                 </div>
                                 <div class="form-row pl-2 pr-2 pb-3">
                                     <div class="form-group col-md-8">
-                                        <label style="color: black">Kota atau Kecamatan</label>
+                                        <label >Kota atau Kecamatan</label>
                                         <input type="text" class="form-control" id="city" name="city" style="background: #F6F6F6" required>
                                         <p class="text ml-1" style="color: #828282">Contoh : Sukolilo, Surabaya</p>
                                     </div>
                                     <div class="form-group col-md-4">
-                                        <label style="color: black">Kode Pos</label>
+                                        <label >Kode Pos</label>
                                         <input type="text" class="form-control" id="postal_code" name="postal_code" style="background: #F6F6F6" required>
                                     </div>
                                 </div>
                                 <div class="form-group pl-2 pr-2 pb-3">
-                                    <label style="color: black">Alamat</label><br>
+                                    <label >Alamat</label><br>
                                     <textarea name="address" id="address" cols="60" rows="4" class="form-control" style="background: #F6F6F6; border: none" required></textarea>
                                     <!-- <input type="text" name="alamat" id="alamat" class="form-control" style="background: #F6F6F6" required> -->
                                 </div>
@@ -325,7 +280,7 @@
         <div class="modal-dialog modal-dialog-centered modal-md" role="document">
             <div class="modal-content">
                 <div class="modal-header pl-0 pb-4">
-                    <h3 class="modal-title w-100 text-center position-absolute" style="color: black">Edit Alamat</h3>
+                    <h3 class="modal-title w-100 text-center position-absolute" >Edit Alamat</h3>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -336,32 +291,32 @@
                             <form action="" method="post" id="checkout-form">
                                 @csrf
                                 <div class="form-group pl-2 pr-2 pb-3">
-                                    <label style="color: black">Jenis Alamat</label><br>
+                                    <label >Jenis Alamat</label><br>
                                     <input type="text" name="address_type" id="address_type" class="form-control" value="{{ $address->address_type }}" style="background: #F6F6F6" required>
                                     <input type="hidden" value="{{ auth()->guard('customer')->user()->id }}" name="customer_id">
                                 </div>
                                 <div class="form-row pl-2 pr-2 pb-3">
                                     <div class="form-group col-md-6">
-                                        <label style="color: black">Nama Penerima</label>
+                                        <label >Nama Penerima</label>
                                         <input type="text" class="form-control" id="receiver_name" name="receiver_name" value="{{ $address->receiver_name }}" style="background: #F6F6F6" required>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label style="color: black">Nomor Telepon</label>
+                                        <label >Nomor Telepon</label>
                                         <input type="text" class="form-control" id="receiver_phone" name="receiver_phone" value="{{ $address->receiver_phone }}" style="background: #F6F6F6" required>
                                     </div>
                                 </div>
                                 <div class="form-row pl-2 pr-2 pb-3">
                                     <div class="form-group col-md-8">
-                                        <label style="color: black">Kota atau Kecamatan</label>
+                                        <label >Kota atau Kecamatan</label>
                                         <input type="text" class="form-control" id="city" name="city" value="{{ $address->city }}" style="background: #F6F6F6" required>
                                     </div>
                                     <div class="form-group col-md-4">
-                                        <label style="color: black">Kode Pos</label>
+                                        <label >Kode Pos</label>
                                         <input type="text" class="form-control" id="postal_code" name="postal_code" value="{{ $address->postal_code }}" style="background: #F6F6F6" required>
                                     </div>
                                 </div>
                                 <div class="form-group pl-2 pr-2 pb-3">
-                                    <label style="color: black">Alamat</label><br>
+                                    <label >Alamat</label><br>
                                     <textarea name="address" id="address" value="" cols="60" rows="4" class="form-control" style="background: #F6F6F6; border: none" required>{{ $address->address }}</textarea>
                                     <!-- <input type="text" name="alamat" id="alamat" class="form-control" style="background: #F6F6F6" required> -->
                                 </div>
@@ -373,7 +328,7 @@
                                     <div class="out_button_area">
                                         <div class="checkout_btn_inner">
                                             <a class="btn btn-outline-secondary" style="width: 7rem; height:40px" href="">Batal</a>
-                                            <a class="btn btn-outline-orange bg-orange" style="color: white" href="" id="add-address">Simpam</a>
+                                            <a class="btn btn-outline-orange bg-orange" style="color: white" href="" id="add-address">Simpan</a>
                                         </div>
                                     </div>
                                 </div>
@@ -385,6 +340,9 @@
         </div>
     </div>
     @endif
+@endsection
+
+@section('js')
     <script src="{{ asset('js/bootstrap.js') }}"></script>
     <script src="{{ asset('js/app.js') }}"></script>
     <script>
@@ -426,6 +384,4 @@
             $('#total').text('Rp' + total)
         })
     </script>
-</body>
-
-</html>
+@endsection
