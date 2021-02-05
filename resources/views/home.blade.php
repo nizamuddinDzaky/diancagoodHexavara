@@ -113,7 +113,7 @@
                                 <div class="row px-4 py-4">
                                     <div class="col-lg-4">
                                         <a href="{{ url('/product/' . $row->id) }}">
-                                            <img id="pic{{ $row }}" class="product-img-sm" src="{{ asset('storage/products/' . $row->image) }}" alt="{{ $row->name }}">
+                                            <img id="pic{{ $row }}" class="product-img-sm" src="{{ asset('storage/products/' . $row->images->first()->filename) }}" alt="{{ $row->name }}">
                                         </a>
                                     </div>
                                     <div class="col-lg-7">
@@ -149,7 +149,7 @@
                                 <div class="row px-4 py-4">
                                     <div class="col-lg-4">
                                         <a href="{{ url('/product/' . $row->id) }}">
-                                            <img id="pic{{ $row }}" class="product-img-sm" src="{{ asset('storage/products/' . $row->image) }}" alt="{{ $row->name }}">
+                                            <img id="pic{{ $row }}" class="product-img-sm" src="{{ asset('storage/products/' . $row->images->first()->filename) }}" alt="{{ $row->name }}">
                                         </a>
                                     </div>
                                     <div class="col-lg-7">
