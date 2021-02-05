@@ -34,8 +34,8 @@ Route::get('/logout', [CustomerLoginController::class, 'logout'])->name('custome
 Route::post('/checkout', [OrderController::class, 'index'])->name('checkout');
 Route::post('/checkout-address', [OrderController::class, 'address'])->name('checkout.address');
 Route::post('/checkout-done', [OrderController::class, 'checkout_process'])->name('checkout.process');
-Route::get('/payment', [OrderController::class, 'payment'])->name('payment');
-Route::get('/finish-payment', [OrderController::class, 'paymentDone'])->name('payment.done');
+Route::get('/payment/{id}', [OrderController::class, 'payment'])->name('payment');
+Route::get('/finish-payment/{id}', [OrderController::class, 'paymentDone'])->name('payment.done');
 
 Route::get('/transactions/{status}', [TransactionController::class, 'index'])->name('transaction.list');
 

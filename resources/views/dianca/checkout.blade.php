@@ -179,7 +179,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4">>
+                    <div class="col-lg-4 mt-2">
                         <div class="card shadow-1">
                             <div class="card-body font-18">
                                 <h4 style="color: #828282"><strong>Ringkasan Belanja</strong></h4>
@@ -199,7 +199,7 @@
                                             <h5 id="total"><strong>Rp {{ number_format($carts['total_cost'] + 17000) }}</strong></h5>
                                         </div>
                                     </div>
-                                    <button class="btn btn-orange weight-600 btn-block font-18 py-2" href="{{ route('payment') }}" aria-disabled="true">Pilih Pembayaran</a>
+                                    <button class="btn btn-orange weight-600 btn-block font-18 py-2">Pilih Pembayaran</a>
                                 </form>
                                 
                             </div>

@@ -45,19 +45,34 @@ class OrderController extends Controller
         
     }
 
-    public function payment()
+    public function payment($id)
     {
         if(Auth::guard('customer')->check()) {
-            $cart = Cart::where('customer_id', Auth::guard('customer')->user()->id)->first();
-            $total_cost = $cart->total_cost;
-            $qty = CartDetail::where('cart_id', $cart->id)->sum('qty');
-            return view('dianca.payment', compact('total_cost', 'qty'));
+            $order = Order::where('customer_id', Auth::guard('customer')->user()->id)->where('id', $id)->first();
+            $total_cost = $order->subtotal;
+            $qty = OrderDetail::where('order_id', $id)->sum('qty');
+            return view('dianca.payment', compact('id', 'total_cost', 'qty'));
         }
     }
 
-    public function paymentDone()
+    public function paymentDone($id)
     {
-        return view('dianca.payment-done');
+        if(Auth::guard('customer')->check()) {
+            $order = Order::where('customer_id', Auth::guard('customer')->user()->id)->where('id', $id)->first();
+
+            $order_details = OrderDetail::where('order_id', $id)->get();
+
+            $cart = Cart::where('customer_id', Auth::guard('customer')->user()->id)->first();
+
+            foreach($order_details as $od) {
+                CartDetail::where('cart_id', $cart->id)->where('product_variant_id', $od->product_variant_id)->delete();
+            }
+
+            $cart->total_cost = CartDetail::where('cart_id', $cart->id)->sum('price');
+            $cart->save();
+
+            return view('dianca.payment-done');
+        }
     }
 
     public function address(Request $request)
@@ -142,14 +157,11 @@ class OrderController extends Controller
 
             DB::commit();
 
-            foreach($variants as $v) {
-                CartDetail::where('cart_id', $carts->id)->where('product_variant_id', $v->id)->delete();
-            }
+            // foreach($variants as $v) {
+            //     CartDetail::where('cart_id', $carts->id)->where('product_variant_id', $v->id)->delete();
+            // }
 
-            $carts->total_cost = CartDetail::where('cart_id', $carts->id)->sum('price');
-            $carts->save();
-
-            return redirect(route('payment'));
+            return redirect(route('payment', ['id' => $order->id]));
             // return redirect(route('payment', $order->invoice));
         }catch (\Exception $e) {
             DB::rollback();
