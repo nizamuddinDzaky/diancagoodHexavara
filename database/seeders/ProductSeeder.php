@@ -163,6 +163,10 @@ class ProductSeeder extends Seeder
             [
                 'customer_id' => 1,
                 'total_cost' => 558000,
+            ],
+            [
+                'customer_id' => 3,
+                'total_cost' => 558000,
             ]
         ];
 
