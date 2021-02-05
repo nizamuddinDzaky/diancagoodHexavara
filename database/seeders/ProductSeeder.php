@@ -183,6 +183,22 @@ class ProductSeeder extends Seeder
                 'is_avail' => 1,
                 
             ],
+            [
+                'cart_id' => 2,
+                'product_variant_id' => 1,
+                'price' => 258000,
+                'qty' => 1,
+                'is_avail' => 1,
+                
+            ],
+            [
+                'cart_id' => 2,
+                'product_variant_id' => 2,
+                'price' => 300000,
+                'qty' => 1,
+                'is_avail' => 1,
+                
+            ],
         ];
 
         Category::insert($categories);

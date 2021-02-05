@@ -46,6 +46,22 @@ class UserSeeder extends Seeder
                 'address' => 'Jalan Mulyosari 37',
                 'district_id' => 6145
             ],
+            [
+                'name' => 'Afia Hana',
+                'email' => 'afia@gmail.com',
+                'password' => Hash::make('asdasdasd'),
+                'phone_number' => '123123123',
+                'address' => 0,
+                'district_id' => 6145
+            ],
+            [
+                'name' => 'Reva',
+                'email' => 'reva@gmail.com',
+                'password' => Hash::make('asdasdasd'),
+                'phone_number' => '123123123',
+                'address' => 0,
+                'district_id' => 6145
+            ],
         ];
 
         Order::create([
