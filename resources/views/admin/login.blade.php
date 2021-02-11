@@ -1,4 +1,4 @@
-@extends('layouts.store')
+@extends('layouts.admin')
 
 @section('title')
     <title>Login</title>
@@ -25,7 +25,7 @@
                             @if (session('error'))
                                 <div class="alert alert-danger">{{ session('error') }}</div>
                             @endif
-                            <form action="{{ route('customer.post_login') }}" class="form pl-3 pr-3 pt-4" id="login-form" method="post">
+                            <form action="{{ route('administrator.post_login') }}" class="form pl-3 pr-3 pt-4" id="login-form" method="post">
                             @csrf
                                 <div class="form-group">
                                     <label for="email">Email</label><br>
@@ -48,10 +48,8 @@
                                     @enderror
                                 </div>
                                 <div class="form-group pt-4 text-center">
-                                    <input type="submit" value="Masuk" name="register_submit" id="register_submit"
+                                    <input type="submit" value="Masuk" name="login_submit" id="login_submit"
                                         class="form-control form-control-lg bg-orange" style="color: white">
-                                    <label class="text-muted text-center pt-2">Anda belum punya akun? <a href="{{ route('customer.register') }}"
-                                            style="color:orange;font-weight:bold">Daftar Sekarang</a></label><br>
                                 </div>
                             </form>
                         </div>

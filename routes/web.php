@@ -8,6 +8,8 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\AdminLoginController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,3 +53,10 @@ Route::get('/cart', [OrderController::class, 'showCart'])->name('cart.show');
 Route::post('/cart/add', [OrderController::class, 'addToCart'])->name('cart.add');
 Route::post('/cart/update', [OrderController::class, 'updateCart'])->name('cart.update');
 Route::post('/cart/semi-update', [OrderController::class, 'updateCartOrder'])->name('cart.semiupdate');
+
+// admin
+Route::get('/admin/login', [AdminLoginController::class, 'index'])->name('administrator.login');
+Route::post('/admin/login', [AdminLoginController::class, 'login'])->name('administrator.post_login');
+Route::get('/admin/logout', [AdminLoginController::class, 'logout'])->name('administrator.logout');
+
+Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('administrator.dashboard');
