@@ -32,21 +32,18 @@
             <div class="container">           
                 <div class="row my-2">
                     <div class="main_title">
-                        <h2 class="pl-3" style="color: black">Pembayaran</h2>
-                        <h5 class="pl-3 pt-2" style="color: black">2 dari 2 langkah</h5>
-                        <!-- <div class="container">
-                            <hr class="rounded" style="border-color:F2F2F2">
-                        </div> -->
+                        <h2 class="pl-3">Pembayaran</h2>
+                        <h5 class="pl-3 pt-2">2 dari 2 langkah</h5>
                     </div>
                 </div>
                 <div class="row my-2">
                     <div class="col-lg-4">
                         <hr class="rounded" style="border: 5px solid orange">
-                        <h6 style="color: black">1 Checkout</h6>
+                        <h6>1 Checkout</h6>
                     </div>
                     <div class="col-lg-4">
                         <hr class="rounded" style="border: 5px solid orange">
-                        <h6 style="color: black">2 Bayar</h6>
+                        <h6>2 Bayar</h6>
                     </div>
                 </div>
             </div>
@@ -66,14 +63,14 @@
                                     <div class="card-body">
                                         <form action="">
                                             <div class="form-group">
-                                                <label style="color: black">Pilih Metode Pembayaran</label><br>
+                                                <label>Pilih Metode Pembayaran</label><br>
                                                 <select id="inputState" class="form-control" style="background: #F2F2F2">
                                                     <option selected>Bank Transfer</option>
                                                     <option>...</option>
                                                 </select>
                                             </div>
                                             <div class="form-group">
-                                                <label style="color: black">Pilih Bank</label><br>
+                                                <label>Pilih Bank</label><br>
                                                 <select id="inputState" class="form-control" style="background: #F2F2F2">
                                                     <option selected>Bank Negara Indonesia</option>
                                                     <option>...</option>
@@ -91,7 +88,7 @@
                                 <div class="card shadow-1" style="width: 22rem; height:20rem">
                                     <div class="row px-4 py-4 ml-2" style="height: 50px">
                                         <div class="">
-                                            <h4 style="color: black"><strong>Ringkasan Belanja</strong></h4>
+                                            <h4><strong>Ringkasan Belanja</strong></h4>
                                         </div>
                                     </div>
                                     <div class="container">
@@ -100,25 +97,25 @@
                                     <div class="row px-4 py-2">
                                         <div class="col-lg-6">
                                             <div class="row ml-2">
-                                                <h5 style="color: black">Total Harga</h5>
+                                                <h5>Total Harga</h5>
                                             </div>
                                             <div class="row ml-2 pt-1 pb-2">
-                                                <h5 style="color: black">Ongkos Kirim</h5>
+                                                <h5>Ongkos Kirim</h5>
                                             </div>
                                             <div class="row ml-2 pt-3">
-                                                <h5 style="color: black">Total Tagihan</h5>
+                                                <h5>Total Tagihan</h5>
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="row mr-2 float-right">
-                                                <h5 style="color: black">Rp {{number_format($total_cost, 2, ',', '.')}}</h5>
+                                                <h5>Rp {{number_format($total_cost, 2, ',', '.')}}</h5>
                                             </div>
                                             <div class="row mr-2 pt-1 pb-2 float-right">
-                                                <h5 style="color: black">Rp {{ number_format(17000, 2, ',', '.') }}</h5>
+                                                <h5>Rp {{ number_format(17000, 2, ',', '.') }}</h5>
                                             </div>
                                             <br>
                                             <div class="row mr-2 pt-3 float-right">
-                                                <h5 style="color: black"><strong>Rp {{number_format($total_cost + 17000, 2, ',', '.')}}</strong></h5>
+                                                <h5><strong>Rp {{number_format($total_cost + 17000, 2, ',', '.')}}</strong></h5>
                                             </div>
                                         </div>
                                     </div>

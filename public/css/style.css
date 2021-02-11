@@ -37,7 +37,7 @@ Table of Content:
 /*font Variables*/
 /*Color Variables*/
 /*=================== fonts ====================*/
-@import url("https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700|Proxima Nova:300,400,500,700|Nunito:200,300,400,500,600,700|Source+Sans+Pro:200,300,400,600,700,900");
+@import url("https://fonts.googleapis.com/css?family=Proxima Nova:300,400,500,700|Nunito:200,300,400,500,600,700|Source+Sans+Pro:200,300,400,600,700,900");
 
 @font-face {
     font-family: 'Proxima Nova Thin';
@@ -211,7 +211,7 @@ a:focus {
 /* Main Title Area css
 ============================================================================================ */
 .main_title {
-    text-align: justify;
+    text-align: left;
     max-width: 720px;
     margin: 0px;
 }
@@ -225,7 +225,7 @@ a:focus {
 .main_title h2 {
     font-family: "Proxima Nova", sans-serif;
     color: #4F4F4F;
-    font-weight: normal;
+    font-weight: 600;
     font-size: 2rem !important;
 }
 

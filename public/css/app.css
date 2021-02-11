@@ -302,6 +302,7 @@ button::-moz-focus-inner,
 
 input[type=radio],
 input[type=checkbox] {
+  vertical-align: middle;
   box-sizing: border-box;
   padding: 0;
 }
@@ -2301,6 +2302,7 @@ textarea.form-control {
 
 .form-check-label {
   margin-bottom: 0;
+  margin-left: 0.5rem;
 }
 
 .form-check-inline {

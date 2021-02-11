@@ -55,12 +55,12 @@
                     <div>
                         <ul class="nav">
                             <li class="nav-item">
-                                <a type="button" class="btn" href="{{ route('cart.show') }}" tabindex="-1"
-                                    aria-disabled="true"><i class="material-icons md-24">shopping_cart</i></a>
+                                <a type="button" class="btn py-0" href="{{ route('cart.show') }}" tabindex="-1"
+                                    aria-disabled="true"><i class="material-icons md-18">shopping_cart</i></a>
                             </li>
                             @if (auth()->guard('customer')->check())
                             <li class="nav-item dropdown">
-                                <a class="btn dropdown-toggle" href="#" role="button" data-toggle="dropdown" id="navbarmenu" style="margin-left=0px" tabindex="-1" aria-haspopup="true" aria-expanded="false">{{ Auth::guard('customer')->user()->name }}</a>
+                                <a class="btn dropdown-toggle py-0" href="#" role="button" data-toggle="dropdown" id="navbarmenu" style="margin-left=0px" tabindex="-1" aria-haspopup="true" aria-expanded="false">{{ Auth::guard('customer')->user()->name }} </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarmenu">
                                     <a class="dropdown-item">Edit Profil</a>
                                     <div class="dropdown-divider"></div>

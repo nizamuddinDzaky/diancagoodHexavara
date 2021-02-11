@@ -31,16 +31,22 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         if(Auth::guard('customer')->check()) {
-            $carts = Cart::where('customer_id', auth()->guard('customer')->user()->id)->first();
-            $carts_detail = CartDetail::with('variant.product')->where('is_avail', 1)->where('cart_id', $carts->id)->get();
+            $cart = Cart::where('customer_id', auth()->guard('customer')->user()->id)->first();
 
-            foreach($carts_detail as $cd) {
-                $variants[] = ProductVariant::where('id', $cd->product_variant_id)->first();
+            $cart_arr = $request->input('cd');
+            $total_cost = 0;
+
+            foreach($cart_arr as $cd) {
+                $cart_detail[] = CartDetail::with('variant.product')->where('is_avail', 1)->where('id', $cd)->first();
+            }
+            
+            foreach($cart_detail as $cd) {
+                $total_cost += $cd->price;
             }
             
             $address = Address::where('customer_id', auth()->guard('customer')->user()->id)->where('is_main', 1)->first();
 
-            return view('dianca.checkout', compact('carts', 'carts_detail', 'variants', 'address'));
+            return view('dianca.checkout', compact('cart', 'cart_detail', 'address', 'total_cost'));
         }
         
     }
@@ -108,16 +114,15 @@ class OrderController extends Controller
     public function checkout_process(Request $request)
     {
         $this->validate($request, [
-            // 'courier' => 'required'
-            'shipping_cost' => 'required'
+            'courier' => 'required',
+            'duration' => 'required',
+            'shipping_cost' => 'required',
+            'subtotal' => 'required',
+            'cd' => 'required'
         ]);
 
         $carts = Cart::where('customer_id', auth()->guard('customer')->user()->id)->first();
-        $carts_detail = CartDetail::with('variant')->where('is_avail', 1)->where('cart_id', $carts->id)->get();
-
-        foreach($carts_detail as $cd) {
-            $variants[] = ProductVariant::where('id', $cd->product_variant_id)->first();
-        }
+        $cart_arr = $request->input('cd');
 
         $address = Address::where('customer_id', auth()->guard('customer')->user()->id)->where('is_main', 1)->first();
         $customer = Customer::where('id', auth()->guard('customer')->user()->id)->first();
@@ -133,33 +138,31 @@ class OrderController extends Controller
                 'customer_phone' => $customer->phone_number,
                 'customer_address' => $address->address,
                 'district_id' => 1,
-                'subtotal' => $carts->total_cost,
-                'total_cost' => $carts->total_cost + 17000,
+                'subtotal' => $request->subtotal,
+                'total_cost' => $request->total_cost + $request->shipping_cost,
                 'shipping_cost' => $request->shipping_cost,
-                'shipping' => 'JNT',
+                'shipping' => $request->courier,
             ]);
 
-            foreach ($carts_detail as $row) {
-                $variant = ProductVariant::where('id', $row->product_variant_id)->first();
+            foreach ($cart_arr as $cd) {
+                $cart_detail = CartDetail::with('variant')->where('is_avail', 1)->where('id', $cd)->first();
+                $variant = ProductVariant::where('id', $cart_detail->product_variant_id)->first();
+
                 OrderDetail::create([
                     'order_id' => $order->id,
-                    'product_variant_id' => $row->product_variant_id,
+                    'product_variant_id' => $variant->id,
                     'price' => $variant->price,
-                    'qty' => $row->qty,
-                    'weight' => $variant->weight
+                    'qty' => $cart_detail->qty,
+                    'weight' => $variant->weight * $cart_detail->qty,
                 ]);
 
-                $variant->stock -= $row->qty;
+                $variant->stock -= $cart_detail->qty;
                 $variant->save();
 
-                $row->delete();
+                $cart_detail->delete();
             }
 
             DB::commit();
-
-            // foreach($variants as $v) {
-            //     CartDetail::where('cart_id', $carts->id)->where('product_variant_id', $v->id)->delete();
-            // }
 
             return redirect(route('payment', ['id' => $order->id]));
             // return redirect(route('payment', $order->invoice));
@@ -208,7 +211,7 @@ class OrderController extends Controller
                     $cart_variant->price += $variant->price * $request->qty;
                     $cart_variant->save();
 
-                    $cart->total_cost = CartDetail::where('cart_id', $cart_id)->sum('price');
+                    $cart->total_cost = CartDetail::where('cart_id', $cart->id)->sum('price');
                     $cart->save();
                 }
                 
@@ -223,8 +226,8 @@ class OrderController extends Controller
     public function updateCart(Request $request)
     {
         $cart = Cart::where('customer_id', Auth::guard('customer')->user()->id)->first();
-        $product_variant = ProductVariant::where('id', $request->id)->first();
-        $carts_variant = CartDetail::where('cart_id', $cart->id)->where('product_variant_id', $request->id)->first();
+        $carts_variant = CartDetail::where('cart_id', $cart->id)->where('id', $request->id)->first();
+        $product_variant = ProductVariant::where('id', $carts_variant->product_variant_id)->first();
 
         $carts_variant->update([
             'qty' => $request->qty,
@@ -249,7 +252,26 @@ class OrderController extends Controller
         $return['variant'] = $carts_variant;
         $return['qty'] = $carts_variant->sum('qty');
 
-        return json_encode($return);
+        return json_encode($return, JSON_NUMERIC_CHECK);
+    }
+
+    public function updateCartOrder(Request $request)
+    {
+        $cart = Cart::where('customer_id', Auth::guard('customer')->user()->id)->first();
+        $carts_variant = CartDetail::where('cart_id', $cart->id)->where('id', $request->id)->first();
+        $product_variant = ProductVariant::where('id', $carts_variant->product_variant_id)->first();
+
+        $return = array();
+        
+        if($request->add == 1) {
+            $return['totalcost'] = $request->curr_total + ($request->qty * $product_variant->price);
+            $return['qty'] = $request->curr_qty + $request->qty;
+        } else if($request->add == 0) {
+            $return['totalcost'] = $request->curr_total - ($request->qty * $product_variant->price);
+            $return['qty'] = $request->curr_qty - $request->qty;
+        }
+
+        return json_encode($return, JSON_NUMERIC_CHECK);
     }
 
     public function getCourier(Request $request)

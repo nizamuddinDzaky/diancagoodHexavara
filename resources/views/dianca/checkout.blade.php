@@ -5,6 +5,8 @@
 @endsection
 
 @section('content')
+<form action="{{ route('checkout.payment') }}" method="POST">
+@csrf
     <section class="feature_product_area section_gap mt-4" style="height: 240px">
         <div class="main_box pt-4">
             <div class="container">           
@@ -80,10 +82,8 @@
                         <div class="row py-2">
                             <div class="col-lg-12 pb-1">
                                 @if(auth()->guard('customer')->check())
-                                @foreach ($carts_detail as $val)
-                                
+                                @foreach ($cart_detail as $val)
                                 <div class="card shadow-1 mb-3" style="width: 47rem">
-                                    
                                     <div class="row px-4 py-4">
                                         <div class="col-lg-3">
                                             <a href="#">
@@ -101,19 +101,19 @@
                                                 <h5>({{ $val->variant->weight }} gr)</h5>
                                             </div>
                                         </div>
+                                        <input type="hidden" value="{{ $val->id }}" name="cd[]">
                                     </div>
                                     <div class="container">
                                         <hr class="" style="border-color:F2F2F2">
                                     </div>
                                     <div class="row px-4 py-2" style="height: 60px">
                                         <div class="col-lg-9">
-                                            <h5 class="ml-2" >Sub Total Harga: <strong>Rp {{ number_format($val['price'] * $val['qty'], 2, ',', '.') }}</strong></h5>
+                                            <h5 class="ml-2" >Sub Total Harga: <strong>Rp {{ number_format($val['price'], 2, ',', '.') }}</strong></h5>
                                         </div>
                                         <div class="col-lg-3">
                                             <a type="button" class="btn btn-outline-orange float-right" href="#" aria-disabled="true">Edit</a>
                                         </div>
                                     </div>
-                                    
                                 </div>
                                 @endforeach
                                 @endif
@@ -130,19 +130,16 @@
                                     </div>
                                     <div class="form-group">
                                         <label>Pilih Jasa Pengiriman</label><br>
-                                        <!-- <select class="form-control border border-secondary" style="width:8rem" name="courier" id="courier" required>
-                                            <option value="">Pilih</option>
-                                        </select> -->
-                                        <select id="inputState" class="form-control border border-secondary" style="width:8rem">
-                                            <option selected>Pilih</option>
-                                            <option>JNT</option>
+                                        <select id="courier" name="courier" class="form-control border border-secondary" style="width:8rem">
+                                            <option value="" selected>Pilih</option>
+                                            <option value="JNT">JNT</option>
                                         </select>
                                     </div>
                                     <div class="form-group">
                                         <label>Pilih Durasi</label><br>
-                                        <select id="inputState" class="form-control border border-secondary" style="width:12rem">
-                                            <option selected>Pilih</option>
-                                            <option>Regular (4-5 hari)</option>
+                                        <select id="duration" name="duration" class="form-control border border-secondary" style="width:12rem">
+                                            <option value="" selected>Pilih</option>
+                                            <option value="regular">Regular (4-5 hari)</option>
                                         </select>
                                     </div>
                                 </div>
@@ -184,24 +181,22 @@
                             <div class="card-body font-18">
                                 <h4 style="color: #828282"><strong>Ringkasan Belanja</strong></h4>
                                 <hr>
-                                <form action="{{ route('checkout.process') }}" method="post">
-                                @csrf
-                                    <div class="row py-2">
-                                        <div class="col-lg-6" style="color: #828282">
-                                            <h5>Total Harga</h5>
-                                            <h5>Ongkos Kirim</h5>
-                                            <h5>Total Tagihan</h5>
-                                        </div>
-                                        <div class="col-lg-6 float-right" style="text-align: right">
-                                            <h5>Rp {{ number_format($carts['total_cost']) }}</h5>
-                                            <h5 id="ongkir">Rp 17,000</h5>
-                                            <input type="hidden" value="17000" name="shipping_cost">
-                                            <h5 id="total"><strong>Rp {{ number_format($carts['total_cost'] + 17000) }}</strong></h5>
-                                        </div>
+                                <div class="row py-2">
+                                    <div class="col-lg-6" style="color: #828282">
+                                        <h5>Total Harga</h5>
+                                        <h5>Ongkos Kirim</h5>
+                                        <h5>Total Tagihan</h5>
                                     </div>
-                                    <button class="btn btn-orange weight-600 btn-block font-18 py-2">Pilih Pembayaran</a>
-                                </form>
-                                
+                                    <div class="col-lg-6 float-right" style="text-align: right">
+                                        <h5>Rp {{ number_format($total_cost) }}</h5>
+                                        <h5 id="ongkir">Rp 17,000</h5>
+                                        <input type="hidden" value="17000" name="shipping_cost">
+                                        <input type="hidden" value="{{ $total_cost }}" name="subtotal">
+                                            
+                                        <h5 id="total"><strong>Rp {{ number_format($total_cost + 17000) }}</strong></h5>
+                                    </div>
+                                </div>
+                                <button class="btn btn-orange weight-600 btn-block font-18 py-2">Pilih Pembayaran</a>
                             </div>
                         </div>
                     </div>
@@ -209,6 +204,7 @@
             </div>
         </div>
     </section>
+</form>
     <div class="modal fade w-100" id="addressModal" role="dialog">
         <div class="modal-dialog modal-dialog-centered modal-md" role="document">
             <div class="modal-content">
@@ -376,7 +372,7 @@
             $('#ongkir').text('Rp ' + split[2]);
 
             @if( auth()->guard('customer')->check() )
-                var subtotal = "{{ $carts->total_cost }}";
+                var subtotal = "{{ $cart->total_cost }}";
             @else
                 var subtotal = "{{ $subtotal }}";
             @endif
