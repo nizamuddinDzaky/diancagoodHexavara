@@ -48,7 +48,7 @@
                                     @enderror
                                 </div>
                                 <div class="form-group pt-4 text-center">
-                                    <input type="submit" value="Masuk" name="register_submit" id="register_submit"
+                                    <input type="submit" value="Masuk" name="login_submit" id="login_submit"
                                         class="form-control form-control-lg bg-orange" style="color: white">
                                 </div>
                             </form>

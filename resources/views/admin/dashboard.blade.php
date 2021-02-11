@@ -33,7 +33,7 @@
                     <div>
                         <ul class="nav">
                             <li class="nav-item dropdown">
-                                <a class="btn dropdown-toggle" href="#" role="button" data-toggle="dropdown" id="navbarmenu" style="margin-left=0px" tabindex="-1" aria-haspopup="true" aria-expanded="false">{{ Auth::guard('customer')->user()->name }}</a>
+                                <a class="btn dropdown-toggle" href="#" role="button" data-toggle="dropdown" id="navbarmenu" style="margin-left=0px" tabindex="-1" aria-haspopup="true" aria-expanded="false">Admin</a>
                                 <div class="dropdown-menu" aria-labelledby="navbarmenu">
                                     <a class="dropdown-item" style="color:#EB5757" href="{{ route('administrator.logout') }}">Keluar</a>
                                 </div>
