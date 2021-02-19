@@ -18,7 +18,7 @@ class CreateProductVariantsTable extends Migration
             $table->unsignedBigInteger('product_id');
             $table->string('name');
             $table->integer('price');
-            $table->integer('weight');
+            $table->integer('weight')->nullable();
             $table->integer('stock');
             $table->string('image')->nullable();
             $table->timestamps();

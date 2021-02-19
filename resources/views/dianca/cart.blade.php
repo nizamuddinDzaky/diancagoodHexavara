@@ -1,7 +1,7 @@
 @extends('layouts.store')
 
 @section('title')
-    <title>Pembelian</title>
+<title>Pembelian</title>
 @endsection
 
 @section('content')
@@ -22,7 +22,7 @@
                                 </div>
                             </div>
                             <div class="col-lg-6">
-                                <a type="a" class="float-right font-16 weight-600" style="color:#EB5757">Hapus</a>
+                                <a class="float-right font-16 weight-600" style="color:#EB5757" onclick="deleteAll()">Hapus</a>
                             </div>
                         </div>
                         <hr>
@@ -68,7 +68,7 @@
                                                             </button>
                                                         </span>
                                                         <a type="button" class="float-right px-2 muted"><i class="material-icons md-24 py-0">favorite</i></a>
-                                                        <a type="button" class="float-right muted"><i class="material-icons md-24 py-0">delete</i></a>
+                                                        <a type="button" class="float-right muted" onclick="removeFromCart({{ $cd->id }})"><i class="material-icons md-24 py-0">delete</i></a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -202,7 +202,14 @@
                 }
             });
         }
-        
+    }
+
+    function deleteAll() {
+
+    }
+
+    function removeFromCart(id) {
+
     }
 
     $.ajaxSetup({

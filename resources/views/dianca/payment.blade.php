@@ -52,6 +52,8 @@
     <div class="container">
         <hr class="pb-2" style="border-color:F2F2F2">
     </div>
+    <form action="{{ route('checkout.process') }}" method="POST">
+    @csrf
     <section class="feature_product_area">
         <div class="main_box">
             <div class="container">
@@ -61,22 +63,27 @@
                             <div class="col-lg-12 pb-2">
                                 <div class="card shadow-1" style="width: 47rem">
                                     <div class="card-body">
-                                        <form action="">
                                             <div class="form-group">
                                                 <label>Pilih Metode Pembayaran</label><br>
-                                                <select id="inputState" class="form-control" style="background: #F2F2F2">
-                                                    <option selected>Bank Transfer</option>
+                                                <select id="payment_method" name="payment_method" class="form-control" style="background: #F2F2F2">
+                                                    <option value="Transfer" selected>Bank Transfer</option>
                                                     <option>...</option>
                                                 </select>
                                             </div>
                                             <div class="form-group">
                                                 <label>Pilih Bank</label><br>
-                                                <select id="inputState" class="form-control" style="background: #F2F2F2">
-                                                    <option selected>Bank Negara Indonesia</option>
+                                                <select id="bank" name="bank" class="form-control" style="background: #F2F2F2">
+                                                    <option value="BNI" selected>Bank Negara Indonesia</option>
                                                     <option>...</option>
                                                 </select>
                                             </div>
-                                        </form>
+                                            <input type="hidden" name="courier" value="{{ $courier }}">
+                                            <input type="hidden" name="duration" value="{{ $duration }}">
+                                            <input type="hidden" name="subtotal" value="{{ $subtotal }}">
+                                            <input type="hidden" name="shipping_cost" value="{{ $shipping_cost }}">
+                                            @foreach ($cart_detail as $val)
+                                            <input type="hidden" name="cd[]" value="{{ $val }}">
+                                            @endforeach
                                     </div>
                                 </div>
                             </div>
@@ -108,19 +115,19 @@
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="row mr-2 float-right">
-                                                <h5>Rp {{number_format($total_cost, 2, ',', '.')}}</h5>
+                                                <h5>Rp {{number_format($subtotal, 2, ',', '.')}}</h5>
                                             </div>
                                             <div class="row mr-2 pt-1 pb-2 float-right">
-                                                <h5>Rp {{ number_format(17000, 2, ',', '.') }}</h5>
+                                                <h5>Rp {{ number_format($shipping_cost, 2, ',', '.') }}</h5>
                                             </div>
                                             <br>
                                             <div class="row mr-2 pt-3 float-right">
-                                                <h5><strong>Rp {{number_format($total_cost + 17000, 2, ',', '.')}}</strong></h5>
+                                                <h5><strong>Rp {{number_format($total_cost, 2, ',', '.')}}</strong></h5>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row justify-content-center pt-4">
-                                        <a type="button" class="btn btn-outline-orange bg-orange" style="color: white; width:20rem" href="{{ route('payment.done', $id) }}" aria-disabled="true">Bayar</a>
+                                        <button class="btn btn-outline-orange bg-orange" style="color: white; width:20rem" aria-disabled="true">Bayar</button>
                                     </div>
                                 </div>
                             </div>
@@ -130,6 +137,7 @@
             </div>
         </div>
     </section>
+    </form>
     <script src="{{ asset('js/bootstrap.js') }}"></script>
     <script src="{{ asset('js/app.js') }}"></script>
 </body>

@@ -97,19 +97,10 @@
                     <div class="main_title">
                         <h3>Produk Terlaris</h3>
                     </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="main_title">
-                        <h3>Produk Pilihan</h3>
-                    </div>
-                </div>
-            </div>
-            <div class="row pt-2">
-                <div class="col-lg-6">
                     <div class="row py-2">
                         @forelse($bestseller as $row)
                         <div class="col-lg-12 pb-4">
-                            <div class="card shadow-1" style="width: 32rem">
+                            <div class="card shadow-1">
                                 <div class="row px-4 py-4">
                                     <div class="col-lg-4">
                                         <a href="{{ url('/product/' . $row->id) }}">
@@ -142,10 +133,13 @@
                     </div>
                 </div>
                 <div class="col-lg-6">
+                    <div class="main_title">
+                        <h3>Produk Pilihan</h3>
+                    </div>
                     <div class="row py-2">
                         @forelse($featured as $row)
                         <div class="col-lg-12 pb-4">
-                            <div class="card shadow-1" style="width: 32rem">
+                            <div class="card shadow-1">
                                 <div class="row px-4 py-4">
                                     <div class="col-lg-4">
                                         <a href="{{ url('/product/' . $row->id) }}">
@@ -182,7 +176,7 @@
         </div>
     </div>
 </section>
-<section class="feature_product_area section_gap">
+<section class="feature_product_area section_gap testimoni">
     <div class="main_box">
         <div class="container">
             <div class="row my-2">
@@ -191,14 +185,28 @@
                 </div>
             </div>
             <div class="row my-2">
-                <div class="col">
-                    <div class="f_p_item">
-                        <div class="f_p_img">
-                            <a href="#">
-                                <img id="image" class="home-product-center-cropped" src="img/A1.jpg" alt="kategori">
-                            </a>
+                <div class="col-lg-4">
+                    <div class="card shadow-1">
+                        <div class="card-body">
+                            <h4 class="weight-600">Testimoni 1</h4>
+                            <p class="text-gray-3 font-14">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,</p>
                         </div>
-                        <h4>Testimoni 1</h4>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card shadow-1">
+                        <div class="card-body">
+                            <h4 class="weight-600">Testimoni 1</h4>
+                            <p class="text-gray-3 font-14">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card shadow-1">
+                        <div class="card-body">
+                            <h4 class="weight-600">Testimoni 1</h4>
+                            <p class="text-gray-3 font-14">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,</p>
+                        </div>
                     </div>
                 </div>
             </div>

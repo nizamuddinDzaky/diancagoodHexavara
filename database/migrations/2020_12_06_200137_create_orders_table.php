@@ -24,6 +24,7 @@ class CreateOrdersTable extends Migration
             $table->unsignedBigInteger('district_id');
             $table->integer('subtotal');
             $table->integer('shipping_cost')->default(0);
+            $table->date('shipping_date')->nullable();
             $table->integer('total_cost')->default(0);
             $table->string('shipping')->nullable();
             $table->integer('status')->default(0);

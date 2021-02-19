@@ -62,4 +62,20 @@ Route::get('/admin/login', [AdminLoginController::class, 'index'])->name('admini
 Route::post('/admin/login', [AdminLoginController::class, 'login'])->name('administrator.post_login');
 Route::get('/admin/logout', [AdminLoginController::class, 'logout'])->name('administrator.logout');
 
-Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('administrator.dashboard');
+Route::get('/admin/orders', [DashboardController::class, 'showOrders'])->name('administrator.orders');
+Route::get('/admin/orders/{id}', [DashboardController::class, 'showOrder'])->name('administrator.orders.show');
+Route::post('/admin/order/tracking-update', [DashboardController::class, 'updateTrackingInfo'])->name('administrator.order.update_tracking');
+Route::post('/admin/order/payment-update', [DashboardController::class, 'updatePaymentStatus'])->name('administrator.order.update_payment');
+
+Route::get('/admin/products', [DashboardController::class, 'showProducts'])->name('administrator.products');
+Route::get('/admin/products-fetch/{arg}', [DashboardController::class, 'fetchProducts'])->name('administrator.fetch_products');
+Route::get('/admin/products/add', [DashboardController::class, 'createProduct'])->name('administrator.add_product.show');
+Route::post('/admin/products/add', [DashboardController::class, 'addProduct'])->name('administrator.add_product');
+
+Route::get('/admin/tracking/{status}', [DashboardController::class, 'showTracking'])->name('administrator.tracking');
+Route::get('/admin/tracking/{id}/{status}', [DashboardController::class, 'changeOrderStatus'])->name('administrator.tracking.update_status');
+
+Route::post('/admin/category/add', [DashboardController::class, 'storeCategory'])->name('administrator.add_category');
+Route::post('/admin/subcategory/add', [DashboardController::class, 'storeSubcategory'])->name('administrator.add_subcategory');
+Route::post('/admin/brand/add', [DashboardController::class, 'storeBrand'])->name('administrator.add_brand');
+Route::get('/admin/subcategories-fetch', [DashboardController::class, 'getSubcategories'])->name('administrator.fetch_subcategories');

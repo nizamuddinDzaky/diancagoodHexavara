@@ -38,8 +38,10 @@
                                     Kategori
                                 </button>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="#">Kategori 1</a>
-                                    <a class="dropdown-item" href="#">Kategori 2</a>
+                                    @forelse($categories as $c)
+                                    <a class="dropdown-item" href="#">{{ $c->name }}</a>
+                                    @empty
+                                    @endforelse
                                 </div>
                             </div>
                             <div class="col-lg-10 pl-2 pr-2">
@@ -53,7 +55,7 @@
                         </div>
                     </div>
                     <div>
-                        <ul class="nav">
+                        <ul class="navbar nav">
                             <li class="nav-item">
                                 <a type="button" class="btn py-0" href="{{ route('cart.show') }}" tabindex="-1"
                                     aria-disabled="true"><i class="material-icons md-18">shopping_cart</i></a>

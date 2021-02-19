@@ -16,7 +16,7 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('category_id');
-            $table->unsignedBigInteger('subcategory_id');
+            $table->unsignedBigInteger('subcategory_id')->nullable();
             $table->unsignedBigInteger('brand_id');
             $table->string('name');
             $table->string('slug');
@@ -24,6 +24,7 @@ class CreateProductsTable extends Migration
             $table->boolean('status')->default(true);
             $table->boolean('is_featured')->default(false);
             $table->integer('promo')->nullable();
+            $table->double('rate')->default(0);
             $table->timestamps();
         });
     }
