@@ -123,7 +123,6 @@
                             <hr class="" style="border-color:F2F2F2">
                         </div>
                         <div class="row py-2 ml-2 pb-4">
-                            <form action="">
                                 <div class="col-lg-6" style="color: #4F4F4F">
                                     <div class="main_title pb-2">
                                         <h4>Pengiriman</h4>
@@ -143,7 +142,6 @@
                                         </select>
                                     </div>
                                 </div>
-                            </form>
                             
                             <div class="col-lg-6">
                                 <div class="main_title pb-2 ml-2">

@@ -51,13 +51,25 @@ class OrderController extends Controller
         
     }
 
-    public function payment($id)
+    public function payment(Request $request)
     {
         if(Auth::guard('customer')->check()) {
-            $order = Order::where('customer_id', Auth::guard('customer')->user()->id)->where('id', $id)->first();
-            $total_cost = $order->subtotal;
-            $qty = OrderDetail::where('order_id', $id)->sum('qty');
-            return view('dianca.payment', compact('id', 'total_cost', 'qty'));
+            $this->validate($request, [
+                'courier' => 'required',
+                'duration' => 'required',
+                'shipping_cost' => 'required',
+                'subtotal' => 'required',
+                'cd' => 'required'
+            ]);
+
+            $subtotal = $request->subtotal;
+            $shipping_cost = $request->shipping_cost;
+            $total_cost = $request->subtotal + $request->shipping_cost;
+            $courier = $request->courier;
+            $duration = $request->duration;
+            $cart_detail = $request->input('cd');
+
+            return view('dianca.payment', compact('subtotal', 'shipping_cost', 'total_cost', 'courier', 'duration', 'cart_detail'));
         }
     }
 
@@ -164,7 +176,7 @@ class OrderController extends Controller
 
             DB::commit();
 
-            return redirect(route('payment', ['id' => $order->id]));
+            return redirect(route('payment.done', ['id' => $order->id]));
             // return redirect(route('payment', $order->invoice));
         }catch (\Exception $e) {
             DB::rollback();

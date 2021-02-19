@@ -30,7 +30,7 @@ class AdminLoginController extends Controller
         $credentials = $request->only('email', 'password');
 
         if(Auth::attempt($credentials)) {
-            return redirect()->intended(route('administrator.dashboard'));
+            return redirect()->intended(route('administrator.orders'));
         } else {
             return redirect()->back()->with(['error' => 'Password salah.']);
         }

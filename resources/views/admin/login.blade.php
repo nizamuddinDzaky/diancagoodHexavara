@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title')
-    <title>Login</title>
+    <title>Administrator Login</title>
 @endsection
 
 @section('content')
