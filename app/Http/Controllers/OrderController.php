@@ -48,7 +48,6 @@ class OrderController extends Controller
 
             return view('dianca.checkout', compact('cart', 'cart_detail', 'address', 'total_cost'));
         }
-        
     }
 
     public function payment(Request $request)
@@ -76,7 +75,7 @@ class OrderController extends Controller
     public function paymentDone($id)
     {
         if(Auth::guard('customer')->check()) {
-            $order = Order::where('customer_id', Auth::guard('customer')->user()->id)->where('id', $id)->first();
+            $order = Order::with('payment')->where('customer_id', Auth::guard('customer')->user()->id)->where('id', $id)->first();
 
             $order_details = OrderDetail::where('order_id', $id)->get();
 
@@ -89,7 +88,14 @@ class OrderController extends Controller
             $cart->total_cost = CartDetail::where('cart_id', $cart->id)->sum('price');
             $cart->save();
 
-            return view('dianca.payment-done');
+            return view('dianca.payment-done', compact('order'));
+        }
+    }
+
+    public function makePayment(Request $request)
+    {
+        if(Auth::guard('customer')->check()) {
+            
         }
     }
 
@@ -152,6 +158,8 @@ class OrderController extends Controller
     public function checkout_process(Request $request)
     {
         $this->validate($request, [
+            'payment_method' => 'required',
+            'bank' => 'required',
             'courier' => 'required',
             'duration' => 'required',
             'shipping_cost' => 'required',
@@ -199,6 +207,12 @@ class OrderController extends Controller
 
                 $cart_detail->delete();
             }
+
+            $payment = Payment::create([
+                'order_id' => $order->id,
+                'transfer_to' => $request->bank,
+                'method' => $request->payment_method
+            ]);
 
             DB::commit();
 

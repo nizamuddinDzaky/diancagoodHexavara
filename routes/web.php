@@ -39,6 +39,7 @@ Route::post('/checkout-address-edit/{id}', [OrderController::class, 'updateAddre
 Route::post('/checkout-payment', [OrderController::class, 'payment'])->name('checkout.payment');
 Route::post('/checkout-done', [OrderController::class, 'checkout_process'])->name('checkout.process');
 Route::get('/finish-payment/{id}', [OrderController::class, 'paymentDone'])->name('payment.done');
+Route::get('/finish-payment/', [OrderController::class, 'makePayment'])->name('payment.done.process');
 
 Route::get('/transactions/{status}', [TransactionController::class, 'index'])->name('transaction.list');
 

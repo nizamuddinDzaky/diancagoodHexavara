@@ -16,23 +16,25 @@ class AdminLoginController extends Controller
 
     public function login(Request $request)
     {
-        $this->validate($request, [
-            'email' => 'required|email|exists:users,email',
-            'password' => 'required|string'
-        ]);
-
-        $user = User::where('email', $request->email)->first();
-
-        if(!$user) {
-            return redirect()->back()->with(['error' => 'Email salah.']);
-        }
-
-        $credentials = $request->only('email', 'password');
-
-        if(Auth::attempt($credentials)) {
-            return redirect()->intended(route('administrator.orders'));
-        } else {
-            return redirect()->back()->with(['error' => 'Password salah.']);
+        if(!Auth::guard('web')->user()->check()) {
+            $this->validate($request, [
+                'email' => 'required|email|exists:users,email',
+                'password' => 'required|string'
+            ]);
+    
+            $user = User::where('email', $request->email)->first();
+    
+            if(!$user) {
+                return redirect()->back()->with(['error' => 'Email salah.']);
+            }
+    
+            $credentials = $request->only('email', 'password');
+    
+            if(Auth::attempt($credentials)) {
+                return redirect()->intended(route('administrator.orders'));
+            } else {
+                return redirect()->back()->with(['error' => 'Password salah.']);
+            }
         }
     }
 

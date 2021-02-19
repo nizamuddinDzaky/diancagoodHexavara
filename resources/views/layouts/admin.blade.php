@@ -77,9 +77,9 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="btn-toolbar mb-3" role="toolbar">
-                            <a type="button" class="btn btn-outline-gray-2 weight-600 mr-4" href="{{ route('administrator.orders') }}">Order</a>
-                            <a type="button" class="btn btn-outline-gray-2 weight-600 mr-4" href="{{ route('administrator.products') }}">Produk</a>
-                            <a type="button" class="btn btn-outline-gray-2 weight-600" href="{{ route('administrator.tracking', 0) }}">Tracking</a>
+                            <a type="button" id="order" class="btn btn-outline-gray-2 weight-600 mr-4" href="{{ route('administrator.orders') }}">Order</a>
+                            <a type="button" id="product" class="btn btn-outline-gray-2 weight-600 mr-4" href="{{ route('administrator.products') }}">Produk</a>
+                            <a type="button" id="tracking" class="btn btn-outline-gray-2 weight-600" href="{{ route('administrator.tracking', 0) }}">Tracking</a>
                         </div>
                     </div>
                 </div>
@@ -89,6 +89,17 @@
     @endif
     @yield('content')
 
+    <script>
+        $(document).ready(function() {
+            if(window.location.href.indexOf("/products") > -1) {
+                $("#order").addClass('filter-active-2');
+            } else if(window.location.href.indexOf("/tracking") > -1) {
+                $("#product").addClass('filter-active-2');
+            } else if(window.location.href.indexOf("/orders") > -1) {
+                $("#tracking").addClass('filter-active-2');
+            }
+        });
+    </script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
         integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous">
