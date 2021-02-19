@@ -108,6 +108,32 @@ class OrderController extends Controller
             'address' => 1
         ]);
         // auth()->guard('customer')->user()->address = 1;
+        // return json_encode($orders);
+        // return redirect(route('checkout'));
+    }
+
+    public function updateAddress(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'address_type' => 'required',
+            'receiver_name' => 'required',
+            'receiver_phone' => 'required',
+            'city' => 'required',
+            'postal_code' => 'required',
+            'address' => 'required'
+        ]);
+
+        $address = Address::find($id);
+        $address->update([
+            'address_type' => $request->address_type,
+            'receiver_name' => $request->receiver_name,
+            'receiver_phone' => $request->receiver_phone,
+            'city' => $request->city,
+            'postal_code' => $request->postal_code,
+            'address' => $request->address,
+            'is_main' => true
+        ]);
+
         return redirect(route('checkout'));
     }
 

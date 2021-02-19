@@ -27,4 +27,9 @@ class Customer extends Authenticatable
     {
         return $this->hasMany(Address::class);
     }
+
+    public function bankaccount()
+    {
+        return $this->hasMany(BankAccount::class);
+    }
 }

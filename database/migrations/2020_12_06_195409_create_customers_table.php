@@ -20,6 +20,9 @@ class CreateCustomersTable extends Migration
             $table->string('password');
             $table->string('phone_number')->default('-');
             $table->string('address')->default('-');
+            $table->string('gender')->nullable();
+            $table->string('birthday')->nullable();
+            $table->string('image')->nullable();
             $table->unsignedBigInteger('district_id')->default(1);
             $table->string('activate_token')->nullable();
             $table->boolean('status')->default(false);

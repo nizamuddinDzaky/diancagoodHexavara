@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-<form action="{{ route('checkout.payment') }}" method="POST">
+<form action="{{ route('checkout') }}" method="POST">
 @csrf
     <section class="feature_product_area section_gap mt-4" style="height: 240px">
         <div class="main_box pt-4">
@@ -38,33 +38,35 @@
     <section class="feature_product_area">
         <div class="main_box">
             <div class="container text-gray-2">
-                <div id="#no-address">
+                <div id="">
                     <div class="row my-2">
                         <div class="main_title text-gray-2">
                             <h3 class="pl-3">Alamat Pengiriman</h3>
                         </div>
                     </div>
                     @if (auth()->guard('customer')->user()->address == 0)
-                    <div class="row my-2 pb-3">
+                    <div class="row my-2 pb-3" id="#noAddress">
                         <div class="col">
                             <a type="button" class="btn btn-outline-orange" href="" aria-disabled="true" data-toggle="modal" data-target="#addressModal">Buat Alamat Baru</a>
                         </div>
                     </div>
                     @endif
                     @if (auth()->guard('customer')->user()->address != 0)
-                    <div class="row my-2 pl-3">
-                        <h5><strong>{{ $address->receiver_name }}</strong> ({{ $address->address_type }})</h5>
-                    </div>
-                    <div class="row my-2 pl-3" style="color: #333333">
-                        <h5>{{ $address->receiver_phone }}</h5>
-                    </div>
-                    <div class="row my-2 pb-3 pl-3" style="color: #333333">
-                        <h5>{{ $address->address }}</h5>
-                        <h5>, {{ $address->city }}</h5>
-                        <h5>, {{ $address->postal_code }}</h5>
-                    </div>
-                    <div class="row my-2 pl-3">
-                        <a type="button" class="btn btn-outline-orange" href="" aria-disabled="true" data-toggle="modal" data-target="#editAddress">Edit Alamat</a>
+                    <div id="#hasAddress">
+                        <div class="row my-2 pl-3">
+                            <h5><strong>{{ $address->receiver_name }}</strong> ({{ $address->address_type }})</h5>
+                        </div>
+                        <div class="row my-2 pl-3" style="color: #333333">
+                            <h5>{{ $address->receiver_phone }}</h5>
+                        </div>
+                        <div class="row my-2 pb-3 pl-3" style="color: #333333">
+                            <h5>{{ $address->address }}</h5>
+                            <h5>, {{ $address->city }}</h5>
+                            <h5>, {{ $address->postal_code }}</h5>
+                        </div>
+                        <div class="row my-2 pl-3">
+                            <a type="button" class="btn btn-outline-orange" href="" aria-disabled="true" data-toggle="modal" data-target="#editAddress">Edit Alamat</a>
+                        </div>
                     </div>
                     @endif
                 </div>
@@ -150,29 +152,29 @@
                                     <h4 style="color: #4F4F4F">Ringkasan Pengiriman</h4>
                                 </div>
                                 <div class="row px-4 py-2" style="color: #828282">
-                                        <div class="col-lg-6">
-                                            <div class="row">
-                                                <h6>Jasa Pengiriman</h6>
-                                            </div>
-                                            <div class="row pt-1">
-                                                <h6>Durasi</h6>
-                                            </div>
-                                            <div class="row pt-1">
-                                                <h6>Estimasi Tiba</h6>
-                                            </div>
+                                    <div class="col-lg-6">
+                                        <div class="row">
+                                            <h6>Jasa Pengiriman</h6>
                                         </div>
-                                        <div class="col-lg-6">
-                                            <div class="row">
-                                                <h6>JNT (Regular)</h6>
-                                            </div>
-                                            <div class="row pt-1">
-                                                <h6>4 - 5 hari</h6>
-                                            </div>
-                                            <div class="row pt-1">
-                                                <h6>24 - 25 Desember 2020</h6>
-                                            </div>
+                                        <div class="row pt-1">
+                                            <h6>Durasi</h6>
+                                        </div>
+                                        <div class="row pt-1">
+                                            <h6>Estimasi Tiba</h6>
                                         </div>
                                     </div>
+                                    <div class="col-lg-6">
+                                        <div class="row">
+                                            <h6>JNT (Regular)</h6>
+                                        </div>
+                                        <div class="row pt-1">
+                                            <h6>4 - 5 hari</h6>
+                                        </div>
+                                        <div class="row pt-1">
+                                            <h6>24 - 25 Desember 2020</h6>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -196,7 +198,7 @@
                                         <h5 id="total"><strong>Rp {{ number_format($total_cost + 17000) }}</strong></h5>
                                     </div>
                                 </div>
-                                <button class="btn btn-orange weight-600 btn-block font-18 py-2">Pilih Pembayaran</a>
+                                <button class="btn btn-orange weight-600 btn-block font-18 py-2" id="payment">Pilih Pembayaran</a>
                             </div>
                         </div>
                     </div>
@@ -217,7 +219,7 @@
                 <div class="modal-body">
                     <div class="container">
                         <div class="cart_inner">
-                            <form action="{{ route('checkout.address') }}" method="post" id="checkout-form">
+                            <form action="" method="post" id="checkout-form">
                                 @csrf
                                 <div class="form-group pl-2 pr-2 pb-3">
                                     <label >Jenis Alamat</label><br>
@@ -284,7 +286,7 @@
                 <div class="modal-body">
                     <div class="container">
                         <div class="cart_inner">
-                            <form action="" method="post" id="checkout-form">
+                            <form action="{{ route('checkout.updateAddress', $address->id) }}" method="post" id="address-form">
                                 @csrf
                                 <div class="form-group pl-2 pr-2 pb-3">
                                     <label >Jenis Alamat</label><br>
@@ -324,7 +326,7 @@
                                     <div class="out_button_area">
                                         <div class="checkout_btn_inner">
                                             <a class="btn btn-outline-secondary" style="width: 7rem; height:40px" href="">Batal</a>
-                                            <a class="btn btn-outline-orange bg-orange" style="color: white" href="" id="add-address">Simpan</a>
+                                            <a class="btn btn-outline-orange bg-orange" style="color: white" href="" id="edit-address">Simpan</a>
                                         </div>
                                     </div>
                                 </div>
@@ -341,43 +343,76 @@
 @section('js')
     <script src="{{ asset('js/bootstrap.js') }}"></script>
     <script src="{{ asset('js/app.js') }}"></script>
+
+    <!-- script lama -->
     <script>
-        $('#add-address').click(function (e) {
+        // $('#add-address').click(function (e) {
+        //     e.preventDefault();
+        //     $('#checkout-form').submit();
+        // });
+        $('#edit-address').click(function (e) {
             e.preventDefault();
-            $('#checkout-form').submit();
+            $('#address-form').submit();
         });
     </script>
+
     <script>
-        $.ajax({
-            url: "{{ url('/api/cost') }}",
-            type: "POST",
-            data: { destination: $(this).val(), weight: $('#weight').val() },
-            success: function(html){
-                //BERSIHKAN AREA SELECT BOX
-                $('#courier').empty()
-                $('#courier').append('<option value="">Pilih Kurir</option>')
-            
-                //LOOPING DATA ONGKOS KIRIM
-                $.each(html.data.results, function(key, item) {
-                    let courier = item.courier + ' - ' + item.service + ' (Rp '+ item.cost +')'
-                    let value = item.courier + '-' + item.service + '-'+ item.cost
-                    //DAN MASUKKAN KE DALAM OPTION SELECT BOX
-                    $('#courier').append('<option value="'+value+'">' + courier + '</option>')
-                })
-            }
+        $( "form" ).on( "add-address", function(e) {
+            // var dataString = $(this).serialize();
+            // alert(dataString); return false;
+            var input1 = document.getElementById('address_type'+id);
+            var input2 = document.getElementById('receiver_name'+id);
+            var input3 = document.getElementById('receiver_phone'+id);
+            var input4 = document.getElementById('city'+id);
+            var input5 = document.getElementById('postal_code'+id);
+            var input6 = document.getElementById('address'+id);
+            var input7 = document.getElementById('is_main'+id);
+            var input8 = document.getElementById('customer_id'+id);
+
+            $.ajax({
+                type: "POST",
+                url: "/checkout-address",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "address_type": input1.value,
+                    "receiver_name": input2.value,
+                    "receiver_phone": input3.value,
+                    "city": input4.value,
+                    "postal_code": input5.value,
+                    "address": input6.value,
+                    "is_main": input7.value,
+                    "customer_id": input8.value
+                },
+                success: function () {
+                    $("#addressModal").hide();
+                    $("#noAddress").hide();
+                    $("#hasAddress").show();
+                }
+                });
+
+                e.preventDefault();
+            });
         });
 
-        $('#courier').on('change', function () {
-            let split = $(this).val().split('-');
-            $('#ongkir').text('Rp ' + split[2]);
+        // function addAddress(id) {
+        //     var dataString = $(this).serialize();
 
-            @if( auth()->guard('customer')->check() )
-                var subtotal = "{{ $cart->total_cost }}";
-            @else
-                var subtotal = "{{ $subtotal }}";
-            @endif
-            let total = parseInt(subtotal) + parseInt(split['2'])
-            $('#total').text('Rp' + total)
-        })
+        //     $.ajax({
+        //         type: "POST",
+        //         url: "/checkout-address",
+        //         data: {
+        //             id: id,
+        //             qty: input.value
+        //         },
+        //         dataType: "JSON",
+        //         success: function(res) {
+                    
+        //         },
+        //         error: function (xhr, status, err) {
+        //             console.log(err);
+        //         }
+        //     })
+        // }
+    
     </script>
 @endsection

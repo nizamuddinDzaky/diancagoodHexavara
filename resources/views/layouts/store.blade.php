@@ -62,7 +62,7 @@
                             <li class="nav-item dropdown">
                                 <a class="btn dropdown-toggle py-0" href="#" role="button" data-toggle="dropdown" id="navbarmenu" style="margin-left=0px" tabindex="-1" aria-haspopup="true" aria-expanded="false">{{ Auth::guard('customer')->user()->name }} </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarmenu">
-                                    <a class="dropdown-item">Edit Profil</a>
+                                    <a href="{{ route('profile') }}" class="dropdown-item">Edit Profil</a>
                                     <div class="dropdown-divider"></div>
                                     <a href="{{ route('transaction.list', 5) }}" class="dropdown-item">Pembelian</a>
                                     <div class="dropdown-divider"></div>

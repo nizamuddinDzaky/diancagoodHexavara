@@ -43,17 +43,19 @@
                                     <button class="btn btn-outline-orange bg-orange ml-5 mb-5" style="color: white" aria-disabled="true" data-toggle="modal" data-target="#addRekening">+ Tambah Rekening</button>
                                 </div>
                             </div>
+                            @foreach ($account as $v)
                             <div class="row ml-4 mt-4">
-                                <div class="col-lg-1 md-1 sm-1">Logo Bank</div>
+                                <div class="col-lg-1 md-1 sm-1">{{ $v->bank->image }}</div>
                                 <div class="col-lg-9 md-9 sm-9">
-                                    <h6 style="color: #828282">PT. BANK NEGARA INDONESIA (BNI) (PERSERO)</h6>
-                                    <h6 style="color: #4F4F4F">800 152 6846</h6>
-                                    <h6 style="color: #828282">a.n <h6 style="color: #4F4F4F">Sdr RANA WIJDAN NAIM</h6></h6>
+                                    <h6 style="color: #828282">{{ $v->bank->name }}</h6>
+                                    <h6 style="color: #4F4F4F">{{ $v->account_number }}</h6>
+                                    <!-- <h6 style="color: #828282">a.n <h6 style="color: #4F4F4F">Sdr RANA WIJDAN NAIM</h6></h6> -->
                                 </div>
                                 <div class="col-lg-2 md-2 sm-2">
                                     <button class="btn btn-outline-orange mt-4">Hapus</button>
                                 </div>
                             </div>
+                            @endforeach
                         </div>
                     </div>
                 </div>
@@ -72,22 +74,21 @@
                 <div class="modal-body">
                     <div class="container">
                         <div class="cart_inner">
-                            <form action="" method="post" id="addAddress-form">
+                            <form action="{{ route('profile-rekening.add') }}" method="post" id="addAccount-form">
                                 @csrf
                                 <div class="form-group pl-2 pr-2 pb-3">
                                     <label style="color: black">Nama Bank</label><br>
-                                    <select name="" class="form-control" style="background: #F6F6F6" required>
+                                    <select name="bank_id" class="form-control" style="background: #F6F6F6" required>
                                         <option value="">Pilih</option>
-                                        <option value="">PT.BCA (BANK CENTRAL ASIA)</option>
-                                        <option value="">PT.BANK NEGARA INDONESIA (BNI)</option>
-                                        <option value="">PT.BANK NEGARA INDONESIA (BNI)</option>
-                                        <option value="">PT.BANK NEGARA INDONESIA (BNI)</option>
-                                        <option value="">PT.BANK NEGARA INDONESIA (BNI)</option>
+                                        @foreach ($banks as $row)
+                                        <option value="{{ $row->id }}" {{ old('bank_id') == $row->id ? 'selected':'' }}>
+                                            {{ $row->name }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div class="form-group pl-2 pr-2 pb-3">
                                     <label style="color: black">Nomor Rekening</label><br>
-                                    <input type="text" name="norek" id="norek" class="form-control" style="background: #F6F6F6" required>
+                                    <input type="text" name="account_number" id="account_number" class="form-control" style="background: #F6F6F6" required>
                                 </div>
                             </form>
                         </div>
@@ -97,7 +98,7 @@
                                     <div class="out_button_area">
                                         <div class="checkout_btn_inner">
                                             <a class="btn btn-outline-secondary" style="width: 7rem; height:40px" href="#">Batal</a>
-                                            <a class="btn btn-outline-orange bg-orange" style="color: white" href="#" id="checkout-go">Tambah</a>
+                                            <a class="btn btn-outline-orange bg-orange" style="color: white" id="account-go">Tambah</a>
                                         </div>
                                     </div>
                                 </div>
@@ -112,4 +113,10 @@
 @endsection
 
 @section('js')
+<script>
+    $('#account-go').click(function (e) {
+        e.preventDefault();
+        $('#addAccount-form').submit();
+    });
+</script>
 @endsection

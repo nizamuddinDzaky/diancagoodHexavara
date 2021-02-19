@@ -35,6 +35,7 @@ Route::get('/logout', [CustomerLoginController::class, 'logout'])->name('custome
 
 Route::post('/checkout', [OrderController::class, 'index'])->name('checkout');
 Route::post('/checkout-address', [OrderController::class, 'address'])->name('checkout.address');
+Route::post('/checkout-address-edit/{id}', [OrderController::class, 'updateAddress'])->name('checkout.updateAddress');
 Route::post('/checkout-payment', [OrderController::class, 'payment'])->name('checkout.payment');
 Route::post('/checkout-done', [OrderController::class, 'checkout_process'])->name('checkout.process');
 Route::get('/finish-payment/{id}', [OrderController::class, 'paymentDone'])->name('payment.done');
@@ -46,8 +47,10 @@ Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.s
 Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
 
 Route::get('/profil', [ProfileController::class, 'index'])->name('profile');
+Route::post('/profil-edit', [ProfileController::class, 'editProfile'])->name('edit.profile');
 Route::get('/profil/alamat', [ProfileController::class, 'address'])->name('profile-address');
 Route::get('/profil/rekening', [ProfileController::class, 'rekening'])->name('profile-rekening');
+Route::post('/profil/rekening-add', [ProfileController::class, 'addBankAccount'])->name('profile-rekening.add');
 
 Route::get('/cart', [OrderController::class, 'showCart'])->name('cart.show');
 Route::post('/cart/add', [OrderController::class, 'addToCart'])->name('cart.add');

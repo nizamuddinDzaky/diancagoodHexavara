@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\OrderDetail;
+use App\Models\Bank;
 
 class UserSeeder extends Seeder
 {
@@ -127,7 +128,15 @@ class UserSeeder extends Seeder
             'tracking_number' => 'JJA000021928'
         ]);
 
+        $banks = [
+            [
+                'name' => 'PT. BANK NEGARA INDONESIA (BNI)',
+                'image' => 'BNI.png'
+            ]
+        ];
+
         Customer::insert($customers);
         OrderDetail::insert($order_details);
+        Bank::insert($banks);
     }
 }
