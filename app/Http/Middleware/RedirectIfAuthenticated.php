@@ -21,7 +21,7 @@ class RedirectIfAuthenticated
     {
         if ($guard == "customer" && Auth::guard($guard)->check()) {
             return redirect('/');
-        } else if (Auth::guard($guard)->check()) {
+        } else if ($guard == "web" && Auth::guard($guard)->check()) {
             return redirect('/admin/dashboard');
         }
 
