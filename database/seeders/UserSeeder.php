@@ -36,7 +36,6 @@ class UserSeeder extends Seeder
                 'email' => 'butsherlock@gmail.com',
                 'password' => Hash::make('asdasdasd'),
                 'phone_number' => '123123123',
-                'address' => 'Jalan Mulyosari 37',
                 'district_id' => 6145
             ],
             [
@@ -44,7 +43,6 @@ class UserSeeder extends Seeder
                 'email' => 'rizaladam@gmail.com',
                 'password' => Hash::make('asdasdasd'),
                 'phone_number' => '123123123',
-                'address' => 'Jalan Mulyosari 37',
                 'district_id' => 6145
             ],
             [
@@ -52,7 +50,6 @@ class UserSeeder extends Seeder
                 'email' => 'afia@gmail.com',
                 'password' => Hash::make('asdasdasd'),
                 'phone_number' => '123123123',
-                'address' => 0,
                 'district_id' => 6145
             ],
             [
@@ -60,7 +57,6 @@ class UserSeeder extends Seeder
                 'email' => 'reva@gmail.com',
                 'password' => Hash::make('asdasdasd'),
                 'phone_number' => '123123123',
-                'address' => 0,
                 'district_id' => 6145
             ],
         ];

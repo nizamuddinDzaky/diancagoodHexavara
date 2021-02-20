@@ -1,58 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.store')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+@section('title')
+<title>Pembelian</title>
+@endsection
 
-    <title>Pembayaran</title>
-
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/responsive.css') }}">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
-</head>
-
-<body>
-    <header class="header_area">
-        <div class="main_menu">
-            <nav class="navbar navbar-expand-lg">
-                <div class="container-fluid pr-5 pl-5">
-                    <a class="navbar-brand logo_h pr-3" href="{{ url('/') }}">
-                        <img src="{{ asset('img/logo-1x.png') }}" alt="logo" style="width: 150px">
-                    </a>
+@section('content')
+<section class="feature_product_area section_gap mt-4" style="height: 240px">
+    <div class="main_box pt-4">
+        <div class="container">
+            <div class="row my-2">
+                <div class="main_title">
+                    <h2 class="pl-3">Pembayaran</h2>
+                    <h5 class="pl-3 pt-2">2 dari 2 langkah</h5>
                 </div>
-            </nav>
-        </div>
-    </header>
-    <section class="feature_product_area section_gap mt-4" style="height: 240px">
-        <div class="main_box pt-4">
-            <div class="container">           
-                <div class="row my-2">
-                    <div class="main_title">
-                        <h2 class="pl-3">Pembayaran</h2>
-                        <h5 class="pl-3 pt-2">2 dari 2 langkah</h5>
-                    </div>
+            </div>
+            <div class="row my-2">
+                <div class="col-lg-4">
+                    <hr class="rounded" style="border: 5px solid orange">
+                    <h6>1 Checkout</h6>
                 </div>
-                <div class="row my-2">
-                    <div class="col-lg-4">
-                        <hr class="rounded" style="border: 5px solid orange">
-                        <h6>1 Checkout</h6>
-                    </div>
-                    <div class="col-lg-4">
-                        <hr class="rounded" style="border: 5px solid orange">
-                        <h6>2 Bayar</h6>
-                    </div>
+                <div class="col-lg-4">
+                    <hr class="rounded" style="border: 5px solid orange">
+                    <h6>2 Bayar</h6>
                 </div>
             </div>
         </div>
-    </section>
-    <div class="container">
-        <hr class="pb-2" style="border-color:F2F2F2">
     </div>
-    <form action="{{ route('checkout.process') }}" method="POST">
+</section>
+<div class="container">
+    <hr class="pb-2" style="border-color:F2F2F2">
+</div>
+<form action="{{ route('checkout.process') }}" method="POST">
     @csrf
     <section class="feature_product_area">
         <div class="main_box">
@@ -63,27 +41,30 @@
                             <div class="col-lg-12 pb-2">
                                 <div class="card shadow-1" style="width: 47rem">
                                     <div class="card-body">
-                                            <div class="form-group">
-                                                <label>Pilih Metode Pembayaran</label><br>
-                                                <select id="payment_method" name="payment_method" class="form-control" style="background: #F2F2F2">
-                                                    <option value="Transfer" selected>Bank Transfer</option>
-                                                    <option>...</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group">
-                                                <label>Pilih Bank</label><br>
-                                                <select id="bank" name="bank" class="form-control" style="background: #F2F2F2">
-                                                    <option value="BNI" selected>Bank Negara Indonesia</option>
-                                                    <option>...</option>
-                                                </select>
-                                            </div>
-                                            <input type="hidden" name="courier" value="{{ $courier }}">
-                                            <input type="hidden" name="duration" value="{{ $duration }}">
-                                            <input type="hidden" name="subtotal" value="{{ $subtotal }}">
-                                            <input type="hidden" name="shipping_cost" value="{{ $shipping_cost }}">
-                                            @foreach ($cart_detail as $val)
-                                            <input type="hidden" name="cd[]" value="{{ $val }}">
-                                            @endforeach
+                                        <div class="form-group">
+                                            <label>Pilih Metode Pembayaran</label><br>
+                                            <select id="payment_method" name="payment_method" class="form-control"
+                                                style="background: #F2F2F2">
+                                                <option value="Transfer" selected>Bank Transfer</option>
+                                                <option>...</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Pilih Bank</label><br>
+                                            <select id="bank" name="bank" class="form-control"
+                                                style="background: #F2F2F2">
+                                                <option value="BNI" selected>Bank Negara Indonesia</option>
+                                                <option>...</option>
+                                            </select>
+                                        </div>
+                                        <input type="hidden" name="courier" value="{{ $courier }}">
+                                        <input type="hidden" name="duration" value="{{ $duration }}">
+                                        <input type="hidden" name="subtotal" value="{{ $subtotal }}">
+                                        <input type="hidden" name="shipping_cost" value="{{ $shipping_cost }}">
+                                        <input type="hidden" name="address_id" value="{{ $address_id }}">
+                                        @foreach ($cart_detail as $val)
+                                        <input type="hidden" name="cd[]" value="{{ $val }}">
+                                        @endforeach
                                     </div>
                                 </div>
                             </div>
@@ -127,7 +108,8 @@
                                         </div>
                                     </div>
                                     <div class="row justify-content-center pt-4">
-                                        <button class="btn btn-outline-orange bg-orange" style="color: white; width:20rem" aria-disabled="true">Bayar</button>
+                                        <button class="btn btn-outline-orange bg-orange"
+                                            style="color: white; width:20rem" aria-disabled="true">Bayar</button>
                                     </div>
                                 </div>
                             </div>
@@ -137,9 +119,5 @@
             </div>
         </div>
     </section>
-    </form>
-    <script src="{{ asset('js/bootstrap.js') }}"></script>
-    <script src="{{ asset('js/app.js') }}"></script>
-</body>
-
-</html>
+</form>
+@endsection

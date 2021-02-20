@@ -31,7 +31,7 @@
     </td>
     <td class="col-2 media">
         <div class="media-body">
-            <button class="btn btn-outline-orange">Edit</button>
+            <a class="btn btn-outline-orange" href="{{ route('administrator.edit_product', $row->id) }}">Edit</a>
         </div>
     </td>
 </tr>

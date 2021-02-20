@@ -121,10 +121,12 @@
             },
             dataType: "JSON",
             success: function(res) {
+                console.log(res);
+                var curr_total = parseInt(document.getElementById("total_cost").innerHTML.replace(/[^0-9-,]/g, ''));
                 $("#subtotal"+id).html(res.subtotal.toLocaleString("id-ID", myObj));
                 if($("#check"+id).prop('checked')){
-                    $("#total_cost").html(res.totalcost.toLocaleString("id-ID", myObj));
-                    $("#qty").html(res.qty);
+                    $("#total_cost").html((curr_total + res.subtotal).toLocaleString("id-ID", myObj));
+                    $("#qty").html(parseInt(input.value + res.qty);
                 }
             },
             error: function (xhr, status, err) {
@@ -147,10 +149,11 @@
                 },
                 dataType: "JSON",
                 success: function(res) {
+                    var curr_total = parseInt(document.getElementById("total_cost").innerHTML.replace(/[^0-9-,]/g, ''));
                     $("#subtotal"+id).html(res.subtotal.toLocaleString("id-ID", myObj));
                     if($("#check"+id).prop('checked')){
-                        $("#total_cost").html(res.totalcost.toLocaleString("id-ID", myObj));
-                        $("#qty").html(res.qty);
+                        $("#total_cost").html((curr_total - res.subtotal).toLocaleString("id-ID", myObj));
+                        $("#qty").html(parseInt(input.value) - res.qty);
                     }
                 },
                 error: function (xhr, status, err) {
