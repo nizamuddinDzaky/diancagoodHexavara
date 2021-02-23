@@ -58,7 +58,7 @@
                         <span>Berat: <strong id="weight"></strong>gr</span>
                     </p>
                     <p class="mb-1">stars</p>
-                    <h2>Rp {{ number_format(248000, 2, ',', '.') }}</h2>
+                    <h2>Rp {{ number_format($product->variant->first()->price, 2, ',', '.') }}</h2>
                     <form method="POST" action="{{ route('cart.add') }}">
                         @csrf
                         <div class="product_variant">

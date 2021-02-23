@@ -6326,6 +6326,13 @@ h6 {
     font-weight: 600;
 }
 
+.filter-active {
+    color: #fff;
+    background-color: #f37020;
+    border-color: #f37020;
+    font-weight: 600;
+}
+
 .weight-500 {
     font-weight: 500 !important;
 }
@@ -6425,7 +6432,7 @@ h6 {
 }
 
 .btn-outline-gray-2:hover {
-    border: 1px solid #4f4f4f;
+    border: 1px solid #f37020;
     color: #f37020;
 }
 

@@ -18,6 +18,7 @@ class CreatePaymentsTable extends Migration
             $table->unsignedBigInteger('order_id');
             $table->string('name')->nullable();
             $table->string('transfer_to');
+            $table->string('method');
             $table->string('transfer_from_bank');
             $table->string('transfer_from_account');
             $table->date('transfer_date')->nullable();

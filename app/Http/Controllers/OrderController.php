@@ -35,6 +35,7 @@ class OrderController extends Controller
 
             $cart_arr = $request->input('cd');
             $total_cost = 0;
+            $cart_detail = array();
 
             foreach($cart_arr as $cd) {
                 $cart_detail[] = CartDetail::with('variant.product')->where('is_avail', 1)->where('id', $cd)->first();
@@ -46,9 +47,12 @@ class OrderController extends Controller
             
             $address = Address::where('customer_id', auth()->guard('customer')->user()->id)->where('is_main', 1)->first();
 
-            return view('dianca.checkout', compact('cart', 'cart_detail', 'address', 'total_cost'));
+            $provinces = Province::get();
+
+            // dd($cart_arr);
+
+            return view('dianca.checkout', compact('cart', 'cart_detail', 'address', 'total_cost', 'provinces'));
         }
-        
     }
 
     public function payment(Request $request)
@@ -57,6 +61,7 @@ class OrderController extends Controller
             $this->validate($request, [
                 'courier' => 'required',
                 'duration' => 'required',
+                'address_id' => 'required|exists:address,id',
                 'shipping_cost' => 'required',
                 'subtotal' => 'required',
                 'cd' => 'required'
@@ -64,19 +69,20 @@ class OrderController extends Controller
 
             $subtotal = $request->subtotal;
             $shipping_cost = $request->shipping_cost;
+            $address_id = $request->address_id;
             $total_cost = $request->subtotal + $request->shipping_cost;
             $courier = $request->courier;
             $duration = $request->duration;
             $cart_detail = $request->input('cd');
 
-            return view('dianca.payment', compact('subtotal', 'shipping_cost', 'total_cost', 'courier', 'duration', 'cart_detail'));
+            return view('dianca.payment', compact('subtotal', 'shipping_cost', 'address_id', 'total_cost', 'courier', 'duration', 'cart_detail'));
         }
     }
 
     public function paymentDone($id)
     {
         if(Auth::guard('customer')->check()) {
-            $order = Order::where('customer_id', Auth::guard('customer')->user()->id)->where('id', $id)->first();
+            $order = Order::with('payment')->where('customer_id', Auth::guard('customer')->user()->id)->where('id', $id)->first();
 
             $order_details = OrderDetail::where('order_id', $id)->get();
 
@@ -89,7 +95,14 @@ class OrderController extends Controller
             $cart->total_cost = CartDetail::where('cart_id', $cart->id)->sum('price');
             $cart->save();
 
-            return view('dianca.payment-done');
+            return view('dianca.payment-done', compact('order'));
+        }
+    }
+
+    public function makePayment(Request $request)
+    {
+        if(Auth::guard('customer')->check()) {
+            
         }
     }
 
@@ -99,7 +112,7 @@ class OrderController extends Controller
             'address_type' => 'required',
             'receiver_name' => 'required',
             'receiver_phone' => 'required',
-            'city' => 'required',
+            'district_id' => 'required|exists:districts,id',
             'postal_code' => 'required',
             'address' => 'required'
         ]);
@@ -108,7 +121,7 @@ class OrderController extends Controller
             'address_type' => $request->address_type,
             'receiver_name' => $request->receiver_name,
             'receiver_phone' => $request->receiver_phone,
-            'city' => $request->city,
+            'district_id' => $request->district_id,
             'postal_code' => $request->postal_code,
             'address' => $request->address,
             'is_main' => true,
@@ -119,40 +132,44 @@ class OrderController extends Controller
         $customer->update([
             'address' => 1
         ]);
-        // auth()->guard('customer')->user()->address = 1;
-        // return json_encode($orders);
-        // return redirect(route('checkout'));
+
+        return json_encode($address);
     }
 
-    public function updateAddress(Request $request, $id)
+    public function updateAddress(Request $request)
     {
         $validator = Validator::make($request->all(), [
+            'address_id' => 'required|exists:addresses,id',
             'address_type' => 'required',
             'receiver_name' => 'required',
             'receiver_phone' => 'required',
-            'city' => 'required',
+            'district_id' => 'required|exists:districts,id',
             'postal_code' => 'required',
-            'address' => 'required'
+            'address' => 'required',
+            'is_main' => 'required'
         ]);
 
-        $address = Address::find($id);
+        $address = Address::find($request->address_id);
         $address->update([
             'address_type' => $request->address_type,
             'receiver_name' => $request->receiver_name,
             'receiver_phone' => $request->receiver_phone,
-            'city' => $request->city,
+            'district' => $request->district_id,
             'postal_code' => $request->postal_code,
             'address' => $request->address,
             'is_main' => true
         ]);
 
-        return redirect(route('checkout'));
+        return json_encode($address);
     }
 
-    public function checkout_process(Request $request)
+    public function checkoutProcess(Request $request)
     {
         $this->validate($request, [
+            'payment_method' => 'required',
+            'bank' => 'required',
             'courier' => 'required',
+            'address_id' => 'required|exists:addresses,id',
             'duration' => 'required',
             'shipping_cost' => 'required',
             'subtotal' => 'required',
@@ -200,6 +217,12 @@ class OrderController extends Controller
                 $cart_detail->delete();
             }
 
+            $payment = Payment::create([
+                'order_id' => $order->id,
+                'transfer_to' => $request->bank,
+                'method' => $request->payment_method
+            ]);
+
             DB::commit();
 
             return redirect(route('payment.done', ['id' => $order->id]));
@@ -215,7 +238,8 @@ class OrderController extends Controller
         if(Auth::guard('customer')->check()){
             $cart = Cart::with('details.variant.product')->where('customer_id', Auth::guard('customer')->user()->id)->first();
             // dd($cart);
-            return view('dianca.cart', compact('cart'));
+            $cart_json = json_encode($cart);
+            return view('dianca.cart', compact('cart', 'cart_json'));
         }
         return redirect(route('customer.login'));;
     }
@@ -285,10 +309,10 @@ class OrderController extends Controller
         $cart->save();
 
         $return = array();
-        $return['totalcost'] = $cart->total_cost;
+        $return['cart'] = $cart;
         $return['subtotal'] = $carts_variant->price;
         $return['variant'] = $carts_variant;
-        $return['qty'] = $carts_variant->sum('qty');
+        $return['qty'] = $carts_variant->qty;
 
         return json_encode($return, JSON_NUMERIC_CHECK);
     }
@@ -335,5 +359,17 @@ class OrderController extends Controller
 
         $body = json_decode($response->getBody(), true);
         return $body;
+    }
+
+    public function getCities()
+    {
+        $cities = City::where('province_id', request()->province_id)->get();
+        return json_encode($cities);
+    }
+
+    public function getDistricts()
+    {
+        $districts = District::where('city_id', request()->city_id)->get();
+        return json_encode($districts);
     }
 }

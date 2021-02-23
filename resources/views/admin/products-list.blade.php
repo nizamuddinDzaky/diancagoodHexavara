@@ -14,7 +14,14 @@
     </td>
     <td class="col-3 media">
         <div class="media-body">
-            <p><strong>Harga: </strong>Rp {{ number_format($row->price, 2, ',', '.') }}</p>
+            <p><strong>Harga: </strong>
+                @if( number_format($row->variant->first()->price) != number_format($row->variant->last()->price))
+                Rp {{ number_format($row->variant->first()->price) }} - Rp
+                {{ number_format($row->variant->last()->price) }}
+                @else
+                Rp {{ number_format($row->variant->first()->price) }}
+                @endif
+            </p>
         </div>
     </td>
     <td class="col-2 media">
@@ -24,7 +31,7 @@
     </td>
     <td class="col-2 media">
         <div class="media-body">
-            <button class="btn btn-outline-orange">Edit</button>
+            <a class="btn btn-outline-orange" href="{{ route('administrator.edit_product', $row->id) }}">Edit</a>
         </div>
     </td>
 </tr>

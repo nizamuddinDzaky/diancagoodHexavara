@@ -34,16 +34,18 @@ Route::get('/login', [CustomerLoginController::class, 'index'])->name('customer.
 Route::post('/login', [CustomerLoginController::class, 'login'])->name('customer.post_login');
 Route::get('/logout', [CustomerLoginController::class, 'logout'])->name('customer.logout');
 
+Route::get('/cities', [OrderController::class, 'getCities'])->name('cities');
+Route::get('/districts', [OrderController::class, 'getDistricts'])->name('districts');
+
 Route::post('/checkout', [OrderController::class, 'index'])->name('checkout');
 Route::post('/checkout-address', [OrderController::class, 'address'])->name('checkout.address');
-Route::post('/checkout-address-edit/{id}', [OrderController::class, 'updateAddress'])->name('checkout.updateAddress');
+Route::post('/checkout-address-edit', [OrderController::class, 'updateAddress'])->name('checkout.updateAddress');
 Route::post('/checkout-payment', [OrderController::class, 'payment'])->name('checkout.payment');
-Route::post('/checkout-done', [OrderController::class, 'checkout_process'])->name('checkout.process');
+Route::post('/checkout-done', [OrderController::class, 'checkoutProcess'])->name('checkout.process');
 Route::get('/finish-payment/{id}', [OrderController::class, 'paymentDone'])->name('payment.done');
+Route::get('/finish-payment/', [OrderController::class, 'makePayment'])->name('payment.done.process');
 
 Route::get('/transactions/{status}', [TransactionController::class, 'index'])->name('transaction.list');
-
-Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
 
 Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
 
@@ -63,24 +65,32 @@ Route::post('/cart/update', [OrderController::class, 'updateCart'])->name('cart.
 Route::post('/cart/semi-update', [OrderController::class, 'updateCartOrder'])->name('cart.semiupdate');
 
 // admin
-Route::get('/admin/login', [AdminLoginController::class, 'index'])->name('administrator.login');
-Route::post('/admin/login', [AdminLoginController::class, 'login'])->name('administrator.post_login');
-Route::get('/admin/logout', [AdminLoginController::class, 'logout'])->name('administrator.logout');
+Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function() {
+    Route::get('/login', [AdminLoginController::class, 'index'])->name('administrator.login');
+    Route::post('/login', [AdminLoginController::class, 'login'])->name('administrator.post_login');
+    Route::get('/logout', [AdminLoginController::class, 'logout'])->name('administrator.logout');
+    
+    Route::get('/orders', [DashboardController::class, 'showOrders'])->name('administrator.orders');
+    Route::get('/orders/{id}', [DashboardController::class, 'showOrder'])->name('administrator.orders.show');
+    Route::post('/order/tracking-update', [DashboardController::class, 'updateTrackingInfo'])->name('administrator.order.update_tracking');
+    Route::post('/order/payment-update', [DashboardController::class, 'updatePaymentStatus'])->name('administrator.order.update_payment');
+    
+    Route::group(['prefix' => 'products'], function() {
+        Route::get('/', [DashboardController::class, 'showProducts'])->name('administrator.products');
+        Route::get('/fetch/{arg}', [DashboardController::class, 'fetchProducts'])->name('administrator.fetch_products');
+        Route::get('/add', [DashboardController::class, 'createProduct'])->name('administrator.add_product.show');
+        Route::post('/add', [DashboardController::class, 'addProduct'])->name('administrator.add_product');
+        Route::get('/edit/{id}', [DashboardController::class, 'editProduct'])->name('administrator.edit_product');
+        Route::post('/edit', [DashboardController::class, 'updateProduct'])->name('administrator.update_product');
+    });
+    
+    Route::group(['prefix' => 'tracking'], function() {
+        Route::get('/{status}', [DashboardController::class, 'showTracking'])->name('administrator.tracking');
+        Route::get('/{id}/{status}', [DashboardController::class, 'changeOrderStatus'])->name('administrator.tracking.update_status');
+    });
 
-Route::get('/admin/orders', [DashboardController::class, 'showOrders'])->name('administrator.orders');
-Route::get('/admin/orders/{id}', [DashboardController::class, 'showOrder'])->name('administrator.orders.show');
-Route::post('/admin/order/tracking-update', [DashboardController::class, 'updateTrackingInfo'])->name('administrator.order.update_tracking');
-Route::post('/admin/order/payment-update', [DashboardController::class, 'updatePaymentStatus'])->name('administrator.order.update_payment');
-
-Route::get('/admin/products', [DashboardController::class, 'showProducts'])->name('administrator.products');
-Route::get('/admin/products-fetch/{arg}', [DashboardController::class, 'fetchProducts'])->name('administrator.fetch_products');
-Route::get('/admin/products/add', [DashboardController::class, 'createProduct'])->name('administrator.add_product.show');
-Route::post('/admin/products/add', [DashboardController::class, 'addProduct'])->name('administrator.add_product');
-
-Route::get('/admin/tracking/{status}', [DashboardController::class, 'showTracking'])->name('administrator.tracking');
-Route::get('/admin/tracking/{id}/{status}', [DashboardController::class, 'changeOrderStatus'])->name('administrator.tracking.update_status');
-
-Route::post('/admin/category/add', [DashboardController::class, 'storeCategory'])->name('administrator.add_category');
-Route::post('/admin/subcategory/add', [DashboardController::class, 'storeSubcategory'])->name('administrator.add_subcategory');
-Route::post('/admin/brand/add', [DashboardController::class, 'storeBrand'])->name('administrator.add_brand');
-Route::get('/admin/subcategories-fetch', [DashboardController::class, 'getSubcategories'])->name('administrator.fetch_subcategories');
+    Route::post('/category/add', [DashboardController::class, 'storeCategory'])->name('administrator.add_category');
+    Route::post('/subcategory/add', [DashboardController::class, 'storeSubcategory'])->name('administrator.add_subcategory');
+    Route::post('/brand/add', [DashboardController::class, 'storeBrand'])->name('administrator.add_brand');
+    Route::get('/subcategories-fetch', [DashboardController::class, 'getSubcategories'])->name('administrator.fetch_subcategories');
+});

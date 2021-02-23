@@ -81,10 +81,11 @@
             <div class="modal-body">
                 <div class="container">
                     <div class="cart_inner">
-                        <form action="">
+                        <form action="{{ route('payment.done.process') }}" method="POST">
+                            @csrf
                             <div class="form-group pl-2 pr-2">
                                 <label style="color: #4F4F4F">Nomor Pemesanan</label><br>
-                                <input type="text" name="nomorpemesanan" id="nomorpemesanan" class="form-control" style="background: #F2F2F2" placeholder="DG01232020AV" disabled>
+                                <input type="text" name="nomorpemesanan" id="nomorpemesanan" class="form-control" style="background: #F2F2F2" value="{{ $order->id }}" disabled>
                             </div>
                             <div class="form-group pl-2 pr-2 pb-1">
                                 <label style="color: #4F4F4F">Bank Tujuan</label>

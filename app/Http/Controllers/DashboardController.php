@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Order;
+use App\Models\Payment;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Subcategory;
@@ -93,7 +94,6 @@ class DashboardController extends Controller
         return redirect(route('administrator.login'));
     }
 
-
     public function createProduct()
     {
         if(Auth::guard('web')->check()) {
@@ -148,6 +148,20 @@ class DashboardController extends Controller
             } catch(\Exception $e) {
                 return redirect()->back()->with(['error' => $e->getMessage()]);
             }
+        }
+        return redirect(route('administrator.login'));
+    }
+
+    public function editProduct($id)
+    {
+        if(Auth::guard('web')->check()) {
+            $product = Product::with('variant', 'images', 'brand', 'subcategory.category')->where('id', $id)->first();
+            $categories = Category::orderBy('name', 'ASC')->get();
+            $subcategories = Subcategory::orderBy('name', 'ASC')->get();
+            $brands = Brand::orderBy('name', 'ASC')->get();
+            
+            // dd($product);
+            return view('admin.products-edit', compact('product', 'categories', 'subcategories', 'brands'));
         }
         return redirect(route('administrator.login'));
     }

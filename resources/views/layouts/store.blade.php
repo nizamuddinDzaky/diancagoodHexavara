@@ -109,7 +109,7 @@
     @yield('content')
 
     <!-- Footer -->
-    <footer class="page-footer font-small pt-4 pl-5 pr-5">
+    <footer class="page-footer font-small py-4 px-5">
         <div class="container-fluid text-center text-md-left text-gray-2">
             <div class="row pl-4">
                 <div class="col-md-3 mt-md-0">
