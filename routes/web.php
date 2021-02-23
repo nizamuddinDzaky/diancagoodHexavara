@@ -23,6 +23,7 @@ use App\Http\Controllers\DashboardController;
 */
 URL::forceRootUrl(getenv('APP_URL'));
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/show', [HomeController::class, 'show'])->name('search-result');
 
 Route::get('/register', [CustomerRegisterController::class, 'index'])->name('customer.register');
 Route::post('/register', [CustomerRegisterController::class, 'register'])->name('customer.post_register');
@@ -49,8 +50,12 @@ Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.s
 Route::get('/profil', [ProfileController::class, 'index'])->name('profile');
 Route::post('/profil-edit', [ProfileController::class, 'editProfile'])->name('edit.profile');
 Route::get('/profil/alamat', [ProfileController::class, 'address'])->name('profile-address');
+Route::post('/profil/alamat-add', [ProfileController::class, 'addAddress'])->name('profile-address.add');
+Route::post('/profil/alamat-edit', [ProfileController::class, 'updateAddress'])->name('profile-address.edit');
+Route::delete('/profil/alamat-delete/{id}', [ProfileController::class, 'deleteAddress'])->name('profile-address.delete');
 Route::get('/profil/rekening', [ProfileController::class, 'rekening'])->name('profile-rekening');
 Route::post('/profil/rekening-add', [ProfileController::class, 'addBankAccount'])->name('profile-rekening.add');
+Route::delete('/profil/rekening-delete/{id}', [ProfileController::class, 'deleteBankAccount'])->name('profile-rekening.delete');
 
 Route::get('/cart', [OrderController::class, 'showCart'])->name('cart.show');
 Route::post('/cart/add', [OrderController::class, 'addToCart'])->name('cart.add');
