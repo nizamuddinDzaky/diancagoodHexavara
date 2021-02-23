@@ -13,6 +13,7 @@ use App\Models\District;
 use App\Models\Customer;
 use App\Models\Bank;
 use App\Models\BankAccount;
+use App\Models\Address;
 
 class ProfileController extends Controller
 {
@@ -32,7 +33,8 @@ class ProfileController extends Controller
     public function address()
     {
         if(auth()->guard('customer')->check()) {
-            return view('dianca.profile-alamat');
+            $address = Address::where('customer_id', auth()->guard('customer')->user()->id)->get();
+            return view('dianca.profile-alamat', compact('address'));
         }
     }
 
@@ -41,7 +43,8 @@ class ProfileController extends Controller
         if(auth()->guard('customer')->check()) {
             $account = BankAccount::with('bank')->where('customer_id', auth()->guard('customer')->user()->id)->get();
             $banks = Bank::get();
-            return view('dianca.profile-rekening', compact('account', 'banks'));
+            $sum = BankAccount::where('customer_id', auth()->guard('customer')->user()->id)->count();
+            return view('dianca.profile-rekening', compact('account', 'banks', 'sum'));
         }
     }
 
@@ -84,8 +87,8 @@ class ProfileController extends Controller
 
         if ($request->hasFile('image')) {
             $file = $request->file('image');
-            $filename = time() . Str::slug($request->name) . '.' . $file->getClientOriginalExtension();
-            $file->storeAs('public/banks', $filename);
+            $filename = time() . $file->getClientOriginalName() . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('public/storage/banks', $filename);
 
             $bank = Bank::create([
                 'name' => $request->name,
@@ -112,6 +115,74 @@ class ProfileController extends Controller
 
             return redirect(route('profile-rekening'));
         }
+    }
+
+    public function deleteBankAccount($id)
+    {
+        $account = BankAccount::find($id);
+        $account->delete();
+        return redirect(route('profile-rekening'));
+    }
+
+    public function addAddress(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'address_type' => 'required',
+            'receiver_name' => 'required',
+            'receiver_phone' => 'required',
+            'city' => 'required',
+            'postal_code' => 'required',
+            'address' => 'required'
+        ]);
+
+        $address = Address::create([
+            'address_type' => $request->address_type,
+            'receiver_name' => $request->receiver_name,
+            'receiver_phone' => $request->receiver_phone,
+            'city' => $request->city,
+            'postal_code' => $request->postal_code,
+            'address' => $request->address,
+            'is_main' => true,
+            'customer_id' => $request->customer_id
+        ]);
+        
+        $customer = Customer::where('id', auth()->guard('customer')->user()->id)->first();
+        $customer->update([
+            'address' => 1
+        ]);
+        return redirect(route('profile-address'));
+    }
+
+    public function updateAddress(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'address_type' => 'required',
+            'receiver_name' => 'required',
+            'receiver_phone' => 'required',
+            'city' => 'required',
+            'postal_code' => 'required',
+            'address' => 'required'
+        ]);
+
+        $address = Address::find($id);
+        $address->update([
+            'address_type' => $request->address_type,
+            'receiver_name' => $request->receiver_name,
+            'receiver_phone' => $request->receiver_phone,
+            'city' => $request->city,
+            'postal_code' => $request->postal_code,
+            'address' => $request->address,
+            'is_main' => true
+        ]);
+
+        return redirect(route('profile-address'));
+    }
+
+    public function deleteAddress($id)
+    {
+        $address = Address::find($id);
+        $address->delete();
+        return redirect(route('profile-address'));
     }
 
     /**

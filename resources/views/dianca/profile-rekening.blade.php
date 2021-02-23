@@ -11,7 +11,14 @@
             <div class="row my-2">
                 <div class="col-lg-12">
                     <div class="main_title">
-                        <h5 class="pl-3">Nama Klien</h5>
+                        <div class="row">
+                            <div class="col-lg-1 md-1 sm-1">
+                                <img id="image" class="" src="{{ asset('img/boy.png') }}" alt="profil">
+                            </div>
+                            <div class="col-lg-4 md-4 sm-4">
+                                <h5 class="">{{ Auth::guard('customer')->user()->name }}</h5>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -39,20 +46,30 @@
                                     <h6 style="color: #828282">Rekening Bank yang aktif maksimal berjumlah tiga akun</h6>
                                 </div>
                                 <div class="col-lg-3 md-3 sm-3"></div>
+                                @if ($sum != 3)
                                 <div class="col-lg-3 md-3 sm-3 ml-5">
                                     <button class="btn btn-outline-orange bg-orange ml-5 mb-5" style="color: white" aria-disabled="true" data-toggle="modal" data-target="#addRekening">+ Tambah Rekening</button>
                                 </div>
+                                @endif
                             </div>
                             @foreach ($account as $v)
                             <div class="row ml-4 mt-4">
-                                <div class="col-lg-1 md-1 sm-1">{{ $v->bank->image }}</div>
+                                <div class="col-lg-1 md-1 sm-1">
+                                    <img class="" src="{{ asset('storage/banks/' . $v->bank->image) }}" width="70px">
+                                </div>
                                 <div class="col-lg-9 md-9 sm-9">
                                     <h6 style="color: #828282">{{ $v->bank->name }}</h6>
                                     <h6 style="color: #4F4F4F">{{ $v->account_number }}</h6>
                                     <!-- <h6 style="color: #828282">a.n <h6 style="color: #4F4F4F">Sdr RANA WIJDAN NAIM</h6></h6> -->
                                 </div>
                                 <div class="col-lg-2 md-2 sm-2">
-                                    <button class="btn btn-outline-orange mt-4">Hapus</button>
+                                    <form action="{{ route('profile-rekening.delete', $v->id) }}"
+                                        method="post">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class="btn btn-outline-orange mt-2"
+                                            onclick="return confirm('Hapus Rekening')">Hapus</button>
+                                    </form>
                                 </div>
                             </div>
                             @endforeach

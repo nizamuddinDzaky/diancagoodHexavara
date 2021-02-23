@@ -11,7 +11,14 @@
             <div class="row my-2">
                 <div class="col-lg-12">
                     <div class="main_title">
-                        <h5 class="pl-3">Nama Klien</h5>
+                        <div class="row">
+                            <div class="col-lg-1 md-1 sm-1">
+                                <img id="image" class="" src="{{ asset('img/boy.png') }}" alt="profil">
+                            </div>
+                            <div class="col-lg-4 md-4 sm-4">
+                                <h5 class="">{{ Auth::guard('customer')->user()->name }}</h5>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
