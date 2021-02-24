@@ -30,17 +30,17 @@
 <div class="container">
     <hr class="pb-2" style="border-color:F2F2F2">
 </div>
-<form action="{{ route('checkout.process') }}" method="POST">
-    @csrf
-    <section class="feature_product_area">
-        <div class="main_box">
-            <div class="container">
-                <div class="row pt-2 pl-2">
-                    <div class="col-lg-8">
-                        <div class="row py-2">
-                            <div class="col-lg-12 pb-2">
-                                <div class="card shadow-1" style="width: 47rem">
-                                    <div class="card-body">
+<section class="feature_product_area">
+    <div class="main_box">
+        <div class="container">
+            <div class="row pt-2 pl-2">
+                <div class="col-lg-8">
+                    <div class="row py-2">
+                        <div class="col-lg-12 pb-2">
+                            <div class="card shadow-1" style="width: 47rem">
+                                <div class="card-body">
+                                    <form action="{{ route('checkout.process') }}" method="POST" id="payment-form">
+                                        @csrf
                                         <div class="form-group">
                                             <label>Pilih Metode Pembayaran</label><br>
                                             <select id="payment_method" name="payment_method" class="form-control"
@@ -65,51 +65,52 @@
                                         @foreach ($cart_detail as $val)
                                         <input type="hidden" name="cd[]" value="{{ $val }}">
                                         @endforeach
-                                    </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4">
-                        <div class="row py-2">
-                            <div class="col-lg-12 pb-4">
-                                <div class="card shadow-1" style="width: 22rem; height:20rem">
-                                    <div class="row px-4 py-4 ml-2" style="height: 50px">
-                                        <div class="">
-                                            <h4><strong>Ringkasan Belanja</strong></h4>
+                </div>
+                <div class="col-lg-4">
+                    <div class="row py-2">
+                        <div class="col-lg-12 pb-4">
+                            <div class="card shadow-1" style="width: 22rem; height:20rem">
+                                <div class="row px-4 py-4 ml-2" style="height: 50px">
+                                    <div class="">
+                                        <h4><strong>Ringkasan Belanja</strong></h4>
+                                    </div>
+                                </div>
+                                <div class="container">
+                                    <hr class="" style="border-color:F2F2F2">
+                                </div>
+                                <div class="row px-4 py-2">
+                                    <div class="col-lg-6">
+                                        <div class="row ml-2">
+                                            <h5>Total Harga</h5>
+                                        </div>
+                                        <div class="row ml-2 pt-1 pb-2">
+                                            <h5>Ongkos Kirim</h5>
+                                        </div>
+                                        <div class="row ml-2 pt-3">
+                                            <h5>Total Tagihan</h5>
                                         </div>
                                     </div>
-                                    <div class="container">
-                                        <hr class="" style="border-color:F2F2F2">
-                                    </div>
-                                    <div class="row px-4 py-2">
-                                        <div class="col-lg-6">
-                                            <div class="row ml-2">
-                                                <h5>Total Harga</h5>
-                                            </div>
-                                            <div class="row ml-2 pt-1 pb-2">
-                                                <h5>Ongkos Kirim</h5>
-                                            </div>
-                                            <div class="row ml-2 pt-3">
-                                                <h5>Total Tagihan</h5>
-                                            </div>
+                                    <div class="col-lg-6">
+                                        <div class="row mr-2 float-right">
+                                            <h5>Rp {{number_format($subtotal, 2, ',', '.')}}</h5>
                                         </div>
-                                        <div class="col-lg-6">
-                                            <div class="row mr-2 float-right">
-                                                <h5>Rp {{number_format($subtotal, 2, ',', '.')}}</h5>
-                                            </div>
-                                            <div class="row mr-2 pt-1 pb-2 float-right">
-                                                <h5>Rp {{ number_format($shipping_cost, 2, ',', '.') }}</h5>
-                                            </div>
-                                            <br>
-                                            <div class="row mr-2 pt-3 float-right">
-                                                <h5><strong>Rp {{number_format($total_cost, 2, ',', '.')}}</strong></h5>
-                                            </div>
+                                        <div class="row mr-2 pt-1 pb-2 float-right">
+                                            <h5>Rp {{ number_format($shipping_cost, 2, ',', '.') }}</h5>
+                                        </div>
+                                        <br>
+                                        <div class="row mr-2 pt-3 float-right">
+                                            <h5><strong>Rp {{number_format($total_cost, 2, ',', '.')}}</strong></h5>
                                         </div>
                                     </div>
-                                    <div class="row justify-content-center pt-4">
-                                        <button class="btn btn-outline-orange bg-orange"
-                                            style="color: white; width:20rem" aria-disabled="true">Bayar</button>
+                                </div>
+                                <div class="row justify-content-center pt-4">
+                                    <div class="col-lg-10">
+                                        <a type="button" id="submit_btn" class="btn btn-block btn-orange" aria-disabled="true">Bayar</a>
                                     </div>
                                 </div>
                             </div>
@@ -118,6 +119,14 @@
                 </div>
             </div>
         </div>
-    </section>
-</form>
+    </div>
+</section>
+@endsection
+
+@section('js')
+<script>
+    $("#submit_btn").on('click', function() {
+        $("#payment-form").submit();
+    })
+</script>
 @endsection

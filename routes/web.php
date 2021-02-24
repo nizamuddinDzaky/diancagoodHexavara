@@ -65,32 +65,34 @@ Route::post('/cart/update', [OrderController::class, 'updateCart'])->name('cart.
 Route::post('/cart/semi-update', [OrderController::class, 'updateCartOrder'])->name('cart.semiupdate');
 
 // admin
-Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function() {
+Route::group(['prefix' => 'admin'], function() {
     Route::get('/login', [AdminLoginController::class, 'index'])->name('administrator.login');
     Route::post('/login', [AdminLoginController::class, 'login'])->name('administrator.post_login');
-    Route::get('/logout', [AdminLoginController::class, 'logout'])->name('administrator.logout');
+    Route::group(['middleware' => 'auth'], function() {
+        Route::get('/logout', [AdminLoginController::class, 'logout'])->name('administrator.logout');
     
-    Route::get('/orders', [DashboardController::class, 'showOrders'])->name('administrator.orders');
-    Route::get('/orders/{id}', [DashboardController::class, 'showOrder'])->name('administrator.orders.show');
-    Route::post('/order/tracking-update', [DashboardController::class, 'updateTrackingInfo'])->name('administrator.order.update_tracking');
-    Route::post('/order/payment-update', [DashboardController::class, 'updatePaymentStatus'])->name('administrator.order.update_payment');
+        Route::get('/orders', [DashboardController::class, 'showOrders'])->name('administrator.orders');
+        Route::get('/orders/{id}', [DashboardController::class, 'showOrder'])->name('administrator.orders.show');
+        Route::post('/order/tracking-update', [DashboardController::class, 'updateTrackingInfo'])->name('administrator.order.update_tracking');
+        Route::post('/order/payment-update', [DashboardController::class, 'updatePaymentStatus'])->name('administrator.order.update_payment');
+        
+        Route::group(['prefix' => 'products'], function() {
+            Route::get('/', [DashboardController::class, 'showProducts'])->name('administrator.products');
+            Route::get('/fetch/{arg}', [DashboardController::class, 'fetchProducts'])->name('administrator.fetch_products');
+            Route::get('/add', [DashboardController::class, 'createProduct'])->name('administrator.add_product.show');
+            Route::post('/add', [DashboardController::class, 'addProduct'])->name('administrator.add_product');
+            Route::get('/edit/{id}', [DashboardController::class, 'editProduct'])->name('administrator.edit_product');
+            Route::post('/edit', [DashboardController::class, 'updateProduct'])->name('administrator.update_product');
+        });
+        
+        Route::group(['prefix' => 'tracking'], function() {
+            Route::get('/{status}', [DashboardController::class, 'showTracking'])->name('administrator.tracking');
+            Route::get('/{id}/{status}', [DashboardController::class, 'changeOrderStatus'])->name('administrator.tracking.update_status');
+        });
     
-    Route::group(['prefix' => 'products'], function() {
-        Route::get('/', [DashboardController::class, 'showProducts'])->name('administrator.products');
-        Route::get('/fetch/{arg}', [DashboardController::class, 'fetchProducts'])->name('administrator.fetch_products');
-        Route::get('/add', [DashboardController::class, 'createProduct'])->name('administrator.add_product.show');
-        Route::post('/add', [DashboardController::class, 'addProduct'])->name('administrator.add_product');
-        Route::get('/edit/{id}', [DashboardController::class, 'editProduct'])->name('administrator.edit_product');
-        Route::post('/edit', [DashboardController::class, 'updateProduct'])->name('administrator.update_product');
+        Route::post('/category/add', [DashboardController::class, 'storeCategory'])->name('administrator.add_category');
+        Route::post('/subcategory/add', [DashboardController::class, 'storeSubcategory'])->name('administrator.add_subcategory');
+        Route::post('/brand/add', [DashboardController::class, 'storeBrand'])->name('administrator.add_brand');
+        Route::get('/subcategories-fetch', [DashboardController::class, 'getSubcategories'])->name('administrator.fetch_subcategories');
     });
-    
-    Route::group(['prefix' => 'tracking'], function() {
-        Route::get('/{status}', [DashboardController::class, 'showTracking'])->name('administrator.tracking');
-        Route::get('/{id}/{status}', [DashboardController::class, 'changeOrderStatus'])->name('administrator.tracking.update_status');
-    });
-
-    Route::post('/category/add', [DashboardController::class, 'storeCategory'])->name('administrator.add_category');
-    Route::post('/subcategory/add', [DashboardController::class, 'storeSubcategory'])->name('administrator.add_subcategory');
-    Route::post('/brand/add', [DashboardController::class, 'storeBrand'])->name('administrator.add_brand');
-    Route::get('/subcategories-fetch', [DashboardController::class, 'getSubcategories'])->name('administrator.fetch_subcategories');
 });

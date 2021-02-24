@@ -36,7 +36,7 @@
                 <div class="row my-2 pb-3" id="noAddress">
                     <div class="col">
                         <a type="button" class="btn btn-outline-orange" href="" aria-disabled="true" data-toggle="modal"
-                            data-target="#addressModal">Buat Alamat Baru</a>
+                            data-target="#addAddress">Buat Alamat Baru</a>
                     </div>
                 </div>
                 @endif
@@ -217,7 +217,7 @@
 </section>
 
 @if (auth()->guard('customer')->user()->address == 0)
-<div class="modal fade w-100" id="addressModal" role="dialog">
+<div class="modal fade w-100" id="addAddress" role="dialog">
     <div class="modal-dialog modal-dialog-centered modal-md" role="document">
         <div class="modal-content">
             <div class="modal-header pl-0 pb-4">
@@ -229,15 +229,14 @@
             <div class="modal-body">
                 <div class="container">
                     <div class="cart_inner">
-                        <form action="" id="checkout-form" onsubmit="addAddress()">
+                        <form id="add-address-form">
                             @csrf
                             <div class="form-row pl-2 pr-2 pb-3">
                                 <div class="form-group col-md-10">
                                     <label>Jenis Alamat</label><br>
                                     <input type="text" name="address_type" id="address_type" class="form-control"
                                         style="background: #F6F6F6" required>
-                                    <input type="hidden" value="{{ auth()->guard('customer')->user()->id }}"
-                                        name="customer_id">
+                                    <input type="hidden" value="{{ auth()->guard('customer')->user()->id }}" id="customer_id" name="customer_id">
                                     <p class="text ml-1" style="color: #828282">Contoh : Alamat Kantor, Alamat Rumah,
                                         Apartemen</p>
                                 </div>
@@ -245,7 +244,7 @@
                                     <label class="form-check-label" for="is_main">
                                         Alamat utama?
                                     </label>
-                                    <input class="form-check-input" type="checkbox" value="" id="is_main">
+                                    <input class="form-check-input" type="checkbox" value="" id="is_main" name="is_main">
                                 </div>
                             </div>
                             <div class="form-row pl-2 pr-2 pb-3">
@@ -303,8 +302,8 @@
                             <div class="cart-inner">
                                 <div class="out_button_area">
                                     <div class="checkout_btn_inner">
-                                        <a class="btn btn-outline-gray" href="" data-dismiss="modal">Batal</a>
-                                        <a class="btn btn-orange weight-600" href="" id="add-address">Tambah</a>
+                                        <a id="close-add-address" class="btn btn-outline-gray" data-dismiss="modal">Batal</a>
+                                        <a type="submit" class="btn btn-orange weight-600" id="add-address">Tambah</a>
                                     </div>
                                 </div>
                             </div>
@@ -328,7 +327,7 @@
             <div class="modal-body">
                 <div class="container">
                     <div class="cart_inner">
-                        <form action="" id="address-form" onsubmit="editAddress()">
+                        <form id="edit-address-form" onsubmit="editAddress()">
                             @csrf
                             <div class="form-group pl-2 pr-2 pb-3">
                                 <label>Jenis Alamat</label><br>
@@ -393,7 +392,12 @@
 @section('js')
 <script>
 $(document).ready(function() {
-
+    $.ajaxSetup({
+        headers: {
+            'X-XSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    
     $("#add-address").on("click", function(e) {
         e.preventDefault();
 
@@ -403,7 +407,9 @@ $(document).ready(function() {
         var input4 = document.getElementById('district_id');
         var input5 = document.getElementById('postal_code');
         var input6 = document.getElementById('address');
-        var input7 = document.getElementById('is_main');
+        var input7 = 0;
+        if($("#is_main").prop('checked'))
+            input7 = 1;
         var input8 = document.getElementById('customer_id');
 
         $.ajax({
@@ -417,13 +423,16 @@ $(document).ready(function() {
                 "district_id": input4.value,
                 "postal_code": input5.value,
                 "address": input6.value,
-                "is_main": input7.value,
+                "is_main": input7,
                 "customer_id": input8.value
             },
             dataType: "JSON",
             success: function(res) {
-                // location.reload();
-                console.log(res);
+                $("#close-add-address").click();
+                location.reload();
+            },
+            error: function(xhr, status, err) {
+                console.log(err);
             }
         });
     });
@@ -456,7 +465,7 @@ $(document).ready(function() {
             },
             dataType: "JSON",
             success: function(res) {
-                console.log(res);
+                // console.log(res);
                 $("#editAddress").modal('hide');
                 document.getElementById("receiver_name_main").innerHTML = "<strong>" + res
                     .receiver_name + "</strong>" + " (" + res.address_type + ")";
@@ -481,8 +490,9 @@ $(document).ready(function() {
             },
             dataType: "JSON",
             success: function(res) {
+                $("#city_id").empty();
                 $.each(res, function(key, item) {
-                    console.log(item.name);
+                    // console.log(item.name);
                     $("#city_id").append('<option value="' + item.id + '">' + item
                         .type + " " + item.name + '</option>');
                 });
@@ -499,6 +509,7 @@ $(document).ready(function() {
             },
             dataType: "JSON",
             success: function(res) {
+                $("#district_id").empty();
                 $.each(res, function(key, item) {
                     $("#district_id").append('<option value="' + item.id + '">' +
                         item.name + '</option>');
@@ -507,5 +518,6 @@ $(document).ready(function() {
         });
     });
 })
+
 </script>
 @endsection

@@ -11,4 +11,9 @@ class District extends Model
     {
         return $this->belongsTo(City::class);
     }
+
+    public function address()
+    {
+        return $this->hasMany(Address::class, 'district_id');
+    }
 }

@@ -11,6 +11,7 @@ use App\Models\Province;
 use App\Models\City;
 use App\Models\District;
 use App\Models\Customer;
+use App\Models\Payment;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Cart;
@@ -61,7 +62,7 @@ class OrderController extends Controller
             $this->validate($request, [
                 'courier' => 'required',
                 'duration' => 'required',
-                'address_id' => 'required|exists:address,id',
+                'address_id' => 'required|exists:addresses,id',
                 'shipping_cost' => 'required',
                 'subtotal' => 'required',
                 'cd' => 'required'
@@ -108,32 +109,38 @@ class OrderController extends Controller
 
     public function address(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'address_type' => 'required',
-            'receiver_name' => 'required',
-            'receiver_phone' => 'required',
-            'district_id' => 'required|exists:districts,id',
-            'postal_code' => 'required',
-            'address' => 'required'
-        ]);
+        if(Auth::guard('customer')->check()) {
+            $this->validate($request, [
+                'address_type' => 'required|string',
+                'receiver_name' => 'required|string',
+                'receiver_phone' => 'required|string',
+                'district_id' => 'required|exists:districts,id',
+                'postal_code' => 'required|string',
+                'address' => 'required|string',
+                'is_main' => 'boolean',
+                'customer_id' => 'required|exists:customers,id'
+            ]);
 
-        $address = Address::create([
-            'address_type' => $request->address_type,
-            'receiver_name' => $request->receiver_name,
-            'receiver_phone' => $request->receiver_phone,
-            'district_id' => $request->district_id,
-            'postal_code' => $request->postal_code,
-            'address' => $request->address,
-            'is_main' => true,
-            'customer_id' => $request->customer_id
-        ]);
-        
-        $customer = Customer::where('id', auth()->guard('customer')->user()->id)->first();
-        $customer->update([
-            'address' => 1
-        ]);
+            $address = Address::create([
+                'address_type' => $request->address_type,
+                'receiver_name' => $request->receiver_name,
+                'receiver_phone' => $request->receiver_phone,
+                'district_id' => $request->district_id,
+                'postal_code' => $request->postal_code,
+                'address' => $request->address,
+                'is_main' => $request->is_main,
+                'customer_id' => $request->customer_id
+            ]);
+            
+            $customer = Customer::where('id', auth()->guard('customer')->user()->id)->first();
+            $customer->update([
+                'address' => 1
+            ]);
 
-        return json_encode($address);
+            $customer->save();
+
+            return json_encode($address);
+        }
     }
 
     public function updateAddress(Request $request)
@@ -287,8 +294,7 @@ class OrderController extends Controller
 
     public function updateCart(Request $request)
     {
-        $cart = Cart::where('customer_id', Auth::guard('customer')->user()->id)->first();
-        $carts_variant = CartDetail::where('cart_id', $cart->id)->where('id', $request->id)->first();
+        $carts_variant = CartDetail::where('id', $request->id)->first();
         $product_variant = ProductVariant::where('id', $carts_variant->product_variant_id)->first();
 
         $carts_variant->update([
@@ -304,17 +310,13 @@ class OrderController extends Controller
 
         $carts_variant->save();
 
+        $cart = Cart::with('details')->where('customer_id', Auth::guard('customer')->user()->id)->first();
+
         $total_cost = CartDetail::where('cart_id', $cart->id)->sum('price');
         $cart->total_cost = $total_cost;
         $cart->save();
 
-        $return = array();
-        $return['cart'] = $cart;
-        $return['subtotal'] = $carts_variant->price;
-        $return['variant'] = $carts_variant;
-        $return['qty'] = $carts_variant->qty;
-
-        return json_encode($return, JSON_NUMERIC_CHECK);
+        return json_encode($cart, JSON_NUMERIC_CHECK);
     }
 
     public function updateCartOrder(Request $request)

@@ -55,7 +55,7 @@
                                                 <div class="col-lg-6">
                                                     <div class="btn-group btn-group-vertical-center float-right">
                                                         <span class="product_count">
-                                                            <button class="reduced items-count font-10" type="button" onclick="decrement({{ $cd->id }})">
+                                                            <button class="reduced items-count font-10" type="button" onclick="update({{ $cd->id }}, 0)">
                                                                 <span class="material-icons md-10">remove</span>
                                                             </button>
                                                         </span>
@@ -63,7 +63,7 @@
                                                             <input type="text" name="qty[]" id="qty{{ $cd->id }}" maxlength="3" value="{{ $cd->qty }}" style="height:26px;width:70px" class="input-text" required>
                                                         </span>
                                                         <span class="product_count">
-                                                            <button class="increase items-count font-10" type="button" onclick="increment({{ $cd->id }})">
+                                                            <button class="increase items-count font-10" type="button" onclick="update({{ $cd->id }}, 1)">
                                                                 <span class="material-icons md-10">add</span>
                                                             </button>
                                                         </span>
@@ -108,9 +108,12 @@
         currency: "IDR"
     }
 
-    function increment(id) {
+    function update(id, isIncrement) {
         var input = document.getElementById('qty'+id);
-        input.value++;
+        if(isIncrement)
+            input.value++;
+        else
+            input.value--;
 
         $.ajax({
             type: "POST",
@@ -121,46 +124,25 @@
             },
             dataType: "JSON",
             success: function(res) {
-                console.log(res);
-                var curr_total = parseInt(document.getElementById("total_cost").innerHTML.replace(/[^0-9-,]/g, ''));
-                $("#subtotal"+id).html(res.subtotal.toLocaleString("id-ID", myObj));
-                if($("#check"+id).prop('checked')){
-                    $("#total_cost").html((curr_total + res.subtotal).toLocaleString("id-ID", myObj));
-                    $("#qty").html(parseInt(input.value + res.qty);
-                }
+                var total_cost = 0;
+                var qty = 0;
+                res.details.forEach(function(cd) {
+                    if($("#check"+cd.id).prop('checked')){
+                        total_cost += parseInt(cd.price);
+                        qty += parseInt(cd.qty);
+                    }
+
+                    if(cd.id == id) {
+                        $("#subtotal"+cd.id).html(cd.price.toLocaleString("id-ID", myObj));
+                    }
+                })
+                $("#total_cost").html(parseInt(total_cost).toLocaleString("id-ID", myObj));
+                $("#qty").html(parseInt(qty));
             },
             error: function (xhr, status, err) {
                 console.log(err);
             }
         })
-    }
-
-    function decrement(id) {
-        var input = document.getElementById('qty'+id);
-        if(input.value - 1 > 0){
-            input.value--;
-
-            $.ajax({
-                type: "POST",
-                url: "/cart/update",
-                data: {
-                    id: id,
-                    qty: input.value
-                },
-                dataType: "JSON",
-                success: function(res) {
-                    var curr_total = parseInt(document.getElementById("total_cost").innerHTML.replace(/[^0-9-,]/g, ''));
-                    $("#subtotal"+id).html(res.subtotal.toLocaleString("id-ID", myObj));
-                    if($("#check"+id).prop('checked')){
-                        $("#total_cost").html((curr_total - res.subtotal).toLocaleString("id-ID", myObj));
-                        $("#qty").html(parseInt(input.value) - res.qty);
-                    }
-                },
-                error: function (xhr, status, err) {
-                    console.log(err);
-                }
-            })
-        }
     }
 
     $("#select-all").click(function() {

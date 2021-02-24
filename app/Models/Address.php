@@ -14,4 +14,9 @@ class Address extends Model
     {
         return $this->belongsTo(Customer::class);
     }
+
+    public function district()
+    {
+        return $this->belongsTo(District::class, 'district_id');
+    }
 }
