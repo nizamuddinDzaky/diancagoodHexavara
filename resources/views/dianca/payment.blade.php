@@ -46,7 +46,7 @@
                                             <select id="payment_method" name="payment_method" class="form-control"
                                                 style="background: #F2F2F2">
                                                 <option value="Transfer" selected>Bank Transfer</option>
-                                                <option>...</option>
+                                                <option value="">...</option>
                                             </select>
                                         </div>
                                         <div class="form-group">
@@ -54,7 +54,7 @@
                                             <select id="bank" name="bank" class="form-control"
                                                 style="background: #F2F2F2">
                                                 <option value="BNI" selected>Bank Negara Indonesia</option>
-                                                <option>...</option>
+                                                <option value="">...</option>
                                             </select>
                                         </div>
                                         <input type="hidden" name="courier" value="{{ $courier }}">
@@ -125,8 +125,14 @@
 
 @section('js')
 <script>
+    $.ajaxSetup({
+        headers: {
+            'X-XSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
     $("#submit_btn").on('click', function() {
         $("#payment-form").submit();
-    })
+    });
 </script>
 @endsection

@@ -12,6 +12,9 @@
 <section class="section_gap mt-4">
     <div class="main_box pt-4">
         <div class="container text-gray-2">
+            @if (session('error'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+            @endif
             <div class="row my-2">
                 <div class="col-lg-12">
                     <div class="main_title">

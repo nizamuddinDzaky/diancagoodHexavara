@@ -20,13 +20,13 @@ class CreateOrdersTable extends Migration
             $table->string('customer_name');
             $table->string('customer_email');
             $table->string('customer_phone');
-            $table->string('customer_address');
-            $table->unsignedBigInteger('district_id');
+            $table->integer('unique');
+            $table->unsignedBigInteger('address_id');
             $table->integer('subtotal');
             $table->integer('shipping_cost')->default(0);
             $table->date('shipping_date')->nullable();
             $table->integer('total_cost')->default(0);
-            $table->string('shipping')->nullable();
+            $table->string('shipping');
             $table->integer('status')->default(0);
             $table->string('tracking_number')->nullable();
             $table->timestamp('invalid_at')->nullable();

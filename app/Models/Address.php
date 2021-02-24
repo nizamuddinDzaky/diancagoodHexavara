@@ -19,4 +19,9 @@ class Address extends Model
     {
         return $this->belongsTo(District::class, 'district_id');
     }
+
+    public function order()
+    {
+        return $this->hasMany(Order::class, 'address_id');
+    }
 }

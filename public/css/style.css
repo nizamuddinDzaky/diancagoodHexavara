@@ -6234,6 +6234,12 @@ h6 {
     border-color: #e0e0e0 !important;
 }
 
+.disabled-field {
+    background: #f2f2f2;
+    color: #bdbdbd;
+    font-weight: 600;
+}
+
 .bg-3 {
     background: #e0e0e0 !important;
 }

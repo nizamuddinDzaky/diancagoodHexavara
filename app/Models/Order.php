@@ -10,9 +10,9 @@ class Order extends Model
     protected $guarded = [];
     protected $appends = ['status_label'];
     
-    public function district()
+    public function address()
     {
-        return $this->belongsTo(District::class);
+        return $this->belongsTo(Address::class, 'address_id');
     }
 
     public function getStatusLabelAttribute()

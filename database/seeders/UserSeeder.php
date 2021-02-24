@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Customer;
+use App\Models\Address;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Bank;
@@ -36,6 +37,7 @@ class UserSeeder extends Seeder
                 'email' => 'butsherlock@gmail.com',
                 'password' => Hash::make('asdasdasd'),
                 'phone_number' => '123123123',
+                'address' => 1,
                 'district_id' => 6145
             ],
             [
@@ -43,6 +45,7 @@ class UserSeeder extends Seeder
                 'email' => 'rizaladam@gmail.com',
                 'password' => Hash::make('asdasdasd'),
                 'phone_number' => '123123123',
+                'address' => 0,
                 'district_id' => 6145
             ],
             [
@@ -50,6 +53,7 @@ class UserSeeder extends Seeder
                 'email' => 'afia@gmail.com',
                 'password' => Hash::make('asdasdasd'),
                 'phone_number' => '123123123',
+                'address' => 0,
                 'district_id' => 6145
             ],
             [
@@ -57,9 +61,21 @@ class UserSeeder extends Seeder
                 'email' => 'reva@gmail.com',
                 'password' => Hash::make('asdasdasd'),
                 'phone_number' => '123123123',
+                'address' => 0,
                 'district_id' => 6145
             ],
         ];
+
+        Address::create([
+            'customer_id' => 1,
+            'address_type' => "Rumah",
+            'receiver_name' => "Rosa",
+            'receiver_phone' => '0812128127',
+            'district_id' => 6145,
+            'postal_code' => "60112",
+            'address' => 'Jalan Mulyosari Tengah VII/37',
+            'is_main' => true
+        ]);
 
         Order::create([
             'invoice' => 'DG001228122020AV',
@@ -67,13 +83,13 @@ class UserSeeder extends Seeder
             'customer_name' => 'cust verif',
             'customer_email' => 'butsherlock@gmail.com',
             'customer_phone' => '123123123',
-            'customer_address' => 'Jalan Mulyosari 37',
-            'district_id' => 6145,
+            'address_id' => 1,
             'subtotal' => 858000,
             'shipping_cost' => 20000,
             'total_cost' => 878000,
             'shipping' => 'JNE',
             'status' => 0,
+            'unique' => rand(1, 99),
             'tracking_number' => 'JJA000021928'
         ]);
 
@@ -107,22 +123,6 @@ class UserSeeder extends Seeder
                 'weight' => 200
             ]
         ];
-
-        Order::create([
-            'invoice' => 'DG001228122020BW',
-            'customer_id' => 1,
-            'customer_name' => 'cust verif',
-            'customer_email' => 'butsherlock@gmail.com',
-            'customer_phone' => '123123123',
-            'customer_address' => 'Jalan Mulyosari 37',
-            'district_id' => 6145,
-            'subtotal' => 858000,
-            'shipping_cost' => 20000,
-            'total_cost' => 878000,
-            'shipping' => 'JNE',
-            'status' => 1,
-            'tracking_number' => 'JJA000021928'
-        ]);
 
         $banks = [
             [

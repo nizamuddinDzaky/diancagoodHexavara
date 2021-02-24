@@ -4,10 +4,17 @@
 <title>Selesaikan Pembayaran</title>
 @endsection
 
+@section('css')
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+@endsection
+
 @section('content')
 <section class="section_gap mt-4">
     <div class="main_box pt-4">
         <div class="container text-gray-2">
+            @if (session('error'))
+                <div class="alert alert-danger">{{ session('error') }}</div>
+            @endif
             <div class="row my-2">
                 <div class="main_title">
                     <h2 class="pl-4">Selesaikan Pembayaran</h2>
@@ -18,18 +25,18 @@
                     <div class="card shadow-1">
                         <div class="card-body">
                             <h5 class="pl-3 text-gray-3 weight-600">Nomor Pemesanan</h5>
-                            <h4 class="pl-3 pb-2 text-orange"><strong>DG001228122020AV</strong></h4>
+                            <h4 class="pl-3 pb-2 text-orange"><strong>{{ $order->invoice }}</strong></h4>
                             <h5 class="pl-3 text-gray-3 weight-600">Metode Pembayaran</h5>
-                            <h5 class="pl-3 pb-2 text-gray-2 weight-600">Transfer Bank BNI</h5>
+                            <h5 class="pl-3 pb-2 text-gray-2 weight-600">{{ $order->payment->method }}</h5>
                             <h5 class="pl-3 text-gray-3 weight-600">Nomor Rekening</h5>
                             <h5 class="pl-3 pb-2 text-gray-2 weight-600">800 152 6846<span class="text-orange float-right">Salin</span></h5>
                             <h5 class="pl-3 text-gray-3 weight-600">Atas Nama</h5>
                             <h5 class="pl-3 pb-2 text-gray-2 weight-600">Toko Diancagoods</h5>
                             <h5 class="pl-3 text-gray-3 weight-600">Batas Pembayaran</h5>
-                            <h5 class="pl-3 pb-2 text-gray-2 weight-600">Senin, 29 Desember 2020. Pukul 10:21 WIB</h5>
+                            <h5 class="pl-3 pb-2 text-gray-2 weight-600">{{ $order->invalid_at }}</h5>
                             <hr>
                             <h5 class="pl-3 text-gray-3 weight-600">Total Pembayaran</h5>
-                            <h3 class="pl-3 text-gray-2 weight-600">Rp 287.002<span class="text-orange float-right font-16">Salin</span></h3>
+                            <h3 class="pl-3 text-gray-2 weight-600">Rp {{ number_format($order->total_cost, 2, ',', '.') }}<span class="text-orange float-right font-16">Salin</span></h3>
                             <h6 class="pl-3 pb-3">Transfer tepat sampai 2 digit terakhir agar mempercepat proses verifikasi</h6>
                             <div class="pl-3">
                                 <a type="button" class="btn btn-outline-orange btn-block font-18" href="#" aria-disabled="true" data-toggle="modal" data-target="#uploadPaymentModal">Upload Bukti Pembayaran</a>
@@ -81,39 +88,54 @@
             <div class="modal-body">
                 <div class="container">
                     <div class="cart_inner">
-                        <form action="{{ route('payment.done.process') }}" method="POST">
+                        <form action="{{ route('payment.done.process') }}" method="POST" id="payment-done-form">
                             @csrf
                             <div class="form-group pl-2 pr-2">
                                 <label style="color: #4F4F4F">Nomor Pemesanan</label><br>
-                                <input type="text" name="nomorpemesanan" id="nomorpemesanan" class="form-control" style="background: #F2F2F2" value="{{ $order->id }}" disabled>
+                                <input type="text" name="invoice" id="invoice" class="form-control disabled-field" value="{{ $order->invoice }}" readonly>
                             </div>
                             <div class="form-group pl-2 pr-2 pb-1">
                                 <label style="color: #4F4F4F">Bank Tujuan</label>
-                                <select class="form-control border" style="boder-color: #EOEOEO">
-                                    <option>Bank BNI (800 152 6846) - A/n. Toko Diancagoods</option>
+                                <select class="form-control border" name="transfer_to" style="boder-color: #EOEOEO">
+                                    <option value="{{ $order->payment->transfer_to }}" selected>Bank BNI (800 152 6846) - A/n. Toko Diancagoods</option>
                                 </select>
                             </div>
                             <div class="form-group pl-2 pr-2 pb-1">
                                 <label style="color: #4F4F4F">Bank Pengirim</label>
-                                <select class="form-control border" style="boder-color: #EOEOEO;">
+                                <select class="form-control border" name="transfer_from_bank" style="boder-color: #EOEOEO;">
                                     <option>Pilih Bank</option>
+                                    <option value="BNI">BNI</option>
+                                    <option value="BCA">BCA</option>
                                 </select>
                             </div>
                             <div class="form-group pl-2 pr-2 pb-1">
                                 <label style="color: #4F4F4F">Nomor Rekening Pengirim</label>
-                                <input type="text" class="form-control border" style="boder-color: #EOEOEO" id="norekpengirim" placeholder="" required>
+                                <input type="text" class="form-control border" name="transfer_from_account" required>
                             </div>
                             <div class="form-group pl-2 pr-2 pb-1">
                                 <label style="color: #4F4F4F">Nama Pemilik Rekening</label>
-                                <input type="text" class="form-control border" style="boder-color: #EOEOEO" id="narekpengirim" placeholder="" required>
+                                <input type="text" class="form-control border" name="name" required>
                             </div>
                             <div class="form-group pl-2 pr-2 pb-1">
                                 <label style="color: #4F4F4F">Jumlah Transfer</label><br>
-                                <input type="text" name="jumlahtrf" id="jumlahtrf" class="form-control border" style="boder-color: #EOEOEO" required>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text bg-3 border">Rp</div>
+                                    </div>
+                                    <input type="text" name="amount" class="form-control bg-white border" required>
+                                </div>
                             </div>
                             <div class="form-group pl-2 pr-2 pb-1">
                                 <label style="color: #4F4F4F">Tanggal Transfer</label><br>
-                                <input type="text" name="tgltrf" id="tgltrf" class="form-control border" style="boder-color: #EOEOEO" placeholder="29 Desember 2020" required>
+                                <div class="form-group">
+                                    <div class="input-group date">
+                                        <input type="text" class="form-control border" name="date" id="date" required>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="material-icons md-18">calendar_today</i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -122,8 +144,8 @@
                             <div class="cart-inner">
                                 <div class="out_button_area">
                                     <div class="checkout_btn_inner">
-                                        <a class="btn btn-outline-secondary" style="width: 7rem; height:40px" href="#" data-dismiss="modal">Cancel</a>
-                                        <a class="btn btn-outline-orange bg-orange" style="color: white" href="#">Upload</a>
+                                        <a class="btn btn-outline-gray" href="" data-dismiss="modal">Batal</a>
+                                        <a id="submit_btn" type="button" class="btn btn-orange weight-600">Upload</a>
                                     </div>
                                 </div>
                             </div>
@@ -137,7 +159,27 @@
 @endsection
 
 @section('js')
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <script>
+    $.ajaxSetup({
+        headers: {
+            'X-XSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
 
+    $(function () {
+        $('#date').daterangepicker({
+            startDate: moment(),
+            singleDatePicker: true,
+            showDropdowns: true,
+            maxYear: parseInt(moment().format('YYYY'), 10),
+            autoUpdateInput: true,
+            drops: 'up',
+        });
+    });
+
+    $("#submit_btn").on('click', function() {
+        $("#payment-done-form").submit();
+    });
 </script>
 @endsection

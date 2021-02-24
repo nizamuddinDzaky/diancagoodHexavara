@@ -46,11 +46,9 @@ class OrderController extends Controller
                 $total_cost += $cd->price;
             }
             
-            $address = Address::where('customer_id', auth()->guard('customer')->user()->id)->where('is_main', 1)->first();
+            $address = Address::with('district.city.province')->where('customer_id', auth()->guard('customer')->user()->id)->where('is_main', 1)->first();
 
             $provinces = Province::get();
-
-            // dd($cart_arr);
 
             return view('dianca.checkout', compact('cart', 'cart_detail', 'address', 'total_cost', 'provinces'));
         }
@@ -77,33 +75,6 @@ class OrderController extends Controller
             $cart_detail = $request->input('cd');
 
             return view('dianca.payment', compact('subtotal', 'shipping_cost', 'address_id', 'total_cost', 'courier', 'duration', 'cart_detail'));
-        }
-    }
-
-    public function paymentDone($id)
-    {
-        if(Auth::guard('customer')->check()) {
-            $order = Order::with('payment')->where('customer_id', Auth::guard('customer')->user()->id)->where('id', $id)->first();
-
-            $order_details = OrderDetail::where('order_id', $id)->get();
-
-            $cart = Cart::where('customer_id', Auth::guard('customer')->user()->id)->first();
-
-            foreach($order_details as $od) {
-                CartDetail::where('cart_id', $cart->id)->where('product_variant_id', $od->product_variant_id)->delete();
-            }
-
-            $cart->total_cost = CartDetail::where('cart_id', $cart->id)->sum('price');
-            $cart->save();
-
-            return view('dianca.payment-done', compact('order'));
-        }
-    }
-
-    public function makePayment(Request $request)
-    {
-        if(Auth::guard('customer')->check()) {
-            
         }
     }
 
@@ -147,13 +118,13 @@ class OrderController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'address_id' => 'required|exists:addresses,id',
-            'address_type' => 'required',
-            'receiver_name' => 'required',
-            'receiver_phone' => 'required',
+            'address_type' => 'required|string',
+            'receiver_name' => 'required|string',
+            'receiver_phone' => 'required|string',
             'district_id' => 'required|exists:districts,id',
-            'postal_code' => 'required',
-            'address' => 'required',
-            'is_main' => 'required'
+            'postal_code' => 'required|string',
+            'address' => 'required|string',
+            'is_main' => 'boolean'
         ]);
 
         $address = Address::find($request->address_id);
@@ -161,13 +132,17 @@ class OrderController extends Controller
             'address_type' => $request->address_type,
             'receiver_name' => $request->receiver_name,
             'receiver_phone' => $request->receiver_phone,
-            'district' => $request->district_id,
+            'district_id' => $request->district_id,
             'postal_code' => $request->postal_code,
             'address' => $request->address,
-            'is_main' => true
+            'is_main' => $request->is_main
         ]);
 
-        return json_encode($address);
+        $address->save();
+
+        $address_new = Address::with('district.city.province')->find($request->address_id);
+
+        return json_encode($address_new);
     }
 
     public function checkoutProcess(Request $request)
@@ -186,28 +161,32 @@ class OrderController extends Controller
         $carts = Cart::where('customer_id', auth()->guard('customer')->user()->id)->first();
         $cart_arr = $request->input('cd');
 
-        $address = Address::where('customer_id', auth()->guard('customer')->user()->id)->where('is_main', 1)->first();
+        $address = Address::where('id', $request->address_id)->first();
         $customer = Customer::where('id', auth()->guard('customer')->user()->id)->first();
 
-        DB::beginTransaction();
         try{
-            // $shipping = explode('-', $request->courier);
+            $unique = rand(1, 99);
             $order = Order::create([
                 'invoice' => Str::random(4) . '-' . time(),
                 'customer_id' => $customer->id,
                 'customer_name' => $customer->name,
                 'customer_email' => $customer->email,
                 'customer_phone' => $customer->phone_number,
-                'customer_address' => $address->address,
-                'district_id' => 1,
+                'address_id' => $request->address_id,
                 'subtotal' => $request->subtotal,
-                'total_cost' => $request->total_cost + $request->shipping_cost,
+                'unique' => $unique,
+                'total_cost' => $request->subtotal + $request->shipping_cost + $unique,
                 'shipping_cost' => $request->shipping_cost,
                 'shipping' => $request->courier,
             ]);
 
+            $order_created = Carbon::create($order->created_at->toDateTimeString());
+            $order->invalid_at = $order_created->addMinutes(90)->toDateTimeString();
+            $order->save();
+
             foreach ($cart_arr as $cd) {
-                $cart_detail = CartDetail::with('variant')->where('is_avail', 1)->where('id', $cd)->first();
+                $cart_detail = CartDetail::where('id', $cd)->first();
+
                 $variant = ProductVariant::where('id', $cart_detail->product_variant_id)->first();
 
                 OrderDetail::create([
@@ -221,7 +200,7 @@ class OrderController extends Controller
                 $variant->stock -= $cart_detail->qty;
                 $variant->save();
 
-                $cart_detail->delete();
+                CartDetail::with('variant')->where('id', $cd)->delete();
             }
 
             $payment = Payment::create([
@@ -230,13 +209,60 @@ class OrderController extends Controller
                 'method' => $request->payment_method
             ]);
 
-            DB::commit();
-
-            return redirect(route('payment.done', ['id' => $order->id]));
-            // return redirect(route('payment', $order->invoice));
+            return redirect()->route('payment.done', ['id' => $order->id]);
         }catch (\Exception $e) {
-            DB::rollback();
             return redirect()->back()->with(['error' => $e->getMessage()]);
+        }
+    }
+
+    public function paymentDone($id)
+    {
+        if(Auth::guard('customer')->check()) {
+            $order = Order::with('payment')->where('customer_id', Auth::guard('customer')->user()->id)->where('id', $id)->first();
+
+            return view('dianca.payment-done', compact('order'));
+        }
+    }
+
+    public function makePayment(Request $request)
+    {
+        if(Auth::guard('customer')->check()) {
+            $this->validate($request, [
+                'invoice' => 'required|exists:orders,invoice',
+                'transfer_to' => 'required|string',
+                'transfer_from_bank' => 'required|string',
+                'transfer_from_account' => 'required|string',
+                'name' => 'required|string',
+                'amount' => 'required|integer',
+                'date' => 'required'
+            ]);
+
+            try {
+                $order = Order::where('invoice', $request->invoice)->first();
+                $payment = Payment::where('order_id', $order->id)->first();
+
+                $order_invalid = Carbon::createFromFormat('Y-m-d H:i:s', $order->invalid_at);
+                $now = Carbon::now();
+
+                if($now->isBefore($order_invalid) && $order->status != 5) {
+                    $payment->update([
+                        'transfer_from_bank' => $request->transfer_from_bank,
+                        'transfer_from_account' => $request->transfer_from_account,
+                        'name' => $request->name,
+                        'amount' => $request->amount,
+                        'transfer_date' => Carbon::createFromFormat('m/d/Y', $request->date),
+                        'status' => 1,
+                    ]);
+                    $payment->save();
+
+                    $order->update(['status' => 1]);
+                    $order->save();
+
+                    return redirect()->route('transaction.list', ['status' => 1])->with(['success' => 'Bukti Pembayaran Sedang Diproses.']);
+                }
+            } catch(\Exception $e) {
+                return redirect()->back()->with(['error' => $e->getMessage()]);
+            }
         }
     }
 

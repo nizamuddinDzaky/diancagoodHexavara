@@ -51,7 +51,7 @@
                     </div>
                     <div class="row my-2 pb-3 pl-3" style="color: #333333">
                         <h5 id="receiver_address_main">{{ $address->address }}</h5>
-                        <h5 id="receiver_city_main">, {{ $address->city }}</h5>
+                        <h5 id="receiver_city_main">, {{ $address->district->city->type }} {{ $address->district->city->name }}</h5>
                         <h5 id="receiver_postal_main">, {{ $address->postal_code }}</h5>
                     </div>
                     <div class="row my-2 pl-3">
@@ -236,9 +236,9 @@
                                     <label>Jenis Alamat</label><br>
                                     <input type="text" name="address_type" id="address_type" class="form-control"
                                         style="background: #F6F6F6" required>
-                                    <input type="hidden" value="{{ auth()->guard('customer')->user()->id }}" id="customer_id" name="customer_id">
                                     <p class="text ml-1" style="color: #828282">Contoh : Alamat Kantor, Alamat Rumah,
                                         Apartemen</p>
+                                    <input type="hidden" value="{{ auth()->guard('customer')->user()->id }}" id="customer_id" name="customer_id">
                                 </div>
                                 <div class="col-md-2 form-check">
                                     <label class="form-check-label" for="is_main">
@@ -329,43 +329,70 @@
                     <div class="cart_inner">
                         <form id="edit-address-form" onsubmit="editAddress()">
                             @csrf
-                            <div class="form-group pl-2 pr-2 pb-3">
-                                <label>Jenis Alamat</label><br>
-                                <input type="text" name="address_type" id="address_type" class="form-control"
-                                    value="{{ $address->address_type }}" style="background: #F6F6F6" required>
-                                <input type="hidden" value="{{ $address->id }}" id="address_id" name="address_id">
-                                <input type="hidden" value="{{ $address->is_main }}" id="is_main" name="is_main">
+                            <div class="form-row pl-2 pr-2 pb-3">
+                                <div class="form-group col-md-10">
+                                    <label>Jenis Alamat</label><br>
+                                    <input type="text" name="address_type" id="address_type" class="form-control" value="{{ $address->address_type ?? '' }}"
+                                        style="background: #F6F6F6" required>
+                                    <p class="text ml-1" style="color: #828282">Contoh : Alamat Kantor, Alamat Rumah,
+                                        Apartemen</p>
+                                    <input type="hidden" value="{{ auth()->guard('customer')->user()->id }}" id="customer_id" name="customer_id">
+                                    <input type="hidden" value="{{ $address->id }}" id="address_id" name="address_id">
+                                </div>
+                                <div class="col-md-2 form-check">
+                                    <label class="form-check-label" for="is_main">
+                                        Alamat utama?
+                                    </label>
+                                    <input class="form-check-input" type="checkbox" id="is_main" name="is_main">
+                                </div>
                             </div>
                             <div class="form-row pl-2 pr-2 pb-3">
                                 <div class="form-group col-md-6">
                                     <label>Nama Penerima</label>
-                                    <input type="text" class="form-control" id="receiver_name" name="receiver_name"
-                                        value="{{ $address->receiver_name }}" style="background: #F6F6F6" required>
+                                    <input type="text" class="form-control" id="receiver_name" name="receiver_name" value="{{ $address->receiver_name ?? '' }}"
+                                        style="background: #F6F6F6" required>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label>Nomor Telepon</label>
                                     <input type="text" class="form-control" id="receiver_phone" name="receiver_phone"
-                                        value="{{ $address->receiver_phone }}" style="background: #F6F6F6" required>
+                                        style="background: #F6F6F6" value="{{ $address->receiver_phone ?? '' }}" required>
+                                    <p class="text ml-1" style="color: #828282">Contoh : 081234567890</p>
+                                </div>
+                            </div>
+                            <div class="form-row pl-2 pr-2 pb-3">
+                                <div class="form-group col-md-6">
+                                    <label>Provinsi</label>
+                                    <select id="province_id" name="province_id" class="form-control bg-light-2">
+                                        <option value="" selected>Pilih</option>
+                                        @foreach($provinces as $p)
+                                        <option value="{{ $p->id }}">{{ $p->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Kota/Kabupaten</label>
+                                    <select id="city_id" name="city_id" class="form-control bg-light-2">
+                                        <option value="">Pilih</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="form-row pl-2 pr-2 pb-3">
                                 <div class="form-group col-md-8">
-                                    <label>Kota atau Kecamatan</label>
-                                    <input type="text" class="form-control" id="city" name="city"
-                                        value="{{ $address->city }}" style="background: #F6F6F6" required>
+                                    <label>Kecamatan</label>
+                                    <select id="district_id" name="district_id" class="form-control bg-light-2">
+                                        <option value="">Pilih</option>
+                                    </select>
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label>Kode Pos</label>
-                                    <input type="text" class="form-control" id="postal_code" name="postal_code"
-                                        value="{{ $address->postal_code }}" style="background: #F6F6F6" required>
+                                    <input type="text" class="form-control" id="postal_code" name="postal_code" value="{{ $address->postal_code ?? '' }}"
+                                        style="background: #F6F6F6" required>
                                 </div>
                             </div>
                             <div class="form-group pl-2 pr-2 pb-3">
                                 <label>Alamat</label><br>
-                                <textarea name="address" id="address" value="" cols="60" rows="4" class="form-control"
-                                    style="background: #F6F6F6; border: none"
-                                    required>{{ $address->address }}</textarea>
-                                <!-- <input type="text" name="alamat" id="alamat" class="form-control" style="background: #F6F6F6" required> -->
+                                <textarea name="address" id="address" cols="60" rows="4" class="form-control"
+                                    style="background: #F6F6F6; border: none" required>{{ $address->address ?? '' }}</textarea>
                             </div>
                         </form>
                     </div>
@@ -397,6 +424,57 @@ $(document).ready(function() {
             'X-XSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+
+    $("#province_id").on('change', function() {
+        $.ajax({
+            url: "{{ route('cities') }}",
+            type: 'GET',
+            data: {
+                province_id: $(this).val()
+            },
+            dataType: "JSON",
+            success: function(res) {
+                $("#city_id").empty();
+                $.each(res, function(key, item) {
+                    $("#city_id").append('<option value="' + item.id + '">' + item
+                        .type + " " + item.name + '</option>');
+                });
+                @if(auth()->guard('customer')->user()->address != 0)
+                    $('#city_id').val({{ $address->district->city->id }}).change();
+                @endif
+            },
+        });
+    });
+
+    $("#city_id").on('change', function() {
+        $.ajax({
+            url: "{{ route('districts') }}",
+            type: 'GET',
+            data: {
+                city_id: $(this).val()
+            },
+            dataType: "JSON",
+            success: function(res) {
+                $("#district_id").empty();
+                $.each(res, function(key, item) {
+                    $("#district_id").append('<option value="' + item.id + '">' +
+                        item.name + '</option>');
+                });
+                @if(auth()->guard('customer')->user()->address != 0)
+                    $('#district_id').val({{ $address->district->id }}).change();
+                @endif
+            },
+        });
+    });
+
+    @if(auth()->guard('customer')->user()->address != 0)
+        @if($address->is_main)
+            $("#is_main").prop('checked', true);
+            $("#is_main").val(1);
+        @endif
+        $('#province_id>option[value="' + {{ $address->district->city->province->id }} + '"]').prop('selected', true);
+        $('#province_id').val({{ $address->district->city->province->id }}).change();
+    @endif
     
     $("#add-address").on("click", function(e) {
         e.preventDefault();
@@ -444,7 +522,7 @@ $(document).ready(function() {
         var input2 = document.getElementById('address_id');
         var input3 = document.getElementById('receiver_name');
         var input4 = document.getElementById('receiver_phone');
-        var input5 = document.getElementById('city');
+        var input5 = document.getElementById('district_id');
         var input6 = document.getElementById('postal_code');
         var input7 = document.getElementById('address');
         var input8 = document.getElementById('is_main');
@@ -458,63 +536,25 @@ $(document).ready(function() {
                 "address_id": input2.value,
                 "receiver_name": input3.value,
                 "receiver_phone": input4.value,
-                "city": input5.value,
+                "district_id": input5.value,
                 "postal_code": input6.value,
                 "address": input7.value,
                 "is_main": input8.value,
             },
             dataType: "JSON",
             success: function(res) {
-                // console.log(res);
                 $("#editAddress").modal('hide');
                 document.getElementById("receiver_name_main").innerHTML = "<strong>" + res
                     .receiver_name + "</strong>" + " (" + res.address_type + ")";
                 document.getElementById("receiver_phone_main").innerHTML = res
                     .receiver_phone;
                 document.getElementById("receiver_address_main").innerHTML = res.address;
-                document.getElementById("receiver_city_main").innerHTML = res.city;
-                document.getElementById("receiver_postal_main").innerHTML = res.postal_code;
+                document.getElementById("receiver_city_main").innerHTML = ", " + res.district.city.type + " " + res.district.city.name;
+                document.getElementById("receiver_postal_main").innerHTML = ", " + res.postal_code;
             },
             error: function(xhr, status, err) {
-                console.log(err);
+                console.log(xhr.responseText);
             }
-        });
-    });
-
-    $("#province_id").on('change', function() {
-        $.ajax({
-            url: "{{ route('cities') }}",
-            type: 'GET',
-            data: {
-                province_id: $(this).val()
-            },
-            dataType: "JSON",
-            success: function(res) {
-                $("#city_id").empty();
-                $.each(res, function(key, item) {
-                    // console.log(item.name);
-                    $("#city_id").append('<option value="' + item.id + '">' + item
-                        .type + " " + item.name + '</option>');
-                });
-            },
-        });
-    });
-
-    $("#city_id").on('change', function() {
-        $.ajax({
-            url: "{{ route('districts') }}",
-            type: 'GET',
-            data: {
-                city_id: $(this).val()
-            },
-            dataType: "JSON",
-            success: function(res) {
-                $("#district_id").empty();
-                $.each(res, function(key, item) {
-                    $("#district_id").append('<option value="' + item.id + '">' +
-                        item.name + '</option>');
-                });
-            },
         });
     });
 })
