@@ -69,7 +69,7 @@
                                     <div class="col-lg-4 md-4 sm-4">
                                         <h5>{{ $var->city ,  $var->postal_code}}</h5>
                                         <h5>Indonesia</h5>
-                                        <button class="btn btn-outline-orange ml-4 mt-4" data-toggle="modal" data-target="#editAddress">Ubah</button>
+                                        <button class="btn btn-outline-orange ml-4 mt-4" data-toggle="modal" data-target="#editAddress" onclick="editAddress({{ $var->id }})">Ubah</button>
                                         <button class="btn btn-outline-orange ml-4 mt-4">Hapus</button>
                                     </div>
                                     <!-- <div class="row">
@@ -99,38 +99,69 @@
                         <div class="cart_inner">
                             <form action="{{ route('profile-address.add') }}" method="post" id="addAddress-form">
                                 @csrf
-                                <div class="form-group pl-2 pr-2 pb-3">
-                                    <label >Jenis Alamat</label><br>
-                                    <input type="text" name="address_type" id="address_type" class="form-control" style="background: #F6F6F6" required>
-                                    <input type="hidden" value="{{ auth()->guard('customer')->user()->id }}" name="customer_id">
-                                    <p class="text ml-1" style="color: #828282">Contoh : Alamat Kantor, Alamat Rumah, Apartemen</p>
+                                <div class="form-row pl-2 pr-2 pb-3">
+                                    <div class="form-group col-md-10">
+                                        <label>Jenis Alamat</label><br>
+                                        <input type="text" name="address_type" id="address_type" class="form-control"
+                                            style="background: #F6F6F6" required>
+                                        <p class="text ml-1" style="color: #828282">Contoh : Alamat Kantor, Alamat Rumah,
+                                            Apartemen</p>
+                                        <input type="hidden" value="{{ auth()->guard('customer')->user()->id }}" id="customer_id" name="customer_id">
+                                    </div>
+                                    <div class="col-md-2 form-check">
+                                        <label class="form-check-label" for="is_main">
+                                            Alamat utama?
+                                        </label>
+                                        <input class="form-check-input" type="checkbox" value="" id="is_main" name="is_main">
+                                    </div>
                                 </div>
                                 <div class="form-row pl-2 pr-2 pb-3">
                                     <div class="form-group col-md-6">
-                                        <label >Nama Penerima</label>
-                                        <input type="text" class="form-control" id="receiver_name" name="receiver_name" style="background: #F6F6F6" required>
+                                        <label>Nama Penerima</label>
+                                        <input type="text" class="form-control" id="receiver_name" name="receiver_name"
+                                            style="background: #F6F6F6" required>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label >Nomor Telepon</label>
-                                        <input type="text" class="form-control" id="receiver_phone" name="receiver_phone" style="background: #F6F6F6" required>
+                                        <label>Nomor Telepon</label>
+                                        <input type="text" class="form-control" id="receiver_phone" name="receiver_phone"
+                                            style="background: #F6F6F6" required>
                                         <p class="text ml-1" style="color: #828282">Contoh : 081234567890</p>
                                     </div>
                                 </div>
                                 <div class="form-row pl-2 pr-2 pb-3">
+                                    <div class="form-group col-md-6">
+                                        <label>Provinsi</label>
+                                        <select id="province_id" name="province_id" class="form-control bg-light-2">
+                                            <option value="" selected>Pilih</option>
+                                            @foreach($provinces as $p)
+                                            <option value="{{ $p->id }}">{{ $p->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label>Kota/Kabupaten</label>
+                                        <select id="city_id" name="city_id" class="form-control bg-light-2">
+                                            <option value="">Pilih</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-row pl-2 pr-2 pb-3">
                                     <div class="form-group col-md-8">
-                                        <label >Kota atau Kecamatan</label>
-                                        <input type="text" class="form-control" id="city" name="city" style="background: #F6F6F6" required>
-                                        <p class="text ml-1" style="color: #828282">Contoh : Sukolilo, Surabaya</p>
+                                        <label>Kecamatan</label>
+                                        <select id="district_id" name="district_id" class="form-control bg-light-2">
+                                            <option value="">Pilih</option>
+                                        </select>
                                     </div>
                                     <div class="form-group col-md-4">
-                                        <label >Kode Pos</label>
-                                        <input type="text" class="form-control" id="postal_code" name="postal_code" style="background: #F6F6F6" required>
+                                        <label>Kode Pos</label>
+                                        <input type="text" class="form-control" id="postal_code" name="postal_code"
+                                            style="background: #F6F6F6" required>
                                     </div>
                                 </div>
                                 <div class="form-group pl-2 pr-2 pb-3">
-                                    <label >Alamat</label><br>
-                                    <textarea name="address" id="address" cols="60" rows="4" class="form-control" style="background: #F6F6F6; border: none" required></textarea>
-                                    <!-- <input type="text" name="alamat" id="alamat" class="form-control" style="background: #F6F6F6" required> -->
+                                    <label>Alamat</label><br>
+                                    <textarea name="address" id="address" cols="60" rows="4" class="form-control"
+                                        style="background: #F6F6F6; border: none" required></textarea>
                                 </div>
                             </form>
                         </div>
@@ -139,8 +170,8 @@
                                 <div class="cart-inner">
                                     <div class="out_button_area">
                                         <div class="checkout_btn_inner">
-                                            <a class="btn btn-outline-secondary" style="width: 7rem; height:40px" href="">Batal</a>
-                                            <a class="btn btn-outline-orange bg-orange" style="color: white" href="" id="add-address">Tambah</a>
+                                            <a id="close-add-address" class="btn btn-outline-gray" data-dismiss="modal">Batal</a>
+                                            <a type="submit" class="btn btn-orange weight-600" id="add-address">Tambah</a>
                                         </div>
                                     </div>
                                 </div>
@@ -165,35 +196,70 @@
                         <div class="cart_inner">
                             <form action="{{ route('profile-address.edit', $var->id) }}" method="post" id="editAddress-form">
                                 @csrf
-                                <div class="form-group pl-2 pr-2 pb-3">
-                                    <label >Jenis Alamat</label><br>
-                                    <input type="text" name="address_type" id="address_type" class="form-control" value="{{ $var->address_type }}" style="background: #F6F6F6" required>
-                                    <input type="hidden" value="{{ auth()->guard('customer')->user()->id }}" name="customer_id">
+                                <div class="form-row pl-2 pr-2 pb-3">
+                                    <div class="form-group col-md-10">
+                                        <label>Jenis Alamat</label><br>
+                                        <input type="text" name="address_type" id="address_type" class="form-control" value="{{ $address->address_type ?? '' }}"
+                                            style="background: #F6F6F6" required>
+                                        <p class="text ml-1" style="color: #828282">Contoh : Alamat Kantor, Alamat Rumah,
+                                            Apartemen</p>
+                                        <input type="hidden" value="{{ auth()->guard('customer')->user()->id }}" id="customer_id" name="customer_id">
+                                        <input type="hidden" value="{{ $address->id }}" id="address_id" name="address_id">
+                                    </div>
+                                    <div class="col-md-2 form-check">
+                                        <label class="form-check-label" for="is_main">
+                                            Alamat utama?
+                                        </label>
+                                        <input class="form-check-input" type="checkbox" id="is_main" name="is_main">
+                                    </div>
                                 </div>
                                 <div class="form-row pl-2 pr-2 pb-3">
                                     <div class="form-group col-md-6">
-                                        <label >Nama Penerima</label>
-                                        <input type="text" class="form-control" id="receiver_name" name="receiver_name" value="{{ $var->receiver_name }}" style="background: #F6F6F6" required>
+                                        <label>Nama Penerima</label>
+                                        <input type="text" class="form-control" id="receiver_name" name="receiver_name" value="{{ $address->receiver_name ?? '' }}"
+                                            style="background: #F6F6F6" required>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label >Nomor Telepon</label>
-                                        <input type="text" class="form-control" id="receiver_phone" name="receiver_phone" value="{{ $var->receiver_phone }}" style="background: #F6F6F6" required>
+                                        <label>Nomor Telepon</label>
+                                        <input type="text" class="form-control" id="receiver_phone" name="receiver_phone"
+                                            style="background: #F6F6F6" value="{{ $address->receiver_phone ?? '' }}" required>
+                                        <p class="text ml-1" style="color: #828282">Contoh : 081234567890</p>
+                                    </div>
+                                </div>
+                                <div class="form-row pl-2 pr-2 pb-3">
+                                    <div class="form-group col-md-6">
+                                        <label>Provinsi</label>
+                                        <select id="province_id" name="province_id" class="form-control bg-light-2">
+                                            <option value="" selected>Pilih</option>
+                                            @foreach($provinces as $p)
+                                            <option value="{{ $p->id }}">{{ $p->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label>Kota/Kabupaten</label>
+                                        <select id="city_id" name="city_id" class="form-control bg-light-2">
+                                            <option value="">Pilih</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="form-row pl-2 pr-2 pb-3">
                                     <div class="form-group col-md-8">
-                                        <label >Kota atau Kecamatan</label>
-                                        <input type="text" class="form-control" id="city" name="city" value="{{ $var->city }}" style="background: #F6F6F6" required>
+                                        <label>Kecamatan</label>
+                                        <select id="district_id" name="district_id" class="form-control bg-light-2">
+                                            <option value="">Pilih</option>
+                                        </select>
                                     </div>
                                     <div class="form-group col-md-4">
-                                        <label >Kode Pos</label>
-                                        <input type="text" class="form-control" id="postal_code" name="postal_code" value="{{ $var->postal_code }}" style="background: #F6F6F6" required>
+                                        <label>Kode Pos</label>
+                                        <input type="text" class="form-control" id="postal_code" name="postal_code" value="{{ $address->postal_code ?? '' }}"
+                                            style="background: #F6F6F6" required>
                                     </div>
                                 </div>
                                 <div class="form-group pl-2 pr-2 pb-3">
-                                    <label >Alamat</label><br>
-                                    <textarea name="address" id="address" value="" cols="60" rows="4" class="form-control" style="background: #F6F6F6; border: none" required>{{ $var->address }}</textarea>
-                                    <!-- <input type="text" name="alamat" id="alamat" class="form-control" style="background: #F6F6F6" required> -->
+                                    <label>Alamat</label><br>
+                                    <textarea name="address" id="address" cols="60" rows="4" class="form-control"
+                                        style="background: #F6F6F6; border: none" required>{{ $address->address ?? '' }}</textarea>
                                 </div>
                             </form>
                         </div>
@@ -202,8 +268,8 @@
                                 <div class="cart-inner">
                                     <div class="out_button_area">
                                         <div class="checkout_btn_inner">
-                                            <a class="btn btn-outline-secondary" style="width: 7rem; height:40px" href="">Batal</a>
-                                            <a class="btn btn-outline-orange bg-orange" style="color: white" href="" id="edit-address">Simpan</a>
+                                            <a id="close-add-address" class="btn btn-outline-gray" data-dismiss="modal">Batal</a>
+                                            <a type="submit" class="btn btn-orange weight-600" id="edit-address">Tambah</a>
                                         </div>
                                     </div>
                                 </div>
@@ -221,6 +287,52 @@
     <script src="{{ asset('js/bootstrap.js') }}"></script>
     <script src="{{ asset('js/app.js') }}"></script>
     <script>
+        // $('editAddress').click(function (e) {
+        //     e.preventDefault();
+        //     $('#editAddress-form').submit();
+        // });
+        $("#province_id").on('change', function() {
+            $.ajax({
+                url: "{{ route('cities') }}",
+                type: 'GET',
+                data: {
+                    province_id: $(this).val()
+                },
+                dataType: "JSON",
+                success: function(res) {
+                    $("#city_id").empty();
+                    $.each(res, function(key, item) {
+                        $("#city_id").append('<option value="' + item.id + '">' + item
+                            .type + " " + item.name + '</option>');
+                    });
+                    @if(auth()->guard('customer')->user()->address != 0)
+                        $('#city_id').val({{ $address->district->city->id }}).change();
+                    @endif
+                },
+            });
+        });
+
+        $("#city_id").on('change', function() {
+            $.ajax({
+                url: "{{ route('districts') }}",
+                type: 'GET',
+                data: {
+                    city_id: $(this).val()
+                },
+                dataType: "JSON",
+                success: function(res) {
+                    $("#district_id").empty();
+                    $.each(res, function(key, item) {
+                        $("#district_id").append('<option value="' + item.id + '">' +
+                            item.name + '</option>');
+                    });
+                    @if(auth()->guard('customer')->user()->address != 0)
+                        $('#district_id').val({{ $address->district->id }}).change();
+                    @endif
+                },
+            });
+        });
+
         $('#add-address').click(function (e) {
             e.preventDefault();
             $('#addAddress-form').submit();

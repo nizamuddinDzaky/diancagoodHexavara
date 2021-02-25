@@ -114,8 +114,8 @@
                                 <div class="cart-inner">
                                     <div class="out_button_area">
                                         <div class="checkout_btn_inner">
-                                            <a class="btn btn-outline-secondary" style="width: 7rem; height:40px" href="#">Batal</a>
-                                            <a class="btn btn-outline-orange bg-orange" style="color: white" id="account-go">Tambah</a>
+                                            <a class="btn btn-outline-gray" data-dismiss="modal">Batal</a>
+                                            <a class="btn btn-orange weight-600" style="color: white" id="account-go">Tambah</a>
                                         </div>
                                     </div>
                                 </div>

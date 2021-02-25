@@ -127,22 +127,24 @@ class ProfileController extends Controller
     public function addAddress(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'address_type' => 'required',
-            'receiver_name' => 'required',
-            'receiver_phone' => 'required',
-            'city' => 'required',
-            'postal_code' => 'required',
-            'address' => 'required'
+            'address_type' => 'required|string',
+            'receiver_name' => 'required|string',
+            'receiver_phone' => 'required|string',
+            'district_id' => 'required|exists:districts,id',
+            'postal_code' => 'required|string',
+            'address' => 'required|string',
+            'is_main' => 'boolean',
+            'customer_id' => 'required|exists:customers,id'
         ]);
 
         $address = Address::create([
             'address_type' => $request->address_type,
             'receiver_name' => $request->receiver_name,
             'receiver_phone' => $request->receiver_phone,
-            'city' => $request->city,
+            'district_id' => $request->district_id,
             'postal_code' => $request->postal_code,
             'address' => $request->address,
-            'is_main' => true,
+            'is_main' => $request->is_main,
             'customer_id' => $request->customer_id
         ]);
         
@@ -156,12 +158,14 @@ class ProfileController extends Controller
     public function updateAddress(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'address_type' => 'required',
-            'receiver_name' => 'required',
-            'receiver_phone' => 'required',
-            'city' => 'required',
-            'postal_code' => 'required',
-            'address' => 'required'
+            'address_id' => 'required|exists:addresses,id',
+            'address_type' => 'required|string',
+            'receiver_name' => 'required|string',
+            'receiver_phone' => 'required|string',
+            'district_id' => 'required|exists:districts,id',
+            'postal_code' => 'required|string',
+            'address' => 'required|string',
+            'is_main' => 'boolean'
         ]);
 
         $address = Address::find($id);
@@ -169,10 +173,10 @@ class ProfileController extends Controller
             'address_type' => $request->address_type,
             'receiver_name' => $request->receiver_name,
             'receiver_phone' => $request->receiver_phone,
-            'city' => $request->city,
+            'district_id' => $request->district_id,
             'postal_code' => $request->postal_code,
             'address' => $request->address,
-            'is_main' => true
+            'is_main' => $request->is_main
         ]);
 
         return redirect(route('profile-address'));
@@ -182,6 +186,14 @@ class ProfileController extends Controller
     {
         $address = Address::find($id);
         $address->delete();
+
+        $sum = Address::where('customer_id', auth()->guard('customer')->user()->id)->count();
+        if($sum == 0){
+            $customer = Customer::where('id', auth()->guard('customer')->user()->id)->first();
+            $customer->update([
+            'address' => 0
+        ]);
+        }
         return redirect(route('profile-address'));
     }
 

@@ -24,6 +24,8 @@ use App\Http\Controllers\DashboardController;
 URL::forceRootUrl(getenv('APP_URL'));
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/show', [HomeController::class, 'show'])->name('search-result');
+Route::get('/category/{slug}', [HomeController::class, 'categoryFilter'])->name('category-result');
+Route::get('/brand/{slug}', [HomeController::class, 'brandFilter'])->name('brand-result');
 
 Route::get('/register', [CustomerRegisterController::class, 'index'])->name('customer.register');
 Route::post('/register', [CustomerRegisterController::class, 'register'])->name('customer.post_register');
