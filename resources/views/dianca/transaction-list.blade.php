@@ -126,7 +126,7 @@
                                                                 </div>
                                                                 <div class="media-body">
                                                                     <h4 class="weight-600">
-                                                                        <a href="{{ url('/product/' . $od->variant->product->id) }}">{{ $od->variant->product->name }}</a>
+                                                                        <a class="text-orange" href="{{ url('/product/' . $od->variant->product->id) }}">{{ $od->variant->product->name }}</a>
                                                                     </h4>
                                                                     <p>{{ $od->weight ?? '120gr' }}</p>
                                                                     <p>Rp {{ number_format($od->price, 2, ',', '.') }}<span class="ml-4 text-gray-3">{{ $od->qty ?? '1 Produk (1 kg)' }}</span></p>
@@ -141,8 +141,10 @@
                                                     <h4><strong>Rp {{ number_format($order->subtotal, 2, ',', '.') }}</strong></h4>
                                                 </div>
                                                 <div class="col-lg-2">
-                                                    @if($order->status == 0)
+                                                    @if($order->status == 0 && $order->payment->status == 0)
                                                     <a class="btn btn-orange weight-600" href="{{ route('payment.done', $order->id) }}">Bayar Sekarang</a>
+                                                    @elseif($order->status == 0 && $order->payment->status == 1)
+                                                    <div><strong>Menunggu Konfirmasi</strong></div>
                                                     @elseif($order->status == 1)
                                                     <div>Estimasi</div>
                                                     <div><strong>Akan diproses dalam <span> {{ "2-3" }} </span>hari kerja</strong></div>

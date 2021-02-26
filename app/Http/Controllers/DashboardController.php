@@ -19,7 +19,7 @@ class DashboardController extends Controller
     public function showOrders()
     {
         if(Auth::guard('web')->check()) {
-            $orders = Order::orderBy('created_at', 'DESC')->paginate(7);
+            $orders = Order::with('address')->orderBy('created_at', 'DESC')->paginate(7);
             return view('admin.orders', compact('orders'));
         }
         return redirect(route('administrator.login'));

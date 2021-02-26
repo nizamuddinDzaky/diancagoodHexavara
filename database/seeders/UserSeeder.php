@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Customer;
 use App\Models\Address;
 use App\Models\Order;
+use App\Models\Payment;
 use App\Models\OrderDetail;
 use App\Models\Bank;
 
@@ -93,6 +94,12 @@ class UserSeeder extends Seeder
             'tracking_number' => 'JJA000021928'
         ]);
 
+        Payment::create([
+            'order_id' => 1,
+            'transfer_to' => 'BNI',
+            'method' => 'Transfer',
+        ]);
+
         $order_details = [
             [
                 'order_id' => 1,
@@ -108,20 +115,6 @@ class UserSeeder extends Seeder
                 'qty' => 2,
                 'weight' => 200
             ],
-            [
-                'order_id' => 2,
-                'product_variant_id' => 1,
-                'price' => 258000,
-                'qty' => 1,
-                'weight' => 60
-            ],
-            [
-                'order_id' => 2,
-                'product_variant_id' => 2,
-                'price' => 300000,
-                'qty' => 2,
-                'weight' => 200
-            ]
         ];
 
         $banks = [

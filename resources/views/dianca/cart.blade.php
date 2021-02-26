@@ -31,7 +31,7 @@
                             @forelse($cart->details as $cd)
                                 <div class="form-check text-gray-2 my-4">
                                     <input class="form-check-input position-static align-top primary-checkbox" type="checkbox" name="cd[]" id="check{{ $cd->id }}" value="{{ $cd->id }}" onclick="selectCart({{ $cd->id }})">
-                                    <div class="card cart-card shadow-1">
+                                    <div class="card cart-card shadow-1 w-90">
                                         <div class="card-body">
                                             <div class="row">
                                                 <div class="col-lg-3">

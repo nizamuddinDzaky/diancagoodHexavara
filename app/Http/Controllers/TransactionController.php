@@ -19,7 +19,7 @@ class TransactionController extends Controller
     {
         if(Auth::guard('customer')->check()) {
             if($status != 5) {
-                $orders = Order::with('details.variant.product.images', 'payment')->where('customer_id', Auth::guard('customer')->user()->id)->where('status', $status)->get();
+                $orders = Order::with('details.variant.product.images', 'payment')->where('customer_id', Auth::guard('customer')->user()->id)->where('status', $status)->orderBy('created_at', 'DESC')->get();
             } else {
                 $orders = Order::with('details.variant.product.images', 'payment')->where('customer_id', Auth::guard('customer')->user()->id)->get();
             }

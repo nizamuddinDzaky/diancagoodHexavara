@@ -251,20 +251,23 @@ class ProductSeeder extends Seeder
                 'name' => '100ml',
                 'price' => 189000,
                 'weight' => 100,
-                'stock' => 75
+                'stock' => 75,
+                'image' => '',
             ],
             [
                 'product_id' => 3,
                 'name' => '100ml',
                 'price' => 328000,
                 'weight' => 100,
-                'stock' => 80
+                'image' => '',
+                'stock' => 80,
             ],
             [
                 'product_id' => 4,
                 'name' => '40gr',
                 'price' => 150000,
                 'weight' => 80,
+                'image' => '',
                 'stock' => 50
             ]
         ];
