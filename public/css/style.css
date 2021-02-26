@@ -3170,6 +3170,10 @@ h6 {
     cursor: pointer;
 }
 
+.checked {
+    color: orange;
+  }
+
 .default-switch input:checked + label {
     left: 19px;
 }
