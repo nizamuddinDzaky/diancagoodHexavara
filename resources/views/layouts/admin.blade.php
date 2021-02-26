@@ -100,11 +100,11 @@
     <script>
         $(document).ready(function() {
             if(window.location.href.indexOf("/products") > -1) {
-                $("#order").addClass('filter-active-2');
-            } else if(window.location.href.indexOf("/tracking") > -1) {
                 $("#product").addClass('filter-active-2');
-            } else if(window.location.href.indexOf("/orders") > -1) {
+            } else if(window.location.href.indexOf("/tracking") > -1) {
                 $("#tracking").addClass('filter-active-2');
+            } else if(window.location.href.indexOf("/orders") > -1) {
+                $("#order").addClass('filter-active-2');
             }
         });
     </script>

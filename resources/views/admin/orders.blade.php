@@ -22,7 +22,7 @@
                     <tbody>
                         @forelse($orders as $o)
                         <tr class="d-flex">
-                            <td class="col-2 weight-600"><a href="{{ route('administrator.orders.show', $o->id) }}" class="text-gray-2">{{ $o->invoice }}</a></td>
+                            <td class="col-2 weight-600"><a class="text-orange" href="{{ route('administrator.orders.show', $o->id) }}" class="text-gray-2">{{ $o->invoice }}</a></td>
                             <td class="col-2">{{ $o->customer_name }}</td>
                             <td class="col-4">{{ $o->customer_address }}</td>
                             <td class="col-2">{{ $o->created_at }}</td>

@@ -235,14 +235,16 @@ class ProductSeeder extends Seeder
                 'name' => '60gr',
                 'price' => 258000,
                 'weight' => 60,
-                'stock' => 125
+                'stock' => 125,
+                'image' => 'yuja niacin brightening sleeping mask 1.png'
             ],
             [
                 'product_id' => 1,
                 'name' => '100gr',
                 'price' => 300000,
                 'weight' => 100,
-                'stock' => 100
+                'stock' => 100,
+                'image' => 'yuja niacin brightening sleeping mask 1.png'
             ],
             [
                 'product_id' => 2,

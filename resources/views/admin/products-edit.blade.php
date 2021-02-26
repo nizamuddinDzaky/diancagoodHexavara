@@ -103,14 +103,15 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row mt-2">
+                        <div class="row my-2">
                             <div class="col-lg-1"></div>
                             <div class="col-lg-6">
                                 <label class="form-label">Varian</label>
-                                
+                                @include('admin.variants-list', ['variants' => 'product_variants'])
+                                <button type="button" id="add-variant" class="btn btn-block btn-orange my-2 py-2">Tambah Varian</button>
                             </div>
                         </div>
-                        <div class="row mt-2">
+                        <div class="row mt-4">
                             <div class="col-lg-7"></div>
                             <div class="col-lg-3">
                                 <button type="submit" class="btn btn-orange float-right font-16 px-5 py-2 mr-0">Submit &
@@ -244,6 +245,73 @@
         </div>
     </div>
 </div>
+<div class="modal fade w-100" id="modal_variant" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content">
+            <form action="{{ route('administrator.add_variant', ['product_id' => $product->id]) }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-header pl-0 pb-4">
+                    <h3 class="modal-title w-100 text-center position-absolute text-gray-2 weight-600">Tambah Varian
+                    </h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row mt-2">
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="form-label" for="name">Nama Varian</label>
+                                    <input type="text" name="name" class="form-control bg-light-2 no-border" required
+                                        autofocus>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-lg-4">
+                                <label class="form-label">Harga</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text bg-3 border-3">Rp</div>
+                                    </div>
+                                    <input type="text" name="price" class="form-control border-3">
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <label class="form-label">Berat</label>
+                                <div class="input-group">
+                                    <input type="text" name="weight" class="form-control border-3">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text bg-3 border-3">gr</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <label class="form-label">Stok</label>
+                                <input type="text" name="stock" class="form-control bg-light-2 no-border" required>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-lg-6">
+                                <label class="form-label">Foto Kategori</label>
+                                <div class="images image_variant" id="variant_container">
+                                    <div class="pic" id="variant_placeholder">Drag your image here, or browse</div>
+                                    <input type="file" id="variant_input" accept="image/*" name="image_variant"
+                                        style="display:none">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-gray" data-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-orange">Tambah</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('js')
@@ -362,5 +430,9 @@ $('select[name=brand_id]').change(function() {
         $('#modal_brand').modal('show');
     }
 });
+
+$("#add-variant").on('click', function() {
+    $('#modal_variant').modal('show');
+})
 </script>
 @endsection

@@ -24,12 +24,105 @@ use DB;
 
 class OrderController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Request $request)
+    public function showCart()
+    {
+        if(Auth::guard('customer')->check()){
+            $cart = Cart::with('details.variant.product')->where('customer_id', Auth::guard('customer')->user()->id)->first();
+            // dd($cart);
+            $cart_json = json_encode($cart);
+            return view('dianca.cart', compact('cart', 'cart_json'));
+        }
+        return redirect(route('customer.login'));;
+    }
+
+    public function addToCart(Request $request)
+    {
+        if(Auth::guard('customer')->check()){
+            $this->validate($request, [
+                'product_variant_id' => 'required|int',
+                'qty' => 'required|int'
+            ]);
+
+            $cart = Cart::with('details.variant.product.images')->where('customer_id', Auth::guard('customer')->user()->id)->first();
+            
+            $variant = ProductVariant::where('id', $request->product_variant_id)->first();
+
+            if($variant->stock > 0) {
+                if(!CartDetail::where('cart_id', $cart->id)->where('product_variant_id', $variant->id)->exists()) {
+                    $cart_detail = CartDetail::create([
+                        'cart_id' => $cart->id,
+                        'product_variant_id' => $variant->id,
+                        'qty' => $request->qty,
+                        'price' => $variant->price * $request->qty
+                    ]);
+    
+                    $cart->total_cost += $cart_detail->price;
+                    $cart->save();
+                } else {
+                    $cart_variant = CartDetail::where('cart_id', $cart->id)->where('product_variant_id', $variant->id)->first();
+                    $cart_variant->qty += $request->qty;
+                    $cart_variant->price += $variant->price * $request->qty;
+                    $cart_variant->save();
+
+                    $cart->total_cost = CartDetail::where('cart_id', $cart->id)->sum('price');
+                    $cart->save();
+                }
+                
+                return redirect()->back()->with(['success' => 'Produk berhasil ditambahkan ke keranjang.']);
+            }
+            
+            return redirect()->back()->with(['error' => 'Produk tidak dapat ditambahkan ke keranjang.']);
+        }
+        return redirect(route('customer.login'));;
+    }
+
+    public function updateCart(Request $request)
+    {
+        $carts_variant = CartDetail::where('id', $request->id)->first();
+        $product_variant = ProductVariant::where('id', $carts_variant->product_variant_id)->first();
+
+        $carts_variant->update([
+            'qty' => $request->qty,
+            'price' => $request->qty * $product_variant->price
+        ]);
+
+        if($product_variant->stock < $carts_variant->qty) {
+            $carts_variant->is_avail = false;
+        } else {
+            $carts_variant->is_avail = true;
+        }
+
+        $carts_variant->save();
+
+        $cart = Cart::with('details')->where('customer_id', Auth::guard('customer')->user()->id)->first();
+
+        $total_cost = CartDetail::where('cart_id', $cart->id)->sum('price');
+        $cart->total_cost = $total_cost;
+        $cart->save();
+
+        return json_encode($cart, JSON_NUMERIC_CHECK);
+    }
+
+    public function updateCartOrder(Request $request)
+    {
+        $cart = Cart::where('customer_id', Auth::guard('customer')->user()->id)->first();
+        $carts_variant = CartDetail::where('cart_id', $cart->id)->where('id', $request->id)->first();
+        $product_variant = ProductVariant::where('id', $carts_variant->product_variant_id)->first();
+
+        $return = array();
+        
+        if($request->add == 1) {
+            $return['totalcost'] = $request->curr_total + ($request->qty * $product_variant->price);
+            $return['qty'] = $request->curr_qty + $request->qty;
+        } else if($request->add == 0) {
+            $return['totalcost'] = $request->curr_total - ($request->qty * $product_variant->price);
+            $return['qty'] = $request->curr_qty - $request->qty;
+        }
+
+        return json_encode($return, JSON_NUMERIC_CHECK);
+    }
+
+    public function checkout(Request $request)
     {
         if(Auth::guard('customer')->check()) {
             $cart = Cart::where('customer_id', auth()->guard('customer')->user()->id)->first();
@@ -51,30 +144,6 @@ class OrderController extends Controller
             $provinces = Province::get();
 
             return view('dianca.checkout', compact('cart', 'cart_detail', 'address', 'total_cost', 'provinces'));
-        }
-    }
-
-    public function payment(Request $request)
-    {
-        if(Auth::guard('customer')->check()) {
-            $this->validate($request, [
-                'courier' => 'required',
-                'duration' => 'required',
-                'address_id' => 'required|exists:addresses,id',
-                'shipping_cost' => 'required',
-                'subtotal' => 'required',
-                'cd' => 'required'
-            ]);
-
-            $subtotal = $request->subtotal;
-            $shipping_cost = $request->shipping_cost;
-            $address_id = $request->address_id;
-            $total_cost = $request->subtotal + $request->shipping_cost;
-            $courier = $request->courier;
-            $duration = $request->duration;
-            $cart_detail = $request->input('cd');
-
-            return view('dianca.payment', compact('subtotal', 'shipping_cost', 'address_id', 'total_cost', 'courier', 'duration', 'cart_detail'));
         }
     }
 
@@ -143,6 +212,30 @@ class OrderController extends Controller
         $address_new = Address::with('district.city.province')->find($request->address_id);
 
         return json_encode($address_new);
+    }
+
+    public function payment(Request $request)
+    {
+        if(Auth::guard('customer')->check()) {
+            $this->validate($request, [
+                'courier' => 'required',
+                'duration' => 'required',
+                'address_id' => 'required|exists:addresses,id',
+                'shipping_cost' => 'required',
+                'subtotal' => 'required',
+                'cd' => 'required'
+            ]);
+
+            $subtotal = $request->subtotal;
+            $shipping_cost = $request->shipping_cost;
+            $address_id = $request->address_id;
+            $total_cost = $request->subtotal + $request->shipping_cost;
+            $courier = $request->courier;
+            $duration = $request->duration;
+            $cart_detail = $request->input('cd');
+
+            return view('dianca.payment', compact('subtotal', 'shipping_cost', 'address_id', 'total_cost', 'courier', 'duration', 'cart_detail'));
+        }
     }
 
     public function checkoutProcess(Request $request)
@@ -255,9 +348,6 @@ class OrderController extends Controller
                     ]);
                     $payment->save();
 
-                    $order->update(['status' => 1]);
-                    $order->save();
-
                     return redirect()->route('transaction.list', ['status' => 1])->with(['success' => 'Bukti Pembayaran Sedang Diproses.']);
                 }
             } catch(\Exception $e) {
@@ -265,105 +355,7 @@ class OrderController extends Controller
             }
         }
     }
-
-    public function showCart()
-    {
-        if(Auth::guard('customer')->check()){
-            $cart = Cart::with('details.variant.product')->where('customer_id', Auth::guard('customer')->user()->id)->first();
-            // dd($cart);
-            $cart_json = json_encode($cart);
-            return view('dianca.cart', compact('cart', 'cart_json'));
-        }
-        return redirect(route('customer.login'));;
-    }
-
-    public function addToCart(Request $request)
-    {
-        if(Auth::guard('customer')->check()){
-            $this->validate($request, [
-                'product_variant_id' => 'required|int',
-                'qty' => 'required|int'
-            ]);
-
-            $cart = Cart::with('details.variant.product.images')->where('customer_id', Auth::guard('customer')->user()->id)->first();
-            
-            $variant = ProductVariant::where('id', $request->product_variant_id)->first();
-
-            if($variant->stock > 0) {
-                if(!CartDetail::where('cart_id', $cart->id)->where('product_variant_id', $variant->id)->exists()) {
-                    $cart_detail = CartDetail::create([
-                        'cart_id' => $cart->id,
-                        'product_variant_id' => $variant->id,
-                        'qty' => $request->qty,
-                        'price' => $variant->price * $request->qty
-                    ]);
     
-                    $cart->total_cost += $cart_detail->price;
-                    $cart->save();
-                } else {
-                    $cart_variant = CartDetail::where('cart_id', $cart->id)->where('product_variant_id', $variant->id)->first();
-                    $cart_variant->qty += $request->qty;
-                    $cart_variant->price += $variant->price * $request->qty;
-                    $cart_variant->save();
-
-                    $cart->total_cost = CartDetail::where('cart_id', $cart->id)->sum('price');
-                    $cart->save();
-                }
-                
-                return redirect()->back()->with(['success' => 'Produk berhasil ditambahkan ke keranjang.']);
-            }
-            
-            return redirect()->back()->with(['error' => 'Produk tidak dapat ditambahkan ke keranjang.']);
-        }
-        return redirect(route('customer.login'));;
-    }
-
-    public function updateCart(Request $request)
-    {
-        $carts_variant = CartDetail::where('id', $request->id)->first();
-        $product_variant = ProductVariant::where('id', $carts_variant->product_variant_id)->first();
-
-        $carts_variant->update([
-            'qty' => $request->qty,
-            'price' => $request->qty * $product_variant->price
-        ]);
-
-        if($product_variant->stock < $carts_variant->qty) {
-            $carts_variant->is_avail = false;
-        } else {
-            $carts_variant->is_avail = true;
-        }
-
-        $carts_variant->save();
-
-        $cart = Cart::with('details')->where('customer_id', Auth::guard('customer')->user()->id)->first();
-
-        $total_cost = CartDetail::where('cart_id', $cart->id)->sum('price');
-        $cart->total_cost = $total_cost;
-        $cart->save();
-
-        return json_encode($cart, JSON_NUMERIC_CHECK);
-    }
-
-    public function updateCartOrder(Request $request)
-    {
-        $cart = Cart::where('customer_id', Auth::guard('customer')->user()->id)->first();
-        $carts_variant = CartDetail::where('cart_id', $cart->id)->where('id', $request->id)->first();
-        $product_variant = ProductVariant::where('id', $carts_variant->product_variant_id)->first();
-
-        $return = array();
-        
-        if($request->add == 1) {
-            $return['totalcost'] = $request->curr_total + ($request->qty * $product_variant->price);
-            $return['qty'] = $request->curr_qty + $request->qty;
-        } else if($request->add == 0) {
-            $return['totalcost'] = $request->curr_total - ($request->qty * $product_variant->price);
-            $return['qty'] = $request->curr_qty - $request->qty;
-        }
-
-        return json_encode($return, JSON_NUMERIC_CHECK);
-    }
-
     public function getCourier(Request $request)
     {
         $this->validate($request, [

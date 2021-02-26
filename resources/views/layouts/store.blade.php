@@ -39,7 +39,7 @@
                                 </button>
                                 <div class="dropdown-menu">
                                     @forelse($categories as $c)
-                                    <a class="dropdown-item" href="#">{{ $c->name }}</a>
+                                    <a class="dropdown-item" href="{{ route('category-result', $c->id) }}">{{ $c->name }}</a>
                                     @empty
                                     @endforelse
                                 </div>

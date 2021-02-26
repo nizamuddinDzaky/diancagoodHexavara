@@ -3972,18 +3972,19 @@ h6 {
 }
 
 .f_p_item h4 {
-    color: #222222;
-    font-size: 24px;
+    color: #4f4f4f;
+    font-size: 18px;
     margin-top: 15px;
     transition: all 300ms linear 0s;
 }
 
 .f_p_item h4:hover {
-    color: #1641ff;
+    color: #f37020;
 }
 
 .f_p_item h5 {
-    margin-bottom: 0px;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
     font-size: 18px;
     font-weight: 700;
 }
@@ -4046,7 +4047,6 @@ h6 {
 /* Product Sidebar Area css
 ============================================================================================ */
 .cat_product_area .latest_product_inner {
-    padding-top: 30px;
     margin-bottom: -50px;
 }
 
@@ -6247,8 +6247,7 @@ h6 {
 .product-center-cropped {
     object-fit: cover;
     object-position: center;
-    height: 179.5px;
-    width: 179.5px;
+    width: 100%;
 }
 
 .material-icons {
@@ -6332,11 +6331,11 @@ h6 {
     font-weight: 600;
 }
 
-.filter-active {
-    color: #fff;
-    background-color: #f37020;
-    border-color: #f37020;
-    font-weight: 600;
+.filter-active-2 {
+    color: #fff !important;
+    background-color: #f37020 !important;
+    border-color: #f37020 !important;
+    font-weight: 600 !important;
 }
 
 .weight-500 {
@@ -6536,13 +6535,19 @@ h6 {
 .curved-border {
     border-radius: 15px !important;
     border: 1px solid #bdbdbd !important;
-    width: 100% !important;
-    border-spacing: 0px;
-    border-collapse: separate;
+}
+
+.plain-border {
+    border: 0px !important;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
 .curved-border-2 {
     border-radius: 10px;
+}
+
+.curved-border-3 {
+    border-radius: 15px 15px 0px 0px;
 }
 
 .product-toggle {

@@ -24,8 +24,8 @@ use App\Http\Controllers\DashboardController;
 URL::forceRootUrl(getenv('APP_URL'));
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/show', [HomeController::class, 'show'])->name('search-result');
-Route::get('/category/{slug}', [HomeController::class, 'categoryFilter'])->name('category-result');
-Route::get('/brand/{slug}', [HomeController::class, 'brandFilter'])->name('brand-result');
+Route::get('/category/{id}', [HomeController::class, 'categoryFilter'])->name('category-result');
+Route::get('/brand/{id}', [HomeController::class, 'brandFilter'])->name('brand-result');
 Route::get('/about-us', [HomeController::class, 'aboutUs'])->name('about-us');
 Route::get('/term-condition', [HomeController::class, 'termCondition'])->name('term-condition');
 
@@ -41,7 +41,7 @@ Route::get('/logout', [CustomerLoginController::class, 'logout'])->name('custome
 Route::get('/cities', [OrderController::class, 'getCities'])->name('cities');
 Route::get('/districts', [OrderController::class, 'getDistricts'])->name('districts');
 
-Route::post('/checkout', [OrderController::class, 'index'])->name('checkout');
+Route::post('/checkout', [OrderController::class, 'checkout'])->name('checkout');
 Route::post('/checkout-address', [OrderController::class, 'address'])->name('checkout.address');
 Route::post('/checkout-address-edit', [OrderController::class, 'updateAddress'])->name('checkout.updateAddress');
 Route::post('/checkout-payment', [OrderController::class, 'payment'])->name('checkout.payment');
@@ -85,6 +85,7 @@ Route::group(['prefix' => 'admin'], function() {
             Route::get('/fetch/{arg}', [DashboardController::class, 'fetchProducts'])->name('administrator.fetch_products');
             Route::get('/add', [DashboardController::class, 'createProduct'])->name('administrator.add_product.show');
             Route::post('/add', [DashboardController::class, 'addProduct'])->name('administrator.add_product');
+            Route::post('/add-variant', [DashboardController::class, 'storeVariant'])->name('administrator.add_variant');
             Route::get('/edit/{id}', [DashboardController::class, 'editProduct'])->name('administrator.edit_product');
             Route::post('/edit', [DashboardController::class, 'updateProduct'])->name('administrator.update_product');
         });

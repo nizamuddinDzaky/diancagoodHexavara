@@ -85,14 +85,14 @@
                                         <div class="card-body">
                                             <div class="row">
                                                 <div class="col-lg-12">
-                                                    <p>{{ $order->created_at ?? '28 Desember 2020' }}</p>
+                                                    <p>{{ date("d F Y, H:i:s", strtotime($order->created_at)) }}</p>
                                                 </div>
                                             </div>
                                             <hr class="mt-2 mb-3"/>
                                             <div class="row">
                                                 <div class="col-lg-5">
                                                     <h4 class="weight-600">Nomor Pemesanan</h4>
-                                                    <h4 class="weight-500">({{ $order->invoice ?? 'DG001228122020AV' }})</h4>
+                                                    <h4 class="weight-500">({{ $order->invoice ?? '' }})</h4>
                                                 </div>
                                                 <div class="col-lg-5">
                                                     <p class="mb-half text-gray-3">Status Pemesanan</p>

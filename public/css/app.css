@@ -1802,7 +1802,7 @@ pre code {
 .table-bordered th,
 .table-bordered td {
   /* border: 1px solid #bdbdbd; */
-  padding-left: 3rem;
+  padding-left: 2rem;
 }
 
 .table-bordered thead th,

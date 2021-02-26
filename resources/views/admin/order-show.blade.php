@@ -4,6 +4,10 @@
 <title>Detail Pemesanan</title>
 @endsection
 
+@section('css')
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+@endsection
+
 @section('content')
 <div class="container-fluid">
     <div class="row">
@@ -40,7 +44,7 @@
                 <div class="card-body px-5">
                     <div class="row">
                         <div class="col-lg-12">
-                            <p>{{ $order->created_at }}</p>
+                            <p>{{ date("d F Y, H:i:s", strtotime($order->created_at)) }}</p>
                         </div>
                     </div>
                     <hr class="mt-2 mb-3" />
@@ -84,8 +88,8 @@
                                                 width="100px" height="100px">
                                         </div>
                                         <div class="media-body">
-                                            <h4 class="weight-600">
-                                                <a
+                                            <h4>
+                                                <a class="weight-600 text-orange"
                                                     href="{{ url('/product/' . $od->variant->product->id) }}">{{ $od->variant->product->name }}</a>
                                             </h4>
                                             <p>{{ $od->variant->name }}</p>
@@ -115,7 +119,8 @@
                         </div>
                     </div>
                     <hr class="mt-2 mb-3" />
-                    @if($order->status == 0)
+
+                    @if($order->payment->status == 1)
                     <div class="row">
                         <div class="col-lg-12 text-center divider">
                             <h3 class="weight-600">Bukti Pembayaran</h3>
@@ -129,7 +134,7 @@
                                 <input type="text" name="invoice" class="form-control bg-white border-3"
                                     value="{{ $order->invoice }}" disabled>
                                 <input type="hidden" name="order_id"
-                                    value="{{ $order->id }}" disabled>
+                                    value="{{ $order->id }}">
                             </div>
                             <div class="col-lg-1"></div>
                             <div class="col-lg-5 mt-4">
@@ -187,8 +192,7 @@
                             </div>
                         </div>
                     </form>
-
-                    @elseif($order->status > 0 && $order->status != 4)
+                    @elseif($order->payment->status == 2 && $order->status != 4)
                     <div class="card curved-border mt-5 mb-5">
                         <div class="card-body px-5 font-18">
                             <div class="card-title text-center mb-4">
@@ -253,7 +257,7 @@
                         </div>
                     </div>
                     @endif
-
+                    <hr class="mt-2 mb-3" />
                     @if($order->status == 1)
                     <div class="row">
                         <div class="col-lg-12 text-center divider">
@@ -268,22 +272,22 @@
                                 <input type="text" name="invoice" class="form-control bg-white border-3"
                                     value="{{ $order->invoice }}" disabled>
                                 <input type="hidden" name="order_id"
-                                    value="{{ $order->id }}" disabled>
+                                    value="{{ $order->id }}">
                             </div>
                             <div class="col-lg-5 mt-4">
                                 <label class="form-label">Alamat Tujuan</label>
                                 <input type="text" name="address" class="form-control bg-white border-3"
-                                        value="{{ $order->customer_address ?? '' }}" disabled>
+                                        value="{{ $order->address->address ?? '' }}" disabled>
                             </div>
                             <div class="col-lg-2 mt-4">
                                 <label class="form-label">Kabupaten/Kota Tujuan</label>
                                 <input type="text" name="address" class="form-control bg-white border-3"
-                                        value="{{ $order->district->city->name ?? '' }}" disabled>
+                                        value="{{ $order->address->district->city->name ?? '' }}" disabled>
                             </div>
                             <div class="col-lg-2 mt-4">
                                 <label class="form-label">Provinsi Tujuan</label>
                                 <input type="text" name="address" class="form-control bg-white border-3"
-                                        value="{{ $order->district->city->province->name ?? '' }}" disabled>
+                                        value="{{ $order->address->district->city->province->name ?? '' }}" disabled>
                             </div>
                         </div>
                         <div class="row">
@@ -297,12 +301,23 @@
                             </div>
                             <div class="col-lg-2 mt-4">
                                 <label class="form-label">Tanggal Pengiriman</label>
-                                <input type="text" name="shipping_date" class="form-control bg-white border-3">
+                                <div class="form-group">
+                                    <div class="input-group date">
+                                        <input type="text" class="form-control border" name="shipping_date" id="shipping_date" required>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="material-icons md-18">calendar_today</i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-5 mt-4">
+                            <div class="col-lg-7 mt-4"></div>
+                            <div class="col-lg-3 mt-4 text-right">
                                 <h4>Apakah Data Pengiriman Sudah Benar?</h4>
+                                <button type="button" class="btn btn-outline-gray-3 font-16 px-5 py-2 m-2"
+                                    data-dismiss="modal">Belum</button>
                                 <button type="submit" class="btn btn-orange font-16 px-5 py-2 m-2">Sudah</button>
                             </div>
                         </div>
@@ -382,7 +397,38 @@
 @endsection
 
 @section('js')
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <script>
-// if orderstatus is ... then select filter_buttons
+    $.ajaxSetup({
+        headers: {
+            'X-XSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $(function () {
+        $('#shipping_date').daterangepicker({
+            startDate: moment(),
+            singleDatePicker: true,
+            showDropdowns: true,
+            maxYear: parseInt(moment().format('YYYY'), 10),
+            autoUpdateInput: true,
+            drops: 'up',
+        });
+    });
+
+    $(document).ready(function() {
+        @if($order->status == 0)
+            $("#pending-orders").addClass('filter-active');
+        @elseif($order->status == 1)
+            $("#processing-orders").addClass('filter-active');
+        @elseif($order->status == 2)
+            $("#sent-orders").addClass('filter-active');
+        @elseif($order->status == 3)
+            $("#finished-orders").addClass('filter-active');
+        @elseif($order->status == 4)
+            $("#canceled-orders").addClass('filter-active');
+        @endif
+    });
 </script>
+
 @endsection

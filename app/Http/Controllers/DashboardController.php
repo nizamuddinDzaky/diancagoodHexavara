@@ -8,9 +8,11 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\Product;
+use App\Models\ProductVariant;
 use App\Models\Category;
 use App\Models\Subcategory;
 use App\Models\Brand;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
@@ -26,7 +28,7 @@ class DashboardController extends Controller
     public function showOrder($id)
     {
         if(Auth::guard('web')->check()) {
-            $order = Order::with('details.variant', 'payment', 'district.city.province')->where('id', $id)->first();
+            $order = Order::with('details.variant', 'payment', 'address.district.city.province')->where('id', $id)->first();
             return view('admin.order-show', compact('order'));
         }
         return redirect(route('administrator.login'));
@@ -38,13 +40,13 @@ class DashboardController extends Controller
             $this->validate($request, [
                 'order_id' => 'required|integer|exists:orders,id',
                 'tracking_number' => 'required',
-                'shipping_date' => 'required|date'
+                'shipping_date' => 'required'
             ]);
 
-            $order = Order::where('id', $request->id)->first();
+            $order = Order::where('id', $request->order_id)->first();
             $order->update([
                 'tracking_number' => $request->tracking_number,
-                'shipping_date' => $request->shipping_date,
+                'shipping_date' => Carbon::createFromFormat('m/d/Y', $request->shipping_date),
                 'status' => 2
             ]);
             
@@ -60,11 +62,11 @@ class DashboardController extends Controller
                 'order_id' => 'required|integer|exists:orders,id',
             ]);
 
-            $order = Order::where('id', $request->id)->first();
+            $order = Order::where('id', $request->order_id)->first();
             $order->update(['status' => 1]);
 
             $payment = Payment::where('order_id', $order->id)->first();
-            $payment->update(['status' => 1]);
+            $payment->update(['status' => 2]);
             
             return redirect()->back()->with(['success' => 'Data Pembayaran Disimpan!']);
         }
@@ -155,13 +157,14 @@ class DashboardController extends Controller
     public function editProduct($id)
     {
         if(Auth::guard('web')->check()) {
-            $product = Product::with('variant', 'images', 'brand', 'subcategory.category')->where('id', $id)->first();
+            $product = Product::with('images', 'brand', 'subcategory.category')->where('id', $id)->first();
             $categories = Category::orderBy('name', 'ASC')->get();
             $subcategories = Subcategory::orderBy('name', 'ASC')->get();
             $brands = Brand::orderBy('name', 'ASC')->get();
+            $product_variants = ProductVariant::where('product_id', $product->id)->get();
             
             // dd($product);
-            return view('admin.products-edit', compact('product', 'categories', 'subcategories', 'brands'));
+            return view('admin.products-edit', compact('product', 'categories', 'subcategories', 'brands', 'product_variants'));
         }
         return redirect(route('administrator.login'));
     }
@@ -172,6 +175,7 @@ class DashboardController extends Controller
             $this->validate($request, [
                 'name' => 'required|string',
                 'price' => 'required|integer',
+                'weight' => 'required|integer',
                 'stock' => 'required|integer',
             ]);
 
