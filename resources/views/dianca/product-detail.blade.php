@@ -57,7 +57,13 @@
                         <span>Total Stok: <strong id="stock"></strong></span>
                         <span>Berat: <strong id="weight"></strong>gr</span>
                     </p>
-                    <p class="mb-1">stars</p>
+                    <div class="row mb-2 ml-1">
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star"></span>
+                    </div>
                     <h2>Rp {{ number_format($product->variant->first()->price, 2, ',', '.') }}</h2>
                     <form method="POST" action="{{ route('cart.add') }}">
                         @csrf
@@ -137,8 +143,65 @@
         <hr/>
         <div class="row my-4">
             <div class="col-lg-12">
-                <h4 class="text-gray-2 weight-600 font-24">Ulasan</h4>
-                
+                <h4 class="text-gray-2 weight-600 font-24 pb-3">Ulasan</h4>
+                <div class="row">
+                    <div class="col-lg-1 md-1 sm-1 text-center">
+                        <img src="/img/people.png" alt="ok" style="border-radius: 50%">
+                    </div>
+                    <div class="col-lg-3 md-3 sm-3">
+                        <h5 class="weight-400">Rizal Adam</h5>
+                        <p class="text-gray-3">Hari ini</p>
+                    </div>
+                    <div class="col-lg-8 md-8 sm-8">
+                        <div class="row mb-2 ml-1">
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star"></span>
+                        </div>
+                        <h5 class="text-gray-3 weight-400 ml-1">Barang udah sampe dan original, pacar juga seneng banget dibeliin ini</h5>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-lg-1 md-1 sm-1 text-center">
+                        <img src="/img/people.png" alt="ok" style="border-radius: 50%">
+                    </div>
+                    <div class="col-lg-3 md-3 sm-3">
+                        <h5 class="weight-400">Bunga Putri</h5>
+                        <p class="text-gray-3">Kemarin</p>
+                    </div>
+                    <div class="col-lg-8 md-8 sm-8">
+                        <div class="row mb-2 ml-1">
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                        </div>
+                        <h5 class="text-gray-3 weight-400 ml-1">Kualitas Sangat Baik</h5>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-lg-1 md-1 sm-1 text-center">
+                        <img src="/img/people.png" alt="ok" style="border-radius: 50%">
+                    </div>
+                    <div class="col-lg-3 md-3 sm-3">
+                        <h5 class="weight-400">Anggi Putri Dewi</h5>
+                        <p class="text-gray-3">20 Desember 2020</p>
+                    </div>
+                    <div class="col-lg-8 md-8 sm-8">
+                        <div class="row mb-2 ml-1">
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star"></span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

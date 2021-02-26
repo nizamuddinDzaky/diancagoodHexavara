@@ -145,7 +145,7 @@
                                 <input class="form-control my-0 py-1 border border-dark" type="text" placeholder="Email"
                                     aria-label="Email">
                                 <div class="input-group-append bg-black">
-                                    <span class="input-group-text" id="basic-text1">Daftar</span>
+                                    <span class="input-group-text" id="basic-text1" style="background: black; color: white">Daftar</span>
                                 </div>
                             </div>
                         </li>
