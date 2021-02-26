@@ -133,8 +133,8 @@
                 <div class="col-md-3 mb-md-0 mb-3">
                     <h5 class="text-uppercase">ABOUT US</h5>
                     <ul class="list-unstyled">
-                        <li><a href="#!" style="color: black">Tentang DiancaGoods</a></li>
-                        <li><a href="#!" style="color: black">Terms & Condition</a></li>
+                        <li><a href="{{ route('about-us') }}" style="color: black">Tentang DiancaGoods</a></li>
+                        <li><a href="{{ route('term-condition') }}" style="color: black">Terms & Condition</a></li>
                     </ul>
                 </div>
                 <div class="col-md-3 mb-md-0 mb-3">
