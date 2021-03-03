@@ -15,7 +15,6 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.min.css">
 
-    
     @yield('css')
 
 </head>
@@ -120,7 +119,7 @@
         </div>
     @endif
 
-    @include('sweetalert::alert')
+    @include('sweetalert::alert, ['cdn' => "https://cdn.jsdelivr.net/npm/sweetalert2@9"]')
 
     @yield('content')
 
