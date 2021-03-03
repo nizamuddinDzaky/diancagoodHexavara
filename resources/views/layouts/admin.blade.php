@@ -14,7 +14,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.min.css">
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>
     @yield('css')
 
 </head>
@@ -71,8 +71,6 @@
     </div>
     @endif
 
-    @include('sweetalert::alert, ['cdn' => "https://cdn.jsdelivr.net/npm/sweetalert2@9"]')
-
     @if (auth()->guard('web')->check())
     <section class="section_gap mt-4 pb-3">
         <div class="main_box pt-4">
@@ -100,7 +98,6 @@
         integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous">
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.26.0/moment.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>
     <script>
         $(document).ready(function() {
             if(window.location.href.indexOf("/products") > -1) {

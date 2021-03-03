@@ -559,7 +559,7 @@ $(document).ready(function() {
     
     $("#continue").on('click', function(e) {
         e.preventDefault();
-        if($("#courier").val() == "" || $("#courier").val() == ""){
+        if($("#courier").val() == "" || $("#duration").val() == ""){
             swal({
                 title: "Detail Tidak Lengkap",
                 text: "Pilih jasa pengiriman dan durasi pengiriman",

@@ -8,7 +8,7 @@
 <section class="section_gap mt-4">
     <div class="main_box pt-4">
         <div class="container text-gray-2">
-            <form method="POST" action="{{ route('checkout') }}">
+            <form method="POST" action="{{ route('checkout') }}" id="checkout-form">
                 @csrf
                 <div class="row my-2">
                     <div class="col-lg-8">
@@ -86,7 +86,7 @@
                                 <h4 class="weight-600">Ringkasan Belanja</h4>
                                 <hr>
                                 <p>Total Harga<strong><span class="float-right" id="total_cost">Rp {{ number_format(0, 2, ',', '.') }}</span></strong></p>
-                                <button class="btn btn-orange weight-600 btn-block font-18 py-2">Beli Sekarang (<span id="qty">{{ 0 }}</span>)</a>
+                                <button type="button" id="continue" class="btn btn-orange weight-600 btn-block font-18 py-2">Beli Sekarang (<span id="qty">{{ 0 }}</span>)</a>
                             </div>
                         </div>
                     </div>
@@ -196,6 +196,24 @@
     function removeFromCart(id) {
 
     }
+
+    $("#continue").on('click', function(e) {
+        e.preventDefault();
+        if($("#checkout-form input[type=checkbox]:checked").length == 0) {
+            swal({
+                title: "Tidak bisa lanjut",
+                text: "Pastikan produk yang ingin dibeli sudah tercentang ",
+                type: "error",
+                reverseButtons: !0
+            }).then(function (e) {
+                e.dismiss;
+            }, function (dismiss) {
+                return false;
+            })
+        } else {
+            $("#checkout-form").submit();
+        }
+    })
 
     $.ajaxSetup({
         headers: {
