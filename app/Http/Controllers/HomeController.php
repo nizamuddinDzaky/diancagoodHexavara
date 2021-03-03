@@ -33,14 +33,19 @@ class HomeController extends Controller
         return view('dianca.term-condition');
     }
 
-    public function show()
+    public function show(Request $request)
     {
-        $product = Product::with('variant', 'images')->get();
+        $product = new Product();
+        // $product = Product::with('variant', 'images')->orderBy('created_at', 'ASC')->get();
         $category = Category::with('subcategory')->get();
         $brand = Brand::with('product')->get();
 
         $str = request()->q;
         $searchVal = preg_split('/\s+/', $str, -1, PREG_SPLIT_NO_EMPTY);
+
+        // if($request->input('q')){
+        //     $product = $product->where('name', 'like', "%{$request->q}%");
+        // }
 
         if (request()->q != '') {
             $product = $product->where(function($q) use ($searchVal) {
@@ -50,23 +55,23 @@ class HomeController extends Controller
             });
         }
         
-        $product = $product->get();
+        $product = $product->with('variant', 'images', 'reviews')->orderBy('created_at', 'ASC')->get();
         return view('dianca.search', compact('product', 'category', 'brand'));
     }
 
-    public function categoryFilter($id)
+    public function categoryFilter($slug)
     {
-        $products = Product::with('images', 'variant')->where('category_id', $id)->orderBy('created_at', 'DESC')->get();
-        $categories = Category::with('subcategory')->get();
-        $brands = Brand::get();
-        return view('dianca.product-list', compact('products', 'categories', 'brands'));
+        $product = Category::where('slug', $slug)->first()->product()->orderBy('created_at', 'DESC')->get();
+        $category = Category::with('subcategory')->get();
+        $brand = Brand::with('product')->get();
+        return view('dianca.search', compact('product', 'category', 'brand'));
     }
 
-    public function brandFilter($id)
+    public function brandFilter($slug)
     {
-        $products = Product::with('images', 'variant')->where('brand_id', $id)->orderBy('created_at', 'DESC')->get();
-        $categories = Category::with('subcategory')->get();
-        $brands = Brand::get();
-        return view('dianca.search', compact('product', 'categories', 'brands'));
+        $product = Brand::where('slug', $slug)->first()->product()->orderBy('created_at', 'DESC')->get();
+        $category = Category::with('subcategory')->get();
+        $brand = Brand::with('product')->get();
+        return view('dianca.search', compact('product', 'category', 'brand'));
     }
 }

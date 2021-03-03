@@ -14,7 +14,7 @@
                 </div>
             </div>
             <div class="row my-2">
-                <div class="pt-2 mt-2">
+                <div class=" col-lg-12 md-12 sm-12 pt-2 mt-2 ml-2">
                     <p>Selamat datang di www.diancagoods.com</p>
                     <p>Syarat & ketentuan yang ditetapkan dibawah ini mengatur pemakaian jasa yang ditawarkan oleh Diancagoods terkait 
                         penggunaan situs www.diancagood.com. Pengguna disarankan membaca dengan seksama karna dapat berdampak kepada hak 

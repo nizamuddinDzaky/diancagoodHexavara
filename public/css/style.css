@@ -98,6 +98,18 @@ body {
     color: #4f4f4f;
 }
 
+.page-wrapper {
+    display: flex;
+    -webkit-display: flex;
+    justify-content: space-around;
+}
+
+.f_p_item_ith {
+    text-align: center;
+    margin-bottom: 50px;
+    transition: max-height 500ms ease-in-out; 
+}
+
 h1,
 h2,
 h3,

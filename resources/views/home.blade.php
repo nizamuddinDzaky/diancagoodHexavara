@@ -185,7 +185,7 @@
                 </div>
             </div>
             <div class="row my-2">
-                <div class="col-lg-4">
+                <div class="col-lg-4 pb-4">
                     <div class="card shadow-1">
                         <div class="card-body">
                             <h4 class="weight-600">Testimoni 1</h4>
@@ -193,7 +193,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4">
+                <div class="col-lg-4 pb-4">
                     <div class="card shadow-1">
                         <div class="card-body">
                             <h4 class="weight-600">Testimoni 1</h4>
@@ -201,7 +201,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4">
+                <div class="col-lg-4 pb-4">
                     <div class="card shadow-1">
                         <div class="card-body">
                             <h4 class="weight-600">Testimoni 1</h4>

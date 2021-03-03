@@ -71,6 +71,7 @@ body {
   line-height: 1.6;
   color: #212529;
   text-align: left;
+  overflow-x: hidden !important;
 }
 
 [tabindex="-1"]:focus:not(:focus-visible) {
@@ -584,6 +585,7 @@ pre code {
   padding-left: 15px;
   margin-right: auto;
   margin-left: auto;
+  overflow-x: hidden !important;
 }
 
 @media (min-width: 576px) {
@@ -9037,6 +9039,18 @@ button.bg-dark:focus {
      -moz-user-select: none !important;
       -ms-user-select: none !important;
           user-select: none !important;
+}
+
+.active a{
+  color: #f37020 !important;
+}
+
+.overflow-visible {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  margin-bottom: auto;
 }
 
 .overflow-auto {

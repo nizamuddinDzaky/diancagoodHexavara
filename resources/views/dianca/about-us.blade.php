@@ -6,8 +6,8 @@
 
 @section('content')
 <section class="feature_product_area section_gap aboutus">
-    <div class="main_box">
-        <div class="container">
+    <div class="">
+        <div class="container-fluid">
             <div class="row my-2">
                 <div class="pt-2 mt-2">
                     <h2 class="pb-3 pt-4 mt-2" style="text-align: center"><strong>ABOUT US</strong></h2>
@@ -22,31 +22,31 @@
 </section>
 <section class="feature_product_area">
     <div class="main_box">
-        <div class="container">
-            <div class="row my-2 pb-4 pt-4 pl-2">
-                <div class="col-lg-6">
+        <div class="container-fluid">
+            <div class="row my-2 pb-4 pt-4 pl-2 pr-2">
+                <div class="col-lg-6 md-6 sm-6">
                     <div class="row py-2">
-                        <div class="col-lg-12 pb-4">
+                        <div class="col-lg-12 md-12 sm-12 pb-4">
                             <div class="card shadow-1" style="width:30rem; height:15rem">
                                 
                             </div>
                         </div>
                     </div>
                     <div class="row py-2">
-                        <div class="col-lg-12 pb-4">
+                        <div class="col-lg-12 md-12 sm-12 pb-4">
                             <div class="card shadow-1" style="width:30rem; height:15rem">
                                 
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-6">
+                <div class="col-lg-6 md-6 sm-6">
                     <div class="main_title">
                         <h3>VISI</h3>
                     </div>
                     <div class="row py-2 pl-4">
                         <div class="pt-2 mt-2">
-                            <p class="">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
                                 Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
                                 Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
                                 Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
@@ -60,7 +60,7 @@
                     </div>
                     <div class="row py-2 pl-4">
                         <div class="pt-2 mt-2">
-                            <p class="">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
                                 Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
                                 Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
                                 Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
@@ -73,10 +73,10 @@
 </section>
 <section class="feature_product_area section_gap aboutus">
     <div class="main_box">
-        <div class="container">
+        <div class="container-fluid">
             <h2 class="pb-4 pt-3" style="text-align: center"><strong>FAKTA TENTANG KAMI</strong></h2>
             <div class="row my-2">
-                <div class="col-lg-4">
+                <div class="col-lg-4 md-4 sm-4 pb-4">
                     <div class="card shadow-1">
                         <div class="card-body text-center">
                             <div class="pt-4 pb-2">
@@ -86,7 +86,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4">
+                <div class="col-lg-4 md-4 sm-4 pb-4">
                     <div class="card shadow-1">
                         <div class="card-body text-center">
                             <div class="pt-4 pb-2">
@@ -96,7 +96,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4">
+                <div class="col-lg-4 md-4 sm-4 pb-4">
                     <div class="card shadow-1">
                         <div class="card-body text-center">
                             <div class="pt-4 pb-2">
