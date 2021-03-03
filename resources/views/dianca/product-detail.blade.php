@@ -135,7 +135,7 @@
         <div class="row my-4">
             <div class="col-lg-12">
                 <h4 class="text-gray-2 weight-600 font-24">Deskripsi</h4>
-                <p class="text-gray-3 font-18">
+                <p class="text-gray-3 font-18" style="white-space: pre-wrap">
                     {{ $product->description }}
                 </p>
             </div>

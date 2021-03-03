@@ -102,7 +102,7 @@
                             </div>
                             <div class="form-group pl-2 pr-2 pb-1">
                                 <label style="color: #4F4F4F">Bank Pengirim</label>
-                                <select class="form-control border" name="transfer_from_bank" style="boder-color: #EOEOEO;">
+                                <select class="form-control border" name="transfer_from_bank" id="transfer_from_bank" style="boder-color: #EOEOEO;">
                                     <option>Pilih Bank</option>
                                     <option value="BNI">BNI</option>
                                     <option value="BCA">BCA</option>
@@ -110,11 +110,11 @@
                             </div>
                             <div class="form-group pl-2 pr-2 pb-1">
                                 <label style="color: #4F4F4F">Nomor Rekening Pengirim</label>
-                                <input type="text" class="form-control border" name="transfer_from_account" required>
+                                <input type="text" class="form-control border" name="transfer_from_account" id="transfer_from_account" required>
                             </div>
                             <div class="form-group pl-2 pr-2 pb-1">
                                 <label style="color: #4F4F4F">Nama Pemilik Rekening</label>
-                                <input type="text" class="form-control border" name="name" required>
+                                <input type="text" class="form-control border" name="name" id="name" required>
                             </div>
                             <div class="form-group pl-2 pr-2 pb-1">
                                 <label style="color: #4F4F4F">Jumlah Transfer</label><br>
@@ -122,7 +122,7 @@
                                     <div class="input-group-prepend">
                                         <div class="input-group-text bg-3 border">Rp</div>
                                     </div>
-                                    <input type="text" name="amount" class="form-control bg-white border" required>
+                                    <input type="text" name="amount" id="amount" class="form-control bg-white border" required>
                                 </div>
                             </div>
                             <div class="form-group pl-2 pr-2 pb-1">
@@ -178,8 +178,22 @@
         });
     });
 
-    $("#submit_btn").on('click', function() {
-        $("#payment-done-form").submit();
-    });
+    $("#submit_btn").on('click', function(e) {
+        e.preventDefault();
+        if($("#transfer_from_bank").val() == "" || $("#transfer_from_account").val() == "" || $("#name").val() == "" || $("amount").val() == ""){
+            swal({
+                title: "Detail Tidak Lengkap",
+                text: "Pastikan semua kolom terisi",
+                type: "warning",
+                reverseButtons: !0
+            }).then(function (e) {
+                e.dismiss;
+            }, function (dismiss) {
+                return false;
+            })
+        } else {
+            $("#payment-done-form").submit();
+        }
+    })
 </script>
 @endsection

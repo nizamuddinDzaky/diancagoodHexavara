@@ -22,7 +22,7 @@ class CreatePaymentsTable extends Migration
             $table->string('transfer_from_bank')->nullable();
             $table->string('transfer_from_account')->nullable();
             $table->date('transfer_date')->nullable();
-            $table->integer('amount')->nullable();
+            $table->bigInteger('amount')->nullable();
             $table->integer('status')->default(0);
             $table->timestamps();
         });

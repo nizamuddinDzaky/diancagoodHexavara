@@ -131,8 +131,22 @@
         }
     });
 
-    $("#submit_btn").on('click', function() {
-        $("#payment-form").submit();
-    });
+    $("#submit_btn").on('click', function(e) {
+        e.preventDefault();
+        if($("#payment_method").val() == "" || $("#bank").val() == ""){
+            swal({
+                title: "Detail Tidak Lengkap",
+                text: "Pilih metode pembayaran dan bank",
+                type: "warning",
+                reverseButtons: !0
+            }).then(function (e) {
+                e.dismiss;
+            }, function (dismiss) {
+                return false;
+            })
+        } else {
+            $("#payment-form").submit();
+        }
+    })
 </script>
 @endsection

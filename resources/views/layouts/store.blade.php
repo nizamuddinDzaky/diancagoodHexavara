@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="{{ asset('css/responsive.css') }}">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.min.css">
+
     
     @yield('css')
 
@@ -60,10 +62,18 @@
                     </div>
                     <div>
                         <ul class="navbar nav">
+                            @if (!auth()->guard('customer')->check())
                             <li class="nav-item">
                                 <a type="button" class="btn py-0" href="{{ route('cart.show') }}" tabindex="-1"
                                     aria-disabled="true"><i class="material-icons md-18">shopping_cart</i></a>
                             </li>
+                            @else
+                            <li class="nav-item">
+                                <a type="button" class="btn py-0" href="{{ route('cart.show') }}" tabindex="-1"
+                                    aria-disabled="true"><i class="material-icons md-18">shopping_cart</i><span class="badge badge-pill badge-orange">{{ auth()->guard('customer')->user()->cart->details->sum('qty') }}</span></a>
+                            </li>
+                            @endif
+
                             @if (auth()->guard('customer')->check())
                             <li class="nav-item dropdown">
                                 <a class="btn dropdown-toggle py-0" href="#" role="button" data-toggle="dropdown" id="navbarmenu" style="margin-left=0px" tabindex="-1" aria-haspopup="true" aria-expanded="false">{{ Auth::guard('customer')->user()->name }} </a>
@@ -109,6 +119,8 @@
             </button>
         </div>
     @endif
+
+    @include('sweetalert::alert')
 
     @yield('content')
 
@@ -167,18 +179,11 @@
         <div class="footer-copyright text-center py-3">Copyright ©2020 DiancaGoods</div>
     </footer>
 
-    <script>
-        $(document).ready(function(){
-            setTimeout(function() {
-                $(".alert").alert('close');
-            }, 3000);
-    	});
-    </script>
-
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.26.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>
     @yield('js')
 </body>
 

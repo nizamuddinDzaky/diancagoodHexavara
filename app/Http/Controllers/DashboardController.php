@@ -109,7 +109,6 @@ class DashboardController extends Controller
     public function addProduct(Request $request)
     {
         if(Auth::guard('web')->check()) {
-            // dd($request);
             try {
                 $this->validate($request, [
                     'name' => 'required|string',
@@ -131,8 +130,6 @@ class DashboardController extends Controller
                     'description' => $request->description,
                     'rate' => $request->rate
                 ]);
-
-                $this->storeVariant($product->id, $request);
 
                 if ($request->hasFile('images')) {
                     foreach ($request->file('images') as $image) {
@@ -163,8 +160,44 @@ class DashboardController extends Controller
             $brands = Brand::orderBy('name', 'ASC')->get();
             $product_variants = ProductVariant::where('product_id', $product->id)->get();
             
-            // dd($product);
             return view('admin.products-edit', compact('product', 'categories', 'subcategories', 'brands', 'product_variants'));
+        }
+        return redirect(route('administrator.login'));
+    }
+
+    public function updateProduct(Request $request)
+    {
+        if(Auth::guard('web')->check()) {
+            $this->validate($request, [
+                'product_id' => 'required|integer|exists:products,id',
+                'name' => 'required|string',
+                'category_id' => 'required|integer|exists:categories,id',
+                'subcategory_id' => 'required|integer|exists:subcategories,id',
+                'brand_id' => 'required|integer|exists:brands,id',
+                'price' => 'required',
+                'stock' => 'required',
+                'rate' => 'required',
+                'description' => 'string',
+            ]);
+
+            try {
+                $product = Product::where('id', $request->product_id)->first();
+                $product->update([
+                    'category_id' => $request->category_id,
+                    'subcategory_id' => $request->subcategory_id,
+                    'brand_id' => $request->brand_id,
+                    'name' => $request->name,
+                    'slug' => $request->name,
+                    'description' => $request->description,
+                    'rate' => $request->rate
+                ]);
+
+                $product->save();
+
+                return redirect(route('administrator.products'))->with(['success' => 'Produk Berhasil Diperbarui!']);
+            } catch(\Exception $e) {
+                return redirect()->back()->with(['error' => $e->getMessage()]);
+            }
         }
         return redirect(route('administrator.login'));
     }

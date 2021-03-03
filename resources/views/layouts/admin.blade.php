@@ -70,6 +70,8 @@
     </div>
     @endif
 
+    @include('sweetalert::alert')
+
     @if (auth()->guard('web')->check())
     <section class="section_gap mt-4 pb-3">
         <div class="main_box pt-4">

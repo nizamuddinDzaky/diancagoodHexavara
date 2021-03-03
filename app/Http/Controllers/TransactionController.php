@@ -21,7 +21,7 @@ class TransactionController extends Controller
             if($status != 5) {
                 $orders = Order::with('details.variant.product.images', 'payment')->where('customer_id', Auth::guard('customer')->user()->id)->where('status', $status)->orderBy('created_at', 'DESC')->get();
             } else {
-                $orders = Order::with('details.variant.product.images', 'payment')->where('customer_id', Auth::guard('customer')->user()->id)->get();
+                $orders = Order::with('details.variant.product.images', 'payment')->where('customer_id', Auth::guard('customer')->user()->id)->orderBy('status', 'ASC')->get();
             }
 
             return view('dianca.transaction-list', compact('orders'));

@@ -25,7 +25,7 @@
                 </div>
                 <hr class="pb-2" style="border-color:F2F2F2">
             </div>
-            <form action="{{ route('checkout.payment') }}" method="POST">
+            <form action="{{ route('checkout.payment') }}" method="POST" id="checkout-form">
                 @csrf
                 <div class="row my-2">
                     <div class="main_title text-gray-2">
@@ -205,8 +205,7 @@
                                         <h5 id="total"><strong>Rp {{ number_format($total_cost + 17000) }}</strong></h5>
                                     </div>
                                 </div>
-                                <button class="btn btn-orange weight-600 btn-block font-18 py-2" id="payment">Pilih
-                                    Pembayaran</a>
+                                <button type="button" id="continue" class="btn btn-orange weight-600 btn-block font-18 py-2" id="payment">Pilih Pembayaran</a>
                             </div>
                         </div>
                     </div>
@@ -557,6 +556,24 @@ $(document).ready(function() {
             }
         });
     });
+    
+    $("#continue").on('click', function(e) {
+        e.preventDefault();
+        if($("#courier").val() == "" || $("#courier").val() == ""){
+            swal({
+                title: "Detail Tidak Lengkap",
+                text: "Pilih jasa pengiriman dan durasi pengiriman",
+                type: "warning",
+                reverseButtons: !0
+            }).then(function (e) {
+                e.dismiss;
+            }, function (dismiss) {
+                return false;
+            })
+        } else {
+            $("#checkout-form").submit();
+        }
+    })
 })
 
 </script>

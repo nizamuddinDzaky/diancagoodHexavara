@@ -18,7 +18,7 @@
                 <td class="col-2">{{ $v->stock }}</td>
                 <td class="col-3">
                     <div class="d-flex">
-                        <img class="mx-2" src="{{ asset('storage/variants/' . $v->image)" width="100px">
+                        <img class="mx-2" src="{{ asset('storage/variants/' . $v->image) }}" width="100px">
                     </div>
                 </td>
             </tr>

@@ -21,6 +21,7 @@ use Illuminate\Support\Str;
 use GuzzleHttp\Client;
 use Carbon\Carbon;
 use DB;
+use Alert;
 
 class OrderController extends Controller
 {
@@ -131,6 +132,11 @@ class OrderController extends Controller
             $total_cost = 0;
             $cart_detail = array();
 
+            if($cart_arr == null){
+                Alert::error('Tidak bisa lanjut', 'Pastikan produk yang ingin dibeli sudah tercentang');
+                return redirect()->back();
+            }
+
             foreach($cart_arr as $cd) {
                 $cart_detail[] = CartDetail::with('variant.product')->where('is_avail', 1)->where('id', $cd)->first();
             }
@@ -225,6 +231,11 @@ class OrderController extends Controller
                 'subtotal' => 'required',
                 'cd' => 'required'
             ]);
+
+            if($request->courier == "" || $request->duration == ""){
+                Alert::error('Tidak bisa lanjut', 'Pastikan kurir dan durasi sudah terpilih');
+                return redirect()->back();
+            }
 
             $subtotal = $request->subtotal;
             $shipping_cost = $request->shipping_cost;

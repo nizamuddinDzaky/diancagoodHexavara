@@ -6622,7 +6622,7 @@ h6 {
     height: 200px;
     background-size: cover;
     background-position: center;
-    display: flex;
+    display: inline-block;
     align-items: center;
     justify-content: center;
     cursor: pointer;
@@ -6684,4 +6684,9 @@ h6 {
 
 .w-90 {
     width: 90% !important;
+}
+
+.badge-orange {
+    color: #fff;
+    background-color: #f37020;
 }

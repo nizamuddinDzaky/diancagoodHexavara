@@ -27,6 +27,7 @@
                                 <div class="form-group">
                                     <label class="form-label" for="name">Nama Produk</label>
                                     <input type="text" name="name" class="form-control bg-light-2 no-border" value="{{ $product->name }}" required>
+                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
                                 </div>
                             </div>
                             <div class="col-lg-3">
@@ -93,22 +94,28 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="row mt-2">
+                                    <div class="col-lg-12">
+                                        <label class="form-label">Varian</label>
+                                        @include('admin.variants-list', ['variants' => 'product_variants'])
+                                        <button type="button" id="add-variant" class="btn btn-block btn-orange my-2 py-2">Tambah Varian</button>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-lg-4 mt-2">
                                 <label class="form-label">Foto Produk</label>
-                                <div class="images">
-                                    <div class="pic" id="placeholder">Drag your image here, or browse</div>
-                                    <input type="file" id="images" accept="image/*" name="images[]"
+                                <div class="images image_product" id="product_container">
+                                    <div class="pic" id="product_placeholder">Drag your image here, or browse</div>
+                                    <input type="file" id="product_input" accept="image/*" name="image_product[]"
                                         style="visibility:hidden" multiple />
+                                    @forelse($product->images as $i)
+                                    <div class="img">
+                                        <img class="img" src="{{ asset('/storage/products/' . $i->filename) }}">
+                                        <span><strong>Hapus</strong></span>
+                                    </div>
+                                    @empty
+                                    @endforelse
                                 </div>
-                            </div>
-                        </div>
-                        <div class="row my-2">
-                            <div class="col-lg-1"></div>
-                            <div class="col-lg-6">
-                                <label class="form-label">Varian</label>
-                                @include('admin.variants-list', ['variants' => 'product_variants'])
-                                <button type="button" id="add-variant" class="btn btn-block btn-orange my-2 py-2">Tambah Varian</button>
                             </div>
                         </div>
                         <div class="row mt-4">
@@ -154,12 +161,6 @@
                                     <div class="pic" id="category_placeholder">Drag your image here, or browse</div>
                                     <input type="file" id="category_input" accept="image/*" name="image_category"
                                         style="display:none" required>
-                                    @foreach($product->images as $i)
-                                    <div class="img" style="background-image: url(/storage/products/{{ $i->filename }})" rel="{{ asset('storage/products/' . $i->filename) }}">
-                                        <span><strong>Hapus</strong></span>
-                                    </div>
-                                    
-                                    @endforeach
                                 </div>
                             </div>
                         </div>
@@ -324,9 +325,9 @@ $(document).ready(function() {
     var category_button = $('#category_placeholder');
     var category_uploader = $('#category_input');
     var category_images = $('#category_container');
-    var product_button = $('.images .pic');
-    var product_uploader = $('#images');
-    var product_images = $('.images');
+    var product_button = $('#product_placeholder');
+    var product_uploader = $('#product_input');
+    var product_images = $('#product_container');
 
     category_button.on('click', function() {
         category_uploader.click();
