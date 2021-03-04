@@ -70,7 +70,7 @@ class HomeController extends Controller
 
     public function categoryFilter($id)
     {
-        $product = Category::where('id', $id)->first()->product()->orderBy('created_at', 'DESC')->get();
+        $product = Product::with('images', 'variant')->where('category_id', $id)->orderBy('created_at', 'DESC')->get();
         $category = Category::with('subcategory')->get();
         $brand = Brand::with('product')->get();
         $str = NULL;

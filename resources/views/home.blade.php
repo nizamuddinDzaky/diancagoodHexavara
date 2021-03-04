@@ -27,13 +27,13 @@
                     <h2>Kategori apa yang kamu cari?</h2>
                 </div>
             </div>
-            <div class="row my-2">
+            <div class="row my-2 justify-content-center">
                 @forelse($category as $row)
                 <div class="col">
-                    <div class="f_p_item">
-                        <div class="f_p_img pl-3">
+                    <div class="f_p_item_category">
+                        <div class="f_p_img">
                             <a href="{{ url('/category/' . $row->slug) }}">
-                                <img id="pic{{ $row }}" class="home-product-center-cropped" src="{{ asset('storage/categories/' . $row->image) }}" alt="{{ $row->name }}">
+                                <img id="pic{{ $row }}" class="home-category-center-cropped" src="{{ asset('storage/categories/' . $row->image) }}" alt="{{ $row->name }}">
                             </a>
                         </div>
                         <a href="{{ url('/category/' . $row->slug) }}" class="pl-3">
@@ -59,11 +59,11 @@
                     <h2>Produk Baru</h2>
                 </div>
             </div>
-            <div class="row my-2">
+            <div class="row my-2 justify-content-center">
                 @forelse($newproducts as $row)
                 <div class="col">
                     <div class="f_p_item">
-                        <div class="f_p_img pl-3">
+                        <div class="f_p_img">
                             <a href="{{ url('/product/' . $row->id) }}">
                                 <img id="pic{{ $row }}" class="home-product-center-cropped" src="{{ asset('storage/products/' . $row->images->first()->filename) }}" alt="{{ $row->name }}">
                             </a>
@@ -100,7 +100,7 @@
                     <div class="row py-2">
                         @forelse($bestseller as $row)
                         <div class="col-lg-12 pb-4">
-                            <div class="card shadow-1">
+                            <div class="card bestseller-card">
                                 <div class="row px-4 py-4">
                                     <div class="col-lg-4">
                                         <a href="{{ url('/product/' . $row->id) }}">
@@ -139,7 +139,7 @@
                     <div class="row py-2">
                         @forelse($featured as $row)
                         <div class="col-lg-12 pb-4">
-                            <div class="card shadow-1">
+                            <div class="card bestseller-card">
                                 <div class="row px-4 py-4">
                                     <div class="col-lg-4">
                                         <a href="{{ url('/product/' . $row->id) }}">

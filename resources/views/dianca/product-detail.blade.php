@@ -1,7 +1,7 @@
 @extends('layouts.store')
 
 @section('title')
-    <title>Pembelian</title>
+    <title>{{ $product->name }}</title>
 @endsection
 
 @section('css')
@@ -35,9 +35,16 @@
     <div class="container">
         <div class="row s_product_inner mb-4">
             <div class="col-lg-6">
-                <div class="row">
+                <div class="row justify-content-center pb-3">
                     <div class="s_product_img">
-                        <img id="display-product-image" class="slider-center-cropped" src="{{ asset('storage/products/' . $product->images->first()->filename) }}">
+                        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img class="d-block w-100" id="display-product-image" src="{{ asset('storage/products/' . $product->images->first()->filename) }}"
+                                        alt="{{ $product->name }}">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="row justify-content-center">

@@ -257,10 +257,6 @@ a:focus {
 ============================================================================================ */
 /*---------------------------------------------------- */
 /*----------------------------------------------------*/
-.active {
-    color: #1641ff;
-}
-
 .header_area {
     position: absolute;
     width: 100%;
@@ -3955,8 +3951,25 @@ h6 {
 .f_p_item {
     text-align: center;
     margin-bottom: 50px;
-    max-height: 300px;
-    display:block;
+    height: 358px;
+    display: block;
+    border: 1px solid #fff;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    transition: all 300ms ease;
+}
+
+.f_p_item:hover {
+    box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.1);
+}
+
+.f_p_item_category {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.f_p_item_category:hover {
+    box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.1);
 }
 
 .f_p_item .f_p_img {
@@ -6230,10 +6243,17 @@ h6 {
     object-position: center;
     height: 490px;
     width: 100%;
-    border-radius: 15px 15px 0px 0px;
 }
 
 .home-product-center-cropped {
+    object-fit: cover;
+    object-position: center;
+    min-height: 240px;
+    width: 240px;
+    border-radius: 15px 15px 0px 0px;
+}
+
+.home-category-center-cropped {
     object-fit: cover;
     object-position: center;
     height: 240px;
@@ -6252,6 +6272,16 @@ h6 {
 .shadow-1 {
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     border-color: #fff !important;
+}
+
+.bestseller-card {
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-color: #fff !important;
+    transition: all 300ms ease;
+}
+
+.bestseller-card:hover {
+    box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.1);
 }
 
 .border-1 {
@@ -6717,4 +6747,58 @@ h6 {
 .badge-orange {
     color: #fff;
     background-color: #f37020;
+}
+
+.active {
+    display: flex;
+    box-sizing: border-box;
+    height: 490px;
+    width: 500px;
+}
+
+.active img {
+    object-fit: cover;
+    border-radius: 15px 15px 0px 0px;
+    min-height: 490px;
+}
+
+@media (max-width: 500px) {
+    .active {
+        display: block;
+        width: 90vw;
+        height: 0;
+        padding-bottom: 100%;
+    }
+
+    .active img {
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+    }
+}
+
+.logo_h img {
+    width: 150px;
+}
+
+@media (max-width: 500px) {
+    .logo_h img {
+        width: 100px;
+    }
+}
+
+.hero-icon {
+    width: 100%;
+    padding-top: 120px;
+}
+
+@media (min-width: 992px) {
+    .hero-icon {
+        width: 90%;
+        padding-top: 120px;
+    }
+}
+
+.product-name {
+    text-overflow: ellipsis;
 }

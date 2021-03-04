@@ -62,7 +62,7 @@
                             <h4 class="weight-600">Harga</h4>
                             <div class="py-2">
                                 <div class="input-group">
-                                    <div class="input-group-prepend">
+                                    <div class="input-group-append">
                                         <div class="input-group-text bg-3 border-3">Rp</div>
                                     </div>
                                     <input type="text" name="min" class="form-control bg-white border-3"

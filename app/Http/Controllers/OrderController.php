@@ -21,7 +21,6 @@ use Illuminate\Support\Str;
 use GuzzleHttp\Client;
 use Carbon\Carbon;
 use DB;
-use Alert;
 
 class OrderController extends Controller
 {

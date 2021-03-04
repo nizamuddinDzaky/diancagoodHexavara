@@ -98,21 +98,11 @@
 	.navbar-toggler[aria-expanded="true"] span:nth-child(2) {
 		opacity: 0;
 	}
-	.navbar-toggler[aria-expanded="true"] span:first-child {
-		transform: rotate(-45deg);
-		position: relative;
-		top: 7.5px;
-	}
-	.navbar-toggler[aria-expanded="true"] span:last-child {
-		transform: rotate(45deg);
-		bottom: 6px;
-		position: relative;
-	}
 	.navbar-toggler span{
 		display: block;
 		width: 25px;
 		height: 3px;
-		background: #1641ff;
+		background: none;
 		margin: auto;
 		margin-bottom: 4px;
 		transition: all 400ms linear;
@@ -143,7 +133,6 @@
     }
 	.header_area .navbar-collapse{
 		max-height: 340px;
-		overflow-y: scroll;
 	}
 	.header_area .navbar .nav .nav-item.submenu ul .nav-item .nav-link {
 		padding: 0px 15px;

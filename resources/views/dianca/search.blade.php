@@ -98,8 +98,8 @@
                                             <img id="pic{{ $row }}" class="home-product-center-cropped" src="{{ asset('storage/products/' . $row->images->first()->filename) }}" alt="{{ $row->name }}">
                                         </a>
                                     </div>
-                                    <a href="{{ url('/product/' . $row->id) }}" class="overflow-visible mb-2">
-                                        <h4 class="text-gray-2" class="pl-3">{{ $row->name }}</h4>
+                                    <a href="{{ url('/product/' . $row->id) }}" class="overflow-auto mb-2">
+                                        <h4 class="text-gray-2 product-name" class="pl-3">{{ $row->name }}</h4>
                                     </a>
                                     @if( number_format($row->variant->first()->price) != number_format($row->variant->last()->price)
                                     )

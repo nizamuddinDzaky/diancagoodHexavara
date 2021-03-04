@@ -14,17 +14,15 @@
     <div class="align-items-center d-flex min-vh-100">
         <div class="container-fluid pt-5 mt-5">
             <div class="row justify-content-center align-items-center">
-                <div class="col-lg-1"></div>
-                <div class="col-lg-5 md-5 sm-5 pt-5">
-                    <div class="container my-auto">
+            <div class="col-lg-7">
+                    <div class="container">
                         <div>
-                            <img class="" src="{{ asset('img/register.png') }}">
+                            <img class="hero-icon p-120" src="{{ asset('img/register.png') }}">
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-1"></div>
-                <div class="col-lg-5 md-5 sm-5 pt-5">
-                    <div class="card shadow-1 my-auto pt-2" style="width: 85%">
+                <div class="col-lg-4 pt-5">
+                    <div class="card shadow-1 my-auto pt-2">
                         <div class="card-body">
                             <h3 class="card-title text-center pb-1"><strong>Verifikasi Kode</strong></h3>
                             @if(session('error'))

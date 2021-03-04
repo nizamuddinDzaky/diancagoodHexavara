@@ -115,18 +115,18 @@
                     <hr class="mt-2 mb-3" />
                     <div class="row">
                         <div class="col-lg-12">
-                            <p class="font-16">{{ $order->customer_address }}</p>
+                            <p class="font-16">{{ $order->address->address }}</p>
                         </div>
                     </div>
-                    <hr class="mt-2 mb-3" />
 
                     @if($order->payment->status == 1)
+                    <hr class="mt-2 mb-3" />
                     <div class="row">
                         <div class="col-lg-12 text-center divider">
                             <h3 class="weight-600">Bukti Pembayaran</h3>
                         </div>
                     </div>
-                    <form action="{{ route('administrator.order.update_payment') }}" method="POST">
+                    <form action="{{ route('administrator.order.update_payment') }}" method="POST" id="confirm-payment-form">
                         @csrf
                         <div class="row">
                             <div class="col-lg-6 mt-4">
@@ -188,11 +188,12 @@
                                 <h4>Apakah Bukti Pembayaran Sudah Benar?</h4>
                                 <button type="button" class="btn btn-outline-gray-3 font-16 px-5 py-2 m-2"
                                     data-dismiss="modal">Belum</button>
-                                <button type="submit" class="btn btn-orange font-16 px-5 py-2 m-2">Sudah</button>
+                                <button type="button" id="confirm-payment" class="btn btn-orange font-16 px-5 py-2 m-2">Sudah</button>
                             </div>
                         </div>
                     </form>
                     @elseif($order->payment->status == 2 && $order->status != 4)
+                    <hr class="mt-2 mb-3" />
                     <div class="card curved-border mt-5 mb-5">
                         <div class="card-body px-5 font-18">
                             <div class="card-title text-center mb-4">
@@ -257,8 +258,8 @@
                         </div>
                     </div>
                     @endif
-                    <hr class="mt-2 mb-3" />
                     @if($order->status == 1)
+                    <hr class="mt-2 mb-3" />
                     <div class="row">
                         <div class="col-lg-12 text-center divider">
                             <h3 class="weight-600">Pengiriman</h3>
@@ -325,6 +326,7 @@
                     @endif
 
                     @if($order->status > 1 && $order->status != 4)
+                    <hr class="mt-2 mb-3" />
                     <div class="card curved-border mt-5 mb-5">
                         <div class="card-body px-5 font-18">
                             <div class="card-title text-center mb-4">
@@ -429,6 +431,19 @@
             $("#canceled-orders").addClass('filter-active');
         @endif
     });
+
+    $("#confirm-payment").on('click', function(e) {
+        swal({
+            title: "",
+            text: "Apakah data pembayaran sudah benar?",
+            type: "warning",
+            reverseButtons: !0
+        }).then(function (e) {
+            e.dismiss;
+        }, function (dismiss) {
+            return false;
+        })
+    })
 </script>
 
 @endsection
