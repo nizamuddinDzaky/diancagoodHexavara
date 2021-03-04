@@ -99,7 +99,16 @@ class HomeController extends Controller
         return view('dianca.search', compact('product', 'category', 'brand', 'str'));
     }
 
-    public function brandFilter($id, $name)
+    public function brandFilter($id)
+    {
+        $product = Product::with('images', 'variant')->where('brand_id', $id)->orderBy('created_at', 'DESC')->get();
+        $category = Category::with('subcategory')->get();
+        $brand = Brand::with('product')->get();
+        $str = NULL;
+        return view('dianca.search', compact('product', 'category', 'brand', 'str'));
+    }
+
+    public function brandFilters($id, $name)
     {
         $product = new Product();
         // $product = Brand::where('slug', $slug)->first()->product()->orderBy('created_at', 'DESC')->get();

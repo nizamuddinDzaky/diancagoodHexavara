@@ -26,7 +26,8 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/show', [HomeController::class, 'show'])->name('search-result');
 Route::get('/category/{id}', [HomeController::class, 'categoryFilter'])->name('category-result');
 Route::get('/category/{id}/{name}', [HomeController::class, 'categoryFilters'])->name('category-results');
-Route::get('/brand/{id}/{name}', [HomeController::class, 'brandFilter'])->name('brand-result');
+Route::get('/brand/{id}', [HomeController::class, 'brandFilter'])->name('brand-result');
+Route::get('/brand/{id}/{name}', [HomeController::class, 'brandFilters'])->name('brand-results');
 Route::get('/about-us', [HomeController::class, 'aboutUs'])->name('about-us');
 Route::get('/term-condition', [HomeController::class, 'termCondition'])->name('term-condition');
 

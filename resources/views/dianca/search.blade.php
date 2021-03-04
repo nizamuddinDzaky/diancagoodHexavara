@@ -43,8 +43,6 @@
                             @foreach ($category as $v)
                                 <li class="border-0 {{ (request()->segment(2) == $v->id && request()->segment(1) == 'category') ? 'active' : '' }} pb-2 pt-2">
                                     <a href="{{ url('/category/' . $v->id . '/' . $str ) }}" class="option-text text-gray-3 font-14" value="{{ $str }}"><h5>{{ $v->name }}</h5></a>
-                                    <input type="text" class="form-control border" id="category" name="category" value="{{ $v->id }}" hidden>
-                                    <input type="text" class="form-control border" id="search" name="search" value="{{ $str }}" hidden>
                                 </li>
                             @endforeach
                             </ul>
@@ -56,7 +54,7 @@
                             <ul class="option-text text-gray-3 font-14" style="list-style-type:none;">
                             @foreach ($brand as $val)
                                 <li class="border-0 {{ (request()->segment(2) == $val->id && request()->segment(1) == 'brand') ? 'active' : '' }} pb-2 pt-2">
-                                    <a href="{{ url('/brand/' . $val->id . '/' . $str) }}" class="option-text text-gray-3 font-14 hover"><h5>{{ $val->name }}</h5></a>
+                                    <a href="{{ url('/brand/' . $val->id . '/' . $str) }}" class="option-text text-gray-3 font-14 hover" value="{{ $str }}"><h5>{{ $val->name }}</h5></a>
                                 </li>
                             @endforeach
                             </ul>
