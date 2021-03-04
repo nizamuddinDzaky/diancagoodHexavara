@@ -27,14 +27,14 @@
                     <div class="card shadow-1">
                         <div class="card-body">
                             <div class="row text-center" style="color: #4F4F4F">
-                                <div class="col-lg-4 md-4 sm-4">
+                                <div class="col-lg-4 md-4 sm-4 {{ request()->segment(2) == '' ? 'active' : '' }}">
                                     <a href="{{ route('profile') }}" style="color: #4F4F4F">Biodata Diri</a>
                                 </div>
-                                <div class="col-lg-4 md-4 sm-4">
+                                <div class="col-lg-4 md-4 sm-4 {{ request()->segment(2) == 'alamat' ? 'active' : '' }}">
                                     <a href="{{ route('profile-address') }}" style="color: #4F4F4F">Daftar Alamat</a>
                                 </div>
-                                <div class="col-lg-4 md-4 sm-4">
-                                    <h6>Rekening Bank</h6>
+                                <div class="col-lg-4 md-4 sm-4 {{ request()->segment(2) == 'rekening' ? 'active' : '' }}">
+                                    <a href="{{ route('profile-rekening') }}" style="color: #4F4F4F">Rekening Bank</a>
                                 </div>
                             </div>
                             <div class="container">

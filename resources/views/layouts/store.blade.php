@@ -47,9 +47,9 @@
                             </div>
                             <div class="col-lg-10 pl-2 pr-2">
                                 <div class="input-group lg-form form-2 pl-0 pr-3">
-                                    <form action="{{ route('search-result') }}" method="get">
+                                    <form action="{{ route('search-result') }}" method="get" id="search-form">
                                         <div class="input-group">
-                                            <input class="form-control my-0 py-2" style="width:38rem" type="text" name="q" placeholder="Search" aria-label="Search" value="{{ request()->q }}">
+                                            <input class="form-control my-0 py-2" style="width:38rem" type="text" name="q" placeholder="Search" aria-label="Search" value="{{ $str }}">
                                             <div class="input-group-append">
                                                 <span class="input-group-text py-0"><i class="material-icons md-18">search</i></span>
                                             </div>

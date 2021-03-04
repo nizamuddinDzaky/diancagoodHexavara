@@ -19,8 +19,8 @@ class HomeController extends Controller
         $bestseller = Product::where('status', 1)->where('is_featured', 1)->with('variant', 'images')->orderBy('created_at', 'ASC')->limit(3)->get();
         $featured = Product::where('status', 1)->where('is_featured', 2)->with('variant', 'images')->orderBy('created_at', 'ASC')->limit(3)->get();
         $category = Category::with('subcategory')->orderBy('created_at', 'ASC')->limit(4)->get();
-        
-        return view('home', compact('category', 'newproducts', 'bestseller', 'featured'));
+        $str = NULL;
+        return view('home', compact('category', 'newproducts', 'bestseller', 'featured', 'str'));
     }
 
     public function aboutUs()
@@ -42,6 +42,7 @@ class HomeController extends Controller
 
         $str = request()->q;
         $searchVal = preg_split('/\s+/', $str, -1, PREG_SPLIT_NO_EMPTY);
+        // $str1 = request()->cat;
 
         // if($request->input('q')){
         //     $product = $product->where('name', 'like', "%{$request->q}%");
@@ -54,24 +55,69 @@ class HomeController extends Controller
                 }
             });
         }
+
+        // if (request()->cat != '') {
+        //     $product = $product->where(function($cat) use ($str1) {
+        //         foreach ($str1 as $var){
+        //             $cat->orWhere('category_id', $var);
+        //         }
+        //     });
+        // }
         
         $product = $product->with('variant', 'images', 'reviews')->orderBy('created_at', 'ASC')->get();
-        return view('dianca.search', compact('product', 'category', 'brand'));
+        return view('dianca.search', compact('product', 'category', 'brand', 'str'));
     }
 
-    public function categoryFilter($slug)
+    public function categoryFilter($id)
     {
-        $product = Category::where('slug', $slug)->first()->product()->orderBy('created_at', 'DESC')->get();
+        $product = Category::where('id', $id)->first()->product()->orderBy('created_at', 'DESC')->get();
         $category = Category::with('subcategory')->get();
         $brand = Brand::with('product')->get();
-        return view('dianca.search', compact('product', 'category', 'brand'));
+        $str = NULL;
+        return view('dianca.search', compact('product', 'category', 'brand', 'str'));
     }
 
-    public function brandFilter($slug)
+    public function categoryFilters($id, $name)
     {
-        $product = Brand::where('slug', $slug)->first()->product()->orderBy('created_at', 'DESC')->get();
+        $product = new Product();
+        // $product = Category::where('id', $id)->first()->product()->orderBy('created_at', 'DESC')->get();
         $category = Category::with('subcategory')->get();
         $brand = Brand::with('product')->get();
-        return view('dianca.search', compact('product', 'category', 'brand'));
+
+        $str = $name;
+        $searchVal = preg_split('/\s+/', $str, -1, PREG_SPLIT_NO_EMPTY);
+
+        if ($str != '') {
+            $product = $product->where('category_id', $id)->where(function($q) use ($searchVal) {
+                foreach ($searchVal as $val){
+                    $q->orWhere('name', 'like', "%{$val}%");
+                }
+            });
+        }
+
+        $product = $product->with('variant', 'images', 'reviews')->orderBy('created_at', 'ASC')->get();
+        return view('dianca.search', compact('product', 'category', 'brand', 'str'));
+    }
+
+    public function brandFilter($id, $name)
+    {
+        $product = new Product();
+        // $product = Brand::where('slug', $slug)->first()->product()->orderBy('created_at', 'DESC')->get();
+        $category = Category::with('subcategory')->get();
+        $brand = Brand::with('product')->get();
+
+        $str = $name;
+        $searchVal = preg_split('/\s+/', $str, -1, PREG_SPLIT_NO_EMPTY);
+
+        if ($str != '') {
+            $product = $product->where('brand_id', $id)->where(function($q) use ($searchVal) {
+                foreach ($searchVal as $val){
+                    $q->orWhere('name', 'like', "%{$val}%");
+                }
+            });
+        }
+
+        $product = $product->with('variant', 'images', 'reviews')->orderBy('created_at', 'ASC')->get();
+        return view('dianca.search', compact('product', 'category', 'brand', 'str'));
     }
 }

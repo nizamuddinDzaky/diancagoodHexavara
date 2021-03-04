@@ -7,7 +7,7 @@
 @section('content')
 <section class="section_gap mt-4">
     <div class="main_box pt-4">
-        <div class="container text-gray-2">
+        <div class="container-fluid text-gray-2">
             <div class="row my-2">
                 <div class="col-lg-12">
                     <div class="main_title">
@@ -15,7 +15,7 @@
                             <div class="col-lg-1 md-1 sm-1">
                                 <img id="image" class="" src="{{ asset('img/boy.png') }}" alt="profil">
                             </div>
-                            <div class="col-lg-4 md-4 sm-4">
+                            <div class="col-lg-3 md-3 sm-3">
                                 <h5 class="">{{ Auth::guard('customer')->user()->name }}</h5>
                             </div>
                         </div>
@@ -27,13 +27,13 @@
                     <div class="card shadow-1">
                         <div class="card-body">
                             <div class="row text-center" style="color: #4F4F4F">
-                                <div class="col-lg-4 md-4 sm-4">
-                                    <h6>Biodata Diri</h6>
+                                <div class="col-lg-4 md-4 sm-4 {{ request()->segment(2) == '' ? 'active' : '' }}">
+                                    <a href="{{ route('profile') }}" style="color: #4F4F4F">Biodata Diri</a>
                                 </div>
-                                <div class="col-lg-4 md-4 sm-4">
+                                <div class="col-lg-4 md-4 sm-4 {{ request()->segment(2) == 'alamat' ? 'active' : '' }}">
                                     <a href="{{ route('profile-address') }}" style="color: #4F4F4F">Daftar Alamat</a>
                                 </div>
-                                <div class="col-lg-4 md-4 sm-4">
+                                <div class="col-lg-4 md-4 sm-4 {{ request()->segment(2) == 'rekening' ? 'active' : '' }}">
                                     <a href="{{ route('profile-rekening') }}" style="color: #4F4F4F">Rekening Bank</a>
                                 </div>
                             </div>
@@ -97,7 +97,7 @@
                                         <div class="row">
                                             <div class="col-lg-3 md-3 sm-3"></div>
                                             <div class="col-lg-8 md-8 sm-8">
-                                                <button class="btn btn-outline-orange bg-orange mt-3" style="color: white; width:30rem; height:2rem" aria-disabled="true"><h6>Jaga akun anda agar tetap aman dengan <strong>Verifikasi nomor ponsel</strong></h6></button>
+                                                <button class="btn btn-outline-orange bg-orange mt-3" style="color: white;" aria-disabled="true"><h6>Jaga akun anda agar tetap aman dengan <strong>Verifikasi nomor ponsel</strong></h6></button>
                                                 <h6 class="mt-3" style="color: #828282">Untuk kelancaran transaksi anda, silahkan tambahkan nomor yang dapat kami hubungi.</h6>
                                                 <button class="btn btn-orange float-right" id="profile">Simpan</button>
                                             </div>

@@ -11,7 +11,8 @@ class CustomerLoginController extends Controller
 {
     public function index()
     {
-        return view('dianca.login');
+        $str = NULL;
+        return view('dianca.login', compact('str'));
     }
 
     public function login(Request $request)

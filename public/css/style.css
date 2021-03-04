@@ -110,6 +110,11 @@ body {
     transition: max-height 500ms ease-in-out; 
 }
 
+.responsive {
+    max-width: 100%;
+    height: auto;
+}
+
 h1,
 h2,
 h3,
@@ -3950,6 +3955,8 @@ h6 {
 .f_p_item {
     text-align: center;
     margin-bottom: 50px;
+    max-height: 300px;
+    display:block;
 }
 
 .f_p_item .f_p_img {
@@ -3985,6 +3992,15 @@ h6 {
 .f_p_item .f_p_img .p_icon a:hover {
     color: #fff;
     background: #1641ff;
+}
+
+.f_p_item:hover {
+    color: #fff;
+    /* background: #1641ff; */
+    min-height: 300px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: max-height 500ms ease-in-out;
 }
 
 .f_p_item h4 {

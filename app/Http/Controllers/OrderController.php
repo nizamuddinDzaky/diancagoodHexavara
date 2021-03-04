@@ -30,8 +30,9 @@ class OrderController extends Controller
         if(Auth::guard('customer')->check()){
             $cart = Cart::with('details.variant.product')->where('customer_id', Auth::guard('customer')->user()->id)->first();
             // dd($cart);
+            $str = NULL;
             $cart_json = json_encode($cart);
-            return view('dianca.cart', compact('cart', 'cart_json'));
+            return view('dianca.cart', compact('cart', 'cart_json', 'str'));
         }
         return redirect(route('customer.login'));;
     }
@@ -131,6 +132,7 @@ class OrderController extends Controller
             $cart_arr = $request->input('cd');
             $total_cost = 0;
             $cart_detail = array();
+            $str = NULL;
             
             foreach($cart_arr as $cd) {
                 $cart_detail[] = CartDetail::with('variant.product')->where('is_avail', 1)->where('id', $cd)->first();
@@ -144,7 +146,7 @@ class OrderController extends Controller
 
             $provinces = Province::get();
 
-            return view('dianca.checkout', compact('cart', 'cart_detail', 'address', 'total_cost', 'provinces'));
+            return view('dianca.checkout', compact('cart', 'cart_detail', 'address', 'total_cost', 'provinces', 'str'));
         }
     }
 
@@ -234,8 +236,8 @@ class OrderController extends Controller
             $courier = $request->courier;
             $duration = $request->duration;
             $cart_detail = $request->input('cd');
-
-            return view('dianca.payment', compact('subtotal', 'shipping_cost', 'address_id', 'total_cost', 'courier', 'duration', 'cart_detail'));
+            $str = NULL;
+            return view('dianca.payment', compact('subtotal', 'shipping_cost', 'address_id', 'total_cost', 'courier', 'duration', 'cart_detail', 'str'));
         }
     }
 
@@ -313,8 +315,8 @@ class OrderController extends Controller
     {
         if(Auth::guard('customer')->check()) {
             $order = Order::with('payment')->where('customer_id', Auth::guard('customer')->user()->id)->where('id', $id)->first();
-
-            return view('dianca.payment-done', compact('order'));
+            $str = NULL;
+            return view('dianca.payment-done', compact('order', 'str'));
         }
     }
 

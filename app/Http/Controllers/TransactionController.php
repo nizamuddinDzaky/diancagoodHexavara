@@ -23,8 +23,8 @@ class TransactionController extends Controller
             } else {
                 $orders = Order::with('details.variant.product.images', 'payment')->where('customer_id', Auth::guard('customer')->user()->id)->orderBy('status', 'ASC')->get();
             }
-
-            return view('dianca.transaction-list', compact('orders'));
+            $str = NULL;
+            return view('dianca.transaction-list', compact('orders', 'str'));
         }
         return redirect(route('customer.login'));
     }

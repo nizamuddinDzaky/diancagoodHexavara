@@ -26,7 +26,8 @@ class ProfileController extends Controller
     {
         if(auth()->guard('customer')->check()) {
             $customer = Customer::with('address')->where('id', auth()->guard('customer')->user()->id)->first();
-            return view('dianca.profile', compact('customer'));
+            $str = NULL;
+            return view('dianca.profile', compact('customer', 'str'));
         }
     }
 
@@ -34,7 +35,9 @@ class ProfileController extends Controller
     {
         if(auth()->guard('customer')->check()) {
             $address = Address::where('customer_id', auth()->guard('customer')->user()->id)->get();
-            return view('dianca.profile-alamat', compact('address'));
+            $provinces = Province::get();
+            $str = NULL;
+            return view('dianca.profile-alamat', compact('address', 'provinces', 'str'));
         }
     }
 
@@ -44,7 +47,8 @@ class ProfileController extends Controller
             $account = BankAccount::with('bank')->where('customer_id', auth()->guard('customer')->user()->id)->get();
             $banks = Bank::get();
             $sum = BankAccount::where('customer_id', auth()->guard('customer')->user()->id)->count();
-            return view('dianca.profile-rekening', compact('account', 'banks', 'sum'));
+            $str = NULL;
+            return view('dianca.profile-rekening', compact('account', 'banks', 'sum', 'str'));
         }
     }
 

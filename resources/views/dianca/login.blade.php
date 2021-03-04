@@ -5,19 +5,19 @@
 @endsection
 
 @section('content')
-    <div class="align-items-center d-flex min-vh-100">
+    <div class="align-items-center d-flex min-vh-100 section_gap">
         <div class="container-fluid">
             <div class="row justify-content-center align-items-center">
-                <div class="col-lg-1"></div>
+                <div class="col-lg-1 md-1 sm-1"></div>
                 <div class="col-lg-5 md-5 sm-5 pt-5">
-                    <div class="container">
+                    <div class="container-fluid">
                         <div>
-                            <img class="" src="{{ asset('img/login.png') }}">
+                            <img class="responsive" src="{{ asset('img/login.png') }}">
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-1"></div>
-                <div class="col-lg-5 md-5 sm-5 pt-5">
+                <!-- <div class="col-lg-1"></div> -->
+                <div class="col-lg-5 md-5 sm-5 pt-5 pl-5 ml-4">
                     <div class="card shadow-1 my-auto pt-2" style="width: 85%">
                         <div class="card-body">
                             <h3 class="card-title text-center pb-1"><strong>Masuk akun</strong></h3>

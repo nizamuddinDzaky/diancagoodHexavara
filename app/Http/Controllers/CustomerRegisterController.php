@@ -15,7 +15,8 @@ class CustomerRegisterController extends Controller
 {
     public function index()
     {
-        return view('dianca.register');
+        $str = NULL;
+        return view('dianca.register', compact('str'));
     }
 
     public function register(Request $request){
