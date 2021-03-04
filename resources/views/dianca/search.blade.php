@@ -82,7 +82,7 @@
                                         <input type="text" class="form-control" id="max-price" name="max-price" placeholder="Maksimum">
                                     </div>
                                 </div>
-                                <button class="btn btn-orange ml-3 mt-2 text-center" style="width: 12rem">Apply</button>
+                                <button class="btn btn-orange ml-3 mt-2 text-center" style="width: 15rem">Apply</button>
                             </form>
                         </div>
                     </div>
@@ -91,12 +91,18 @@
                     <div class="row my-2 ml-2">
                         @forelse($product as $row)
                         <div class="col ml-2">
-                            <div class="">
+                            <div class="col">
                                 <div class="f_p_item">
                                     <div class="f_p_img">
                                         <a href="{{ url('/product/' . $row->id) }}">
                                             <img id="pic{{ $row }}" class="home-product-center-cropped" src="{{ asset('storage/products/' . $row->images->first()->filename) }}" alt="{{ $row->name }}">
                                         </a>
+                                        <div class="p_icon">
+                                            
+                                                <!-- <i class="material-icons md-18">add_shopping_cart</i> -->
+                                                <button class="btn btn-orange ml-2 mt-2 text-center mb-2" style="">+ Keranjang</button>
+                                            
+                                        </div>
                                     </div>
                                     <a href="{{ url('/product/' . $row->id) }}" class="overflow-auto mb-2">
                                         <h4 class="text-gray-2 product-name" class="pl-3">{{ $row->name }}</h4>
@@ -108,7 +114,7 @@
                                     @else
                                     <h5 class="text-gray-1">Rp {{ number_format($row->variant->first()->price) }}</h5>
                                     @endif
-                                    <button class="btn btn-orange ml-3 mt-2 text-center mb-2" style="">+ Keranjang</button>
+                                    <!-- <button class="btn btn-orange ml-2 mt-2 text-center mb-2" style="">+ Keranjang</button> -->
                                 </div>
                             </div>
                         </div>

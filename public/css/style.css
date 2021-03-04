@@ -3979,8 +3979,8 @@ h6 {
 
 .f_p_item .f_p_img .p_icon {
     position: absolute;
-    right: -90px;
-    bottom: 30px;
+    right: -140px;
+    bottom: 50px;
     transition: all 400ms ease;
 }
 
@@ -4007,14 +4007,14 @@ h6 {
     background: #1641ff;
 }
 
-.f_p_item:hover {
+/* .f_p_item:hover {
     color: #fff;
-    /* background: #1641ff; */
-    min-height: 300px;
+    background: #1641ff;
+    max-height: 600px;
     overflow: hidden;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     transition: max-height 500ms ease-in-out;
-}
+} */
 
 .f_p_item h4 {
     color: #4f4f4f;
