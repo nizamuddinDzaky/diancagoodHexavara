@@ -259,6 +259,7 @@
     <div class="modal-dialog modal-dialog-centered modal-md" role="document">
         <div class="modal-content">
             <form id="form-variant">
+                @csrf
                 <div class="modal-header pl-0 pb-4">
                     <h3 class="modal-title w-100 text-center position-absolute text-gray-2 weight-600">Tambah
                         Varian
@@ -327,13 +328,15 @@
 
 @section('js')
 <script>
-$(document).ready(function() {
     var category_button = $('#category_placeholder');
     var category_uploader = $('#category_input');
     var category_images = $('#category_container');
     var product_button = $('#product_placeholder');
     var product_uploader = $('#product_input');
     var product_images = $('#product_container');
+    var variant_button = $('#variant_placeholder');
+    var variant_uploader = $('#variant_input');
+    var variant_images = $('#variant_container');
 
     // Upload category images
     category_button.on('click', function() {
@@ -402,7 +405,6 @@ $(document).ready(function() {
     product_images.on('click', '.img', function() {
         $(this).remove();
     })
-})
 
 $("#category_id").on('change', function() {
     $.ajax({
@@ -412,7 +414,7 @@ $("#category_id").on('change', function() {
             category_id: $(this).val()
         },
         success: function(res) {
-            // $("#subcategory_id").empty();
+            $("#subcategory_id").empty();
             $.each(res.data, function(key, item) {
                 $("#subcategory_id").append('<option value="' + item.id + '">' +
                     item.name + '</option>');
@@ -449,15 +451,72 @@ $("#add-variant").on('click', function() {
     $('#modal_variant').modal('show');
 })
 
-$("#add-variant-submit").on('click', function(e) {
+ // Upload variant images
+ variant_button.on('click', function() {
+        variant_uploader.click();
+    });
+
+    variant_uploader.on('change', function() {
+        $('#img_variant').remove();
+
+        var reader = new FileReader();
+        var data = $(this)[0].files;
+
+        $.each(data, function(index, file) {
+            if (/(\.|\/)(gif|jpe?g|png)$/i.test(file.type)) {
+                var reader = new FileReader();
+                reader.onload = (function(file) {
+                    return function(e) {
+                        var img = $(
+                            '<div class="img" id="img_variant" style="background-image: url(\'' +
+                            e
+                            .target.result +
+                            '\');" rel="' + e.target.result +
+                            '"><span><strong>Hapus</strong></span></div>'
+                        );
+                        variant_images.append(img);
+                    };
+                })(file);
+                reader.readAsDataURL(file);
+            }
+        });
+    });
+
+    variant_images.on('click', '.img', function() {
+        $(this).remove();
+    })
+
+$("form#form-variant").submit(function(e) {
     e.preventDefault();
-    const data = $("#form-variant").serializeArray();
-    console.log(data[0].value);
+    const data = new FormData($(this)[0]);
+    data.append('image_variant', $("#variant_input")[0].files[0]);
+    $.ajax({
+        "_token": "{{ csrf_token() }}",
+        url: "add-variant",
+        type: 'POST',
+        data: data,
+        enctype: 'multipart/form-data',
+        success: function(res) {
+            console.log(res);
+            const variant = $('<tr class="d-flex"><td class="col-3">' + res.name + '</td><td class="col-2">' + res.price + '</td><td class="col-2">'+ res.weight + '</td><td class="col-2">' + res.stock + '</td></td><td class="col-3"></td></tr>')
+            $("#variants-list").append(variant);
     
-    const variant = $('<tr class="d-flex"><td class="col-3">' + data[0].value + '</td><td class="col-2">' + data[1].value + '</td><td class="col-2">'+ data[2].value + '</td><td class="col-2">' + data[3].value + '</td></td><td class="col-3"></td></tr>')
-    $("#variants-list").append(variant);
-    
-    $('#modal_variant').modal('hide');
+            $('#modal_variant').modal('hide');
+        },
+        error: function(xhr, status, err) {
+            console.log(xhr.responseText);
+        },
+        dataType: 'JSON',
+        cache: false,
+        contentType: false,
+        processData: false,
+    });
 })
+
+$.ajaxSetup({
+    headers: {
+        'X-XSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
 </script>
 @endsection

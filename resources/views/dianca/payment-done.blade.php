@@ -88,19 +88,19 @@
             <div class="modal-body">
                 <div class="container">
                     <div class="cart_inner">
-                        <form action="{{ route('payment.done.process') }}" method="POST" id="payment-done-form">
+                        <form action="{{ route('payment.done.process') }}" method="POST" id="payment-done-form" enctype="multipart/form-data">
                             @csrf
-                            <div class="form-group pl-2 pr-2">
+                            <div class="form-group px-2">
                                 <label style="color: #4F4F4F">Nomor Pemesanan</label><br>
                                 <input type="text" name="invoice" id="invoice" class="form-control disabled-field" value="{{ $order->invoice }}" readonly>
                             </div>
-                            <div class="form-group pl-2 pr-2 pb-1">
+                            <div class="form-group px-2 pb-1">
                                 <label style="color: #4F4F4F">Bank Tujuan</label>
                                 <select class="form-control border" name="transfer_to" style="boder-color: #EOEOEO">
                                     <option value="{{ $order->payment->transfer_to }}" selected>Bank BNI (800 152 6846) - A/n. Toko Diancagoods</option>
                                 </select>
                             </div>
-                            <div class="form-group pl-2 pr-2 pb-1">
+                            <div class="form-group px-2 pb-1">
                                 <label style="color: #4F4F4F">Bank Pengirim</label>
                                 <select class="form-control border" name="transfer_from_bank" id="transfer_from_bank" style="boder-color: #EOEOEO;">
                                     <option>Pilih Bank</option>
@@ -108,7 +108,7 @@
                                     <option value="BCA">BCA</option>
                                 </select>
                             </div>
-                            <div class="form-group pl-2 pr-2 pb-1">
+                            <div class="form-group px-2 pb-1">
                                 <label style="color: #4F4F4F">Nomor Rekening Pengirim</label>
                                 <input type="text" class="form-control border" name="transfer_from_account" id="transfer_from_account" required>
                             </div>
@@ -116,7 +116,7 @@
                                 <label style="color: #4F4F4F">Nama Pemilik Rekening</label>
                                 <input type="text" class="form-control border" name="name" id="name" required>
                             </div>
-                            <div class="form-group pl-2 pr-2 pb-1">
+                            <div class="form-group px-2 pb-1">
                                 <label style="color: #4F4F4F">Jumlah Transfer</label><br>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
@@ -125,7 +125,7 @@
                                     <input type="text" name="amount" id="amount" class="form-control bg-white border" required>
                                 </div>
                             </div>
-                            <div class="form-group pl-2 pr-2 pb-1">
+                            <div class="form-group px-2 pb-1">
                                 <label style="color: #4F4F4F">Tanggal Transfer</label><br>
                                 <div class="form-group">
                                     <div class="input-group date">
@@ -137,6 +137,12 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="form-group px-2 pb-2">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="proof" name="proof" accept="image/*">
+                                    <label class="custom-file-label" for="proof">[OPSIONAL] Upload Foto Bukti</label>
+                                </div>
+                            </div>  
                         </form>
                     </div>
                     <div class="row float-right">

@@ -329,7 +329,8 @@ class OrderController extends Controller
                 'transfer_from_account' => 'required|string',
                 'name' => 'required|string',
                 'amount' => 'required|integer',
-                'date' => 'required'
+                'date' => 'required',
+                'proof' => 'image|mimes:jpg,png,jpeg'
             ]);
 
             try {
@@ -350,6 +351,13 @@ class OrderController extends Controller
                     ]);
                     $payment->save();
 
+                    if($request->hasFile('proof')) {
+                        $file = $request->file('proof');
+                        $filename = time() . '.' . $file->getClientOriginalExtension();
+                        $file->storeAs('public/payment', $filename);
+
+                        $payment->update(['proof' => $filename]);
+                    }
                     return redirect()->route('transaction.list', ['status' => 0])->with(['success' => 'Bukti Pembayaran Sedang Diproses.']);
                 }
             } catch(\Exception $e) {

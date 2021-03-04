@@ -116,13 +116,13 @@
                                     <h4>Pengiriman</h4>
                                 </div>                       
                                 <div class="col-lg-8">
-                                    <div class="font-18 mb-2">
+                                    <div class="font-16 mb-2">
                                         Dikirim dari <strong>Jakarta Selatan</strong>
                                     </div>
-                                    <div class="font-18 my-2">
+                                    <div class="font-16 my-2">
                                         Tujuan pengiriman <strong>Sukolilo, Surabaya</strong>
                                     </div>
-                                    <div class="font-18 my-2">
+                                    <div class="font-16 my-2">
                                         Ongkos kirim mulai dari <strong>Rp 18.000</strong>
                                     </div>
                                 </div>
@@ -142,7 +142,7 @@
         <div class="row my-4">
             <div class="col-lg-12">
                 <h4 class="text-gray-2 weight-600 font-24">Deskripsi</h4>
-                <p class="text-gray-3 font-18" style="white-space: pre-wrap">
+                <p class="text-gray-3 font-16" style="white-space: pre-wrap">
                     {{ $product->description }}
                 </p>
             </div>

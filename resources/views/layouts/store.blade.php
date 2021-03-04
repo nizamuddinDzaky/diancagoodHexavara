@@ -27,13 +27,13 @@
                     <a class="navbar-brand logo_h pr-3" href="{{ url('/') }}">
                         <img src="{{ asset('img/logo-1x.png') }}" alt="logo">
                     </a>
-                    <button class="navbar-toggler px-2 py-0 my-0 bg-white btn" type="button" data-toggle="collapse"
+                    <button class="navbar-toggler" type="button" data-toggle="collapse"
                         data-target="#category-search" aria-controls="category-search" aria-expanded="false"
                         aria-label="Toggle navigation">
                         <span class="m-0 p-0"><i class="material-icons md-24">menu</i></span>
                     </button>
-                    <div class="collapse navbar-collapse flex-basis-2" id="category-search">
-                        <div class="row w-75">
+                    <div class="collapse navbar-collapse offset" id="category-search">
+                        <div class="row w-100">
                             <div class="col-lg-2 pl-2">
                                 <button class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                                     aria-expanded="false">
@@ -47,7 +47,7 @@
                                     @endforelse
                                 </div>
                             </div>
-                            <div class="col-lg-10 pl-2 pr-2">
+                            <div class="col-lg-6 pl-2 pr-2">
                                 <form action="{{ route('search-result') }}" method="get">
                                     <div class="input-group w-100">
                                         <input class="form-control" type="text" name="q" placeholder="Search"
@@ -60,11 +60,7 @@
                                     </div>
                                 </form>
                             </div>
-                        </div>
-                    </div>
-                    <div id="cart-user">
-                        <div class="row w-100">
-                            <div class="col-lg-6">
+                            <div class="col-lg-1">
                                 @if (!auth()->guard('customer')->check())
                                 <a type="button" class="btn py-0" href="{{ route('cart.show') }}" tabindex="-1"
                                     aria-disabled="true"><i class="material-icons md-18">shopping_cart</i></a>
@@ -74,7 +70,7 @@
                                         class="badge badge-pill badge-orange">{{ auth()->guard('customer')->user()->cart->details->sum('qty') }}</span></a>
                                 @endif
                             </div>
-                            <div class="col-lg-6">
+                            <div class="col-lg-3">
                                 @if (auth()->guard('customer')->check())
                                 <button class="btn dropdown-toggle" data-toggle="dropdown" id="navbarmenu"
                                     aria-haspopup="true"

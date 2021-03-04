@@ -24,6 +24,7 @@ class CreatePaymentsTable extends Migration
             $table->date('transfer_date')->nullable();
             $table->bigInteger('amount')->nullable();
             $table->integer('status')->default(0);
+            $table->string('proof')->nullable();
             $table->timestamps();
         });
     }

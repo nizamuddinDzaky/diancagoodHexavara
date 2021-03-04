@@ -118,8 +118,8 @@ class DashboardController extends Controller
                     'stock' => 'required',
                     'rate' => 'required',
                     'description' => 'string',
-                    'images' => 'required',
-                    'images.*' => 'mimes:jpg,jpeg,png'
+                    'image_product' => 'required',
+                    'image_product.*' => 'mimes:jpg,jpeg,png'
                 ]);
 
                 $product = Product::create([
@@ -131,8 +131,8 @@ class DashboardController extends Controller
                     'rate' => $request->rate
                 ]);
 
-                if ($request->hasFile('images')) {
-                    foreach ($request->file('images') as $image) {
+                if ($request->hasFile('image_product')) {
+                    foreach ($request->file('image_product') as $image) {
                         $name = time() . $image->getClientOriginalName() . '.' . $image->getClientOriginalExtension();
                         $image->storeAs('public/storage/products', $name);
 
@@ -202,7 +202,7 @@ class DashboardController extends Controller
         return redirect(route('administrator.login'));
     }
 
-    public function storeVariant($product_id, Request $request)
+    public function storeVariant(Request $request)
     {
         if (Auth::guard('web')->check()) {
             $this->validate($request, [
@@ -210,14 +210,33 @@ class DashboardController extends Controller
                 'price' => 'required|integer',
                 'weight' => 'required|integer',
                 'stock' => 'required|integer',
+                'image_variant' => 'mimes:jpg,jpeg,png',
             ]);
 
-            $product = ProductVariant::create([
-                'product_id' => $product_id,
+            $product_variant = ProductVariant::create([
                 'name' => $request->name,
                 'price' => $request->price,
+                'weight' => $request->weight,
                 'stock' => $request->stock,
             ]);
+
+            if ($request->hasFile('images_variant')) {
+                foreach ($request->file('image_variant') as $image) {
+                    $name = time() . $image->getClientOriginalName() . '.' . $image->getClientOriginalExtension();
+                    $image->storeAs('public/storage/variants', $name);
+
+                    $product_image = ProductImage::create([
+                        'product_id' => $product->id,
+                        'product_variant_id' => $product_variant->id,
+                        'filename' => $name
+                    ]);
+                    
+                    $product_variant->image = $product_image->filename;
+                    $product_variant->save();
+                }
+            }
+
+            return json_encode($product_variant);
         }
     }
 

@@ -14,13 +14,13 @@
                 </div>
             </div>
             <div class="row my-2 pb-2 pt-2 pl-2">
-                <div class="col-lg-5 md-5 sm-5">
+                <div class="col-lg-5">
                     @if ($str != NULL)
                     <h5>Menampilkan hasil pencarian produk untuk "{{ $str }}"</h5>
                     @endif
                 </div>
-                <div class="col-lg-5 md-5 sm-5"></div>
-                <div class="col-lg-2 md-2 sm-2 float-right">
+                <div class="col-lg-5"></div>
+                <div class="col-lg-2 float-right">
                     <button class="btn dropdown-toggle border" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Urutkan: Paling Sesuai
                     </button>
@@ -32,7 +32,7 @@
                 </div>
             </div>
             <div class="row my-2 pb-2 pt-3">
-                <div class="col-lg-3 md-3 sm-3 pb-3">
+                <div class="col-lg-3 pb-3">
                     <div class="card shadow-1">
                         <div class="card-body">
                             <div class="option">
@@ -85,21 +85,17 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-9 md-9 sm-9">
+                <div class="col-lg-9">
                     <div class="row my-2 ml-2">
                         @forelse($product as $row)
-                        <div class="col ml-2">
                             <div class="col">
                                 <div class="f_p_item">
-                                    <div class="f_p_img">
+                                    <div class="f_p_img ">
                                         <a href="{{ url('/product/' . $row->id) }}">
                                             <img id="pic{{ $row }}" class="home-product-center-cropped" src="{{ asset('storage/products/' . $row->images->first()->filename) }}" alt="{{ $row->name }}">
                                         </a>
                                         <div class="p_icon">
-                                            
-                                                <!-- <i class="material-icons md-18">add_shopping_cart</i> -->
-                                                <button class="btn btn-orange ml-2 mt-2 text-center mb-2" style="">+ Keranjang</button>
-                                            
+                                            <button class="btn btn-orange ml-2 mt-2 text-center mb-2" style="">+ Keranjang</button>
                                         </div>
                                     </div>
                                     <a href="{{ url('/product/' . $row->id) }}" class="overflow-auto mb-2">
@@ -112,10 +108,8 @@
                                     @else
                                     <h5 class="text-gray-1">Rp {{ number_format($row->variant->first()->price) }}</h5>
                                     @endif
-                                    <!-- <button class="btn btn-orange ml-2 mt-2 text-center mb-2" style="">+ Keranjang</button> -->
                                 </div>
                             </div>
-                        </div>
                         @empty
                         @endforelse
                     </div>

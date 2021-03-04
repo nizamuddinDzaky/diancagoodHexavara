@@ -183,6 +183,16 @@
                             </div>
                         </div>
                         <div class="row">
+                            <div class="col-lg-5 mt-4">
+                                <h5 class="weight-600">Bukti Pembayaran</h5>
+                                <div class="images">
+                                    <div class="img">
+                                        <img class="img w-75" src="{{ asset('storage/payment/' . $order->payment->proof) }}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="col-lg-7 mt-4"></div>
                             <div class="col-lg-3 mt-4 text-right">
                                 <h4>Apakah Bukti Pembayaran Sudah Benar?</h4>
@@ -433,13 +443,16 @@
     });
 
     $("#confirm-payment").on('click', function(e) {
+        e.preventDefault();
         swal({
-            title: "",
+            title: "Konfirmasi Pembayaran",
             text: "Apakah data pembayaran sudah benar?",
             type: "warning",
+            showCancelButton: true,
             reverseButtons: !0
         }).then(function (e) {
             e.dismiss;
+            $("#confirm-payment-form").submit();
         }, function (dismiss) {
             return false;
         })

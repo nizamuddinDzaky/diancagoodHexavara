@@ -3968,10 +3968,6 @@ h6 {
     margin-bottom: 50px;
 }
 
-.f_p_item_category:hover {
-    box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.1);
-}
-
 .f_p_item .f_p_img {
     position: relative;
     overflow: hidden;
@@ -4007,14 +4003,14 @@ h6 {
     background: #1641ff;
 }
 
-/* .f_p_item:hover {
+.f_p_item:hover {
     color: #fff;
-    background: #1641ff;
-    max-height: 600px;
+    /* background: #1641ff; */
+    min-height: 300px;
     overflow: hidden;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     transition: max-height 500ms ease-in-out;
-} */
+}
 
 .f_p_item h4 {
     color: #4f4f4f;
@@ -6251,6 +6247,16 @@ h6 {
     min-height: 240px;
     width: 240px;
     border-radius: 15px 15px 0px 0px;
+}
+
+.f_p_img img {
+    -webkit-transition: all 300ms ease;
+    transition: all 300ms ease;
+}
+
+.f_p_img img:hover {
+    -webkit-filter: brightness(80%);
+    filter: brightness(80%);
 }
 
 .home-category-center-cropped {

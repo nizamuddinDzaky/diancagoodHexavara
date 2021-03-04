@@ -9,9 +9,7 @@
     <div class="main_box">
         <div class="container">
             <div class="row py-4">
-                <div class="f_p_img">
                     <img class="hero" src="{{ asset('img/hero-2x.png') }}">
-                </div>
             </div>
         </div>
     </div>
