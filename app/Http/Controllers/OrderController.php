@@ -27,8 +27,9 @@ class OrderController extends Controller
     public function showCart()
     {
         if(Auth::guard('customer')->check()){
-            $cart = Cart::with('details.variant.product')->where('customer_id', Auth::guard('customer')->user()->id)->first();
-            // dd($cart);
+            $cart = Cart::with('details.variant.product')->with('details', function($query) {
+                $query->orderBy('created_at', 'desc');
+            })->where('customer_id', Auth::guard('customer')->user()->id)->first();
             $str = NULL;
             $cart_json = json_encode($cart);
             return view('dianca.cart', compact('cart', 'cart_json', 'str'));
@@ -74,7 +75,7 @@ class OrderController extends Controller
             
             return redirect()->back()->with(['error' => 'Produk tidak dapat ditambahkan ke keranjang.']);
         }
-        return redirect(route('customer.login'));;
+        return redirect(route('customer.login'));
     }
 
     public function updateCart(Request $request)
@@ -365,7 +366,66 @@ class OrderController extends Controller
             }
         }
     }
+
+    public function cancelOrder($id)
+    {
+        if(Auth::guard('customer')->check()) {
+            try {
+                $order = Order::with('payment', 'details')->where('id', $id)->first();
+                if($order->status == 0){
+                    $order_details = OrderDetail::where('order_id', $order->id)->get();
+                    foreach($order_details as $od){
+                        $pv = ProductVariant::where('id', $od->product_variant_id)->first();
+                        $pv->stock += $od->qty;
+                    }
+                    $order->status = 4;
+                    $order->save();
+
+                    return redirect()->route('transaction.list', ['status' => 4])->with(['success' => 'Pesanan Berhasil Dihapus.']);
+                }
+            } catch(\Ecception $e) {
+                return redirect()->back()->with(['error' => $e->getMessage()]);
+            }
+        }
+        return redirect(route('customer.login'));
+    }
     
+    public function quickAddToCart($id)
+    {
+        if(Auth::guard('customer')->check()){
+            $cart = Cart::with('details.variant.product.images')->where('customer_id', Auth::guard('customer')->user()->id)->first();
+            
+            $variant = ProductVariant::where('id', $id)->first();
+
+            if($variant->stock > 0) {
+                if(!CartDetail::where('cart_id', $cart->id)->where('product_variant_id', $variant->id)->exists()) {
+                    $cart_detail = CartDetail::create([
+                        'cart_id' => $cart->id,
+                        'product_variant_id' => $variant->id,
+                        'qty' => 1,
+                        'price' => $variant->price * 1
+                    ]);
+    
+                    $cart->total_cost += $cart_detail->price;
+                    $cart->save();
+                } else {
+                    $cart_variant = CartDetail::where('cart_id', $cart->id)->where('product_variant_id', $variant->id)->first();
+                    $cart_variant->qty += 1;
+                    $cart_variant->price += $variant->price * 1;
+                    $cart_variant->save();
+
+                    $cart->total_cost = CartDetail::where('cart_id', $cart->id)->sum('price');
+                    $cart->save();
+                }
+                
+                return redirect(route('cart.show'));
+            }
+            
+            return redirect()->back()->with(['error' => 'Produk tidak dapat ditambahkan ke keranjang.']);
+        }
+        return redirect(route('customer.login'));
+    }
+
     public function getCourier(Request $request)
     {
         $this->validate($request, [
@@ -401,5 +461,11 @@ class OrderController extends Controller
     {
         $districts = District::where('city_id', request()->city_id)->get();
         return json_encode($districts);
+    }
+
+    public function getOrderDetail($id)
+    {
+        $order = Order::with('details.variant.product.images', 'payment', 'address')->where('id', $id)->first();
+        return json_encode($order);
     }
 }

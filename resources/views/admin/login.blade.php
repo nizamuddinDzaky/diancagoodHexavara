@@ -5,27 +5,25 @@
 @endsection
 
 @section('content')
-    <div class="align-items-center d-flex min-vh-100">
+    <div class="align-items-center d-flex min-vh-100 section_gap">
         <div class="container-fluid">
-            <div class="row justify-content-center align-items-center">
-                <div class="col-lg-1"></div>
-                <div class="col-lg-5 md-5 sm-5 pt-5">
-                    <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-7"></div>
+                    <div class="container-fluid">
                         <div>
-                            <img class="" src="{{ asset('img/login.png') }}">
+                            <img class="responsive" src="{{ asset('img/login.png') }}">
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-1"></div>
-                <div class="col-lg-5 md-5 sm-5 pt-5">
-                    <div class="card shadow-1 my-auto pt-2" style="width: 85%">
+                <div class="col-lg-4 pt-5">
+                    <div class="card shadow-1 my-auto pt-2">
                         <div class="card-body">
                             <h3 class="card-title text-center pb-1"><strong>Masuk akun</strong></h3>
                             <h6 class="card-subtitle mb-2 text-muted text-center">Lorem ipsum is simply dummy text</h6>
                             @if (session('error'))
                                 <div class="alert alert-danger">{{ session('error') }}</div>
                             @endif
-                            <form action="{{ route('administrator.post_login') }}" class="form pl-3 pr-3 pt-4" id="login-form" method="post">
+                            <form action="{{ route('administrator.post_login') }}" class="form pt-4" id="login-form" method="post">
                             @csrf
                                 <div class="form-group">
                                     <label for="email">Email</label><br>

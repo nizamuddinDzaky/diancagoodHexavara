@@ -3009,21 +3009,6 @@ fieldset:disabled a.btn {
   border-color: #3490dc;
 }
 
-.btn-outline-orange {
-  color: #f37020;
-  padding: 7px 29px;
-  border-radius: 8px;
-  box-sizing: border-box;
-  border-color: #f37020;
-  transition: color 0.3s ease-in-out background-color 0.3s ease-in-out;
-}
-
-.btn-outline-orange:hover {
-  color: #fff;
-  background-color: #f37020;
-  border-color: #f37020;
-}
-
 .btn-outline-primary:focus,
 .btn-outline-primary.focus {
   box-shadow: 0 0 0 0.2rem rgba(52, 144, 220, 0.5);
@@ -3414,7 +3399,7 @@ input[type=button].btn-block {
 .dropdown-menu {
   position: absolute;
   top: 100%;
-  left: 0;
+  left: 1;
   z-index: 1000;
   display: none;
   float: left;

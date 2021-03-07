@@ -258,13 +258,12 @@ a:focus {
 /*---------------------------------------------------- */
 /*----------------------------------------------------*/
 .header_area {
-    position: absolute;
+    position: fixed;
     width: 100%;
     top: 0;
     left: 0;
     z-index: 99;
     transition: background 0.4s, all 0.3s linear;
-    position: fixed;
 }
 
 .header_area .main_menu {
@@ -6459,6 +6458,37 @@ h6 {
     color: #fff;
 }
 
+.btn-outline-orange {
+    color: #f37020;
+    padding: 7px 29px;
+    border-radius: 8px;
+    box-sizing: border-box;
+    border-color: #f37020;
+    transition: color 0.3s ease-in-out background-color 0.3s ease-in-out;
+}
+  
+.btn-outline-orange:hover {
+    color: #fff;
+    background-color: #f37020;
+    border-color: #f37020;
+}
+
+.btn-outline-orange-2 {
+    color: #f37020;
+    padding: 7px 25px;
+    line-height: 17px;
+    border-radius: 10px;
+    box-sizing: border-box;
+    border-color: #f37020;
+    transition: color 0.3s ease-in-out background-color 0.3s ease-in-out;
+}
+  
+.btn-outline-orange-2:hover {
+    color: #fff;
+    background-color: #f37020;
+    border-color: #f37020;
+}
+
 .btn-outline-gray {
     background: #fff;
     border: 1px solid #4f4f4f;
@@ -6608,6 +6638,10 @@ h6 {
 .plain-border {
     border: 0px !important;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.plain-border-2 {
+    border: 0px !important;
 }
 
 .curved-border-2 {
@@ -6807,4 +6841,8 @@ h6 {
 
 .product-name {
     text-overflow: ellipsis;
+}
+
+.search_bar {
+    width: 50%;
 }

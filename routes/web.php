@@ -42,6 +42,7 @@ Route::get('/logout', [CustomerLoginController::class, 'logout'])->name('custome
 
 Route::get('/cities', [OrderController::class, 'getCities'])->name('cities');
 Route::get('/districts', [OrderController::class, 'getDistricts'])->name('districts');
+Route::get('/order-detail/{id}', [OrderController::class, 'getOrderDetail'])->name('order');
 
 Route::post('/checkout', [OrderController::class, 'checkout'])->name('checkout');
 Route::post('/checkout-address', [OrderController::class, 'address'])->name('checkout.address');
@@ -50,6 +51,7 @@ Route::post('/checkout-payment', [OrderController::class, 'payment'])->name('che
 Route::post('/checkout-done', [OrderController::class, 'checkoutProcess'])->name('checkout.process');
 Route::get('/finish-payment/{id}', [OrderController::class, 'paymentDone'])->name('payment.done');
 Route::post('/process-payment', [OrderController::class, 'makePayment'])->name('payment.done.process');
+Route::get('/cancel-order/{id}', [OrderController::class, 'cancelOrder'])->name('order.cancel');
 
 Route::get('/transactions/{status}', [TransactionController::class, 'index'])->name('transaction.list');
 
@@ -67,6 +69,7 @@ Route::delete('/profil/rekening-delete/{id}', [ProfileController::class, 'delete
 
 Route::get('/cart', [OrderController::class, 'showCart'])->name('cart.show');
 Route::post('/cart/add', [OrderController::class, 'addToCart'])->name('cart.add');
+Route::get('/cart/quick-add/{id}', [OrderController::class, 'quickAddToCart'])->name('cart.quick_add');
 Route::post('/cart/update', [OrderController::class, 'updateCart'])->name('cart.update');
 Route::post('/cart/semi-update', [OrderController::class, 'updateCartOrder'])->name('cart.semiupdate');
 

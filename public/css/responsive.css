@@ -78,13 +78,20 @@
 @media (max-width:991px){
 	/* Main Menu Area css
 	============================================================================================ */
+	.search_bar {
+		width: 100%;
+	}
+	.nav_btn{
+		padding: 5px 0px;
+	}
     .navbar-toggler {
         border: none;
         border-radius: 0px;
         padding: 0px;
         cursor: pointer;
         margin-top: 5px;
-        margin-bottom: 23px;
+        margin-bottom: 5px;
+		margin-right: -10px;
     }
 	.header_area .navbar {
 		background: #fff;
@@ -133,6 +140,7 @@
     }
 	.header_area .navbar-collapse{
 		max-height: 340px;
+		overflow-y: scroll;
 	}
 	.header_area .navbar .nav .nav-item.submenu ul .nav-item .nav-link {
 		padding: 0px 15px;
@@ -593,4 +601,16 @@
 	.returning_customer .contact_form .form-group {
 		padding-left: 0px;
 	}
+}
+
+.main_menu .navbar-collapse {
+	max-height: calc(100vh - 4.5em);
+	overflow-y: auto;
+}
+
+@media (max-height: 450px) {
+    .main_menu .navbar-collapse {
+        max-height: calc(100vh - 4.5em);
+        overflow-y: visible;
+    }
 }

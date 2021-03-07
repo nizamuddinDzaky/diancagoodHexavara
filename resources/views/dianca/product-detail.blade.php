@@ -130,7 +130,7 @@
                             <div class="row mt-4">
                                 <div class="col-lg-12">
                                     <button class="btn btn-orange font-20 py-3 px-5 mr-2">+ Keranjang</button>
-                                    <a type="button" href="#" class="btn btn-outline-gray font-20 py-3 px-5">Beli Sekarang</a>
+                                    <a id="quick-add" type="button" class="btn btn-outline-gray font-20 py-3 px-5">Beli Sekarang</a>
                                 </div>
                             </div>
                         </div>
@@ -252,5 +252,10 @@
         e.preventDefault();
         $("input[name=product_variant_id]").val(this.value);
     });
+
+    document.getElementById("quick-add").onclick = function(){
+        document.getElementById("quick-add").href = "/cart/quick-add/" + $("input[name=product_variant_id]").val();
+        $("#quick-add").click();
+    }
 </script>
 @endsection
