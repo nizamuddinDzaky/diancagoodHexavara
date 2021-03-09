@@ -358,11 +358,20 @@ class ProductSeeder extends Seeder
 
         $reviews = [
             [
-                'product_id' => 1,
-                'customer_id' => 2,
+                'product_variant_id' => 1,
+                'customer_id' => 1,
+                'order_detail_id' => 1,
                 'text' => 'Barang udah sampe dan original, pacar juga seneng banget dibeliin ini',
                 'rate' => 4.5,
                 'status' => 1,
+            ],
+            [
+                'product_variant_id' => 2,
+                'customer_id' => 1,
+                'order_detail_id' => 2,
+                'text' => null,
+                'rate' => 4,
+                'status' => 0,
             ]
         ];
 

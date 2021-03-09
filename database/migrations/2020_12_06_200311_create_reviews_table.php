@@ -15,10 +15,11 @@ class CreateReviewsTable extends Migration
     {
         Schema::create('reviews', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('product_id');
+            $table->unsignedBigInteger('product_variant_id');
             $table->bigInteger('customer_id');
+            $table->bigInteger('order_detail_id');
             $table->longText('text')->nullable();
-            $table->double('rate');
+            $table->double('rate')->nullable();
             $table->boolean('status')->default(false);    // approved or not
             $table->timestamps();
         });

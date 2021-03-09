@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Product;
+use App\Models\ProductVariant;
 
 class ProductVariantController extends Controller
 {
@@ -145,5 +147,11 @@ class ProductVariantController extends Controller
         File::delete(storage_path('app/public/products/variants' . $variant->image));
         $variant->delete();
         // return redirect(route('product.index'))->with(['success' => 'Varian Produk Sudah Dihapus']);
+    }
+
+    public function getDetail($id)
+    {
+        $variant = ProductVariant::find($id);
+        return json_encode($variant);
     }
 }
