@@ -71,13 +71,13 @@
                         <span class="fa fa-star checked"></span>
                         <span class="fa fa-star"></span>
                     </div>
-                    <h2>Rp {{ number_format($product->variant->first()->price, 2, ',', '.') }}</h2>
+                    <h2 id="price">Rp {{ number_format($product->variant->first()->price, 2, ',', '.') }}</h2>
                     <form method="POST" action="{{ route('cart.add') }}">
                         @csrf
                         <div class="product_variant">
-                            <div class="row">
+                            <div class="row mb-2">
                                 <div class="col-lg-4">
-                                    <h4>Varian</h4>
+                                    <h5>Varian</h5>
                                 </div>                       
                                 <div class="col-lg-8">
                                     @forelse($product->variant as $row)
@@ -91,10 +91,11 @@
                             </div>
                             <div class="row">
                                 <div class="col-lg-4">
-                                    <h4>Atur jumlah</h4>
-                                </div>                       
-                                <div class="col-lg-8">
-                                    <div class="input-group ml-4">
+                                    <h5>Atur jumlah</h5>
+                                </div>              
+                                <div class="col-lg-1"></div>
+                                <div class="col-lg-6">
+                                    <div class="input-group">
                                         <span class="product_count">
                                             <button class="reduced items-count" type="button" onclick="decrement()">
                                                 <span class="material-icons">remove</span>
@@ -113,24 +114,24 @@
                             </div>
                             <div class="row">
                                 <div class="col-lg-4">
-                                    <h4>Pengiriman</h4>
+                                    <h5>Pengiriman</h5>
                                 </div>                       
                                 <div class="col-lg-8">
-                                    <div class="font-16 mb-2">
+                                    <div class="font-14 mb-2">
                                         Dikirim dari <strong>Jakarta Selatan</strong>
                                     </div>
-                                    <div class="font-16 my-2">
+                                    <div class="font-14 my-2">
                                         Tujuan pengiriman <strong>Sukolilo, Surabaya</strong>
                                     </div>
-                                    <div class="font-16 my-2">
+                                    <div class="font-14 my-2">
                                         Ongkos kirim mulai dari <strong>Rp 18.000</strong>
                                     </div>
                                 </div>
                             </div>
                             <div class="row mt-4">
                                 <div class="col-lg-12">
-                                    <button class="btn btn-orange font-20 py-3 px-5 mr-2">+ Keranjang</button>
-                                    <a id="quick-add" type="button" class="btn btn-outline-gray font-20 py-3 px-5">Beli Sekarang</a>
+                                    <button class="btn btn-orange py-2 mr-2">+ Keranjang</button>
+                                    <a id="quick-add" type="button" class="btn btn-outline-gray py-2">Beli Sekarang</a>
                                 </div>
                             </div>
                         </div>
@@ -142,7 +143,7 @@
         <div class="row my-4">
             <div class="col-lg-12">
                 <h4 class="text-gray-2 weight-600 font-24">Deskripsi</h4>
-                <p class="text-gray-3 font-16" style="white-space: pre-wrap">
+                <p class="text-gray-3 font-14" style="white-space: pre-wrap">
                     {{ $product->description }}
                 </p>
             </div>
@@ -220,6 +221,8 @@
     $(document).ready(function() {
         const firstVariant = {{ $product->variant->first()->id }};
         $("#var"+firstVariant).prop("checked", true).trigger("change");
+        $("#stock").html({{ $product->variant->first()->stock }});
+        $("#weight").html({{ $product->variant->first()->weight }});
     });
 
     $(document).ready(function() {
@@ -251,6 +254,20 @@
     $("input[name=btn_variant]").on('change', function(e) {
         e.preventDefault();
         $("input[name=product_variant_id]").val(this.value);
+        const variant_id = this.value;
+        $.ajax({
+            url: "/product-variant/" + variant_id,
+            type: "GET",
+            dataType: "JSON",
+            success: function(res){
+                $("#stock").html(res.stock);
+                $("#weight").html(res.weight);
+                $("#price").html(res.price.toLocaleString("id-ID", {style: "currency", currency: "IDR"}));
+            },
+            error: function(xhr, status, err) {
+                console.log(xhr.responseText);
+            },
+        })
     });
 
     document.getElementById("quick-add").onclick = function(){

@@ -37,4 +37,9 @@ class Customer extends Authenticatable
     {
         return $this->hasOne(Cart::class, 'customer_id');
     }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class, 'customer_id');
+    }
 }

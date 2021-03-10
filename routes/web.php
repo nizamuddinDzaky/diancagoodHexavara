@@ -6,8 +6,10 @@ use App\Http\Controllers\CustomerRegisterController;
 use App\Http\Controllers\CustomerLoginController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductVariantController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\AdminLoginController;
 use App\Http\Controllers\DashboardController;
 
@@ -56,6 +58,7 @@ Route::get('/cancel-order/{id}', [OrderController::class, 'cancelOrder'])->name(
 Route::get('/transactions/{status}', [TransactionController::class, 'index'])->name('transaction.list');
 
 Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
+Route::get('/product-variant/{id}', [ProductVariantController::class, 'getDetail'])->name('product_variant.detail');
 
 Route::get('/profil', [ProfileController::class, 'index'])->name('profile');
 Route::post('/profil-edit', [ProfileController::class, 'editProfile'])->name('edit.profile');
@@ -72,6 +75,9 @@ Route::post('/cart/add', [OrderController::class, 'addToCart'])->name('cart.add'
 Route::get('/cart/quick-add/{id}', [OrderController::class, 'quickAddToCart'])->name('cart.quick_add');
 Route::post('/cart/update', [OrderController::class, 'updateCart'])->name('cart.update');
 Route::post('/cart/semi-update', [OrderController::class, 'updateCartOrder'])->name('cart.semiupdate');
+
+Route::get('/reviews/{status}', [ReviewController::class, 'index'])->name('reviews.list');
+Route::post('/reviews/add', [ReviewController::class, 'create'])->name('reviews.add');
 
 // admin
 Route::group(['prefix' => 'admin'], function() {
