@@ -99,6 +99,11 @@ Route::group(['prefix' => 'admin'], function() {
             Route::get('/{status}', [DashboardController::class, 'showTracking'])->name('administrator.tracking');
             Route::get('/{id}/{status}', [DashboardController::class, 'changeOrderStatus'])->name('administrator.tracking.update_status');
         });
+
+        Route::get('/report/all', [DashboardController::class, 'allReport'])->name('administrator.all_report');
+        Route::get('/report/all-product', [DashboardController::class, 'productReport'])->name('administrator.product_report');
+        Route::get('/report/sold-product', [DashboardController::class, 'productSoldReport'])->name('administrator.product_sold_report');
+        Route::get('/report/soldout-product', [DashboardController::class, 'productSoldoutReport'])->name('administrator.product_soldout_report');
     
         Route::post('/category/add', [DashboardController::class, 'storeCategory'])->name('administrator.add_category');
         Route::post('/subcategory/add', [DashboardController::class, 'storeSubcategory'])->name('administrator.add_subcategory');

@@ -8,7 +8,7 @@
     <div class="align-items-center d-flex min-vh-100 section_gap">
         <div class="container-fluid">
             <div class="row justify-content-center">
-                <div class="col-lg-7"></div>
+                <div class="col-lg-7 pt-5">
                     <div class="container-fluid">
                         <div>
                             <img class="responsive" src="{{ asset('img/login.png') }}">
