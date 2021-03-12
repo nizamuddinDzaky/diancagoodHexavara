@@ -16,9 +16,17 @@ class CreatePromosTable extends Migration
         Schema::create('promos', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
-            $table->date('start');
-            $table->date('end');
-            $table->boolean('status')->default(false);
+            $table->string('promo_type');
+            // flash, event, single
+            $table->string('value_type');
+            $table->double('payment_duration');
+            // percent, price
+            $table->double('value');
+            $table->date('start_date');
+            $table->time('start_time');
+            $table->date('end_date');
+            $table->time('end_time');
+            $table->boolean('is_published')->default(false);
             $table->timestamps();
         });
     }

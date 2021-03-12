@@ -38,4 +38,14 @@ class ProductVariant extends Model
     {
         return $this->hasOne(ProductImage::class, 'product_variant_id');
     }
+
+    public function promo_detail()
+    {
+        return $this->hasMany(PromoDetail::class, 'product_variant_id');
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
 }

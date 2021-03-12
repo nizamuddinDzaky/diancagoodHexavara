@@ -13,7 +13,7 @@
     <div class="main_box pt-4">
         <div class="container text-gray-2">
             @if (session('error'))
-            <div class="alert alert-success">{{ session('success') }}</div>
+            <div class="alert alert-error">{{ session('error') }}</div>
             @endif
             <div class="row my-2">
                 <div class="col-lg-12">
@@ -204,7 +204,7 @@
     </div>
 </section>
 <div class="modal fade w-100" id="trackModal" role="dialog">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document" style="width:1000rem">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header pl-0 pb-4">
                 <h3 class="modal-title w-100 text-center position-absolute" style="color: #4F4F4F">Lacak Pengiriman</h3>

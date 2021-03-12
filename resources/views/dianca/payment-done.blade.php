@@ -96,13 +96,13 @@
                             </div>
                             <div class="form-group px-2 pb-1">
                                 <label style="color: #4F4F4F">Bank Tujuan</label>
-                                <select class="form-control border" name="transfer_to" style="boder-color: #EOEOEO">
+                                <select class="form-control border" name="transfer_to" style="border-color: #EOEOEO">
                                     <option value="{{ $order->payment->transfer_to }}" selected>Bank BNI (800 152 6846) - A/n. Toko Diancagoods</option>
                                 </select>
                             </div>
                             <div class="form-group px-2 pb-1">
                                 <label style="color: #4F4F4F">Bank Pengirim</label>
-                                <select class="form-control border" name="transfer_from_bank" id="transfer_from_bank" style="boder-color: #EOEOEO;">
+                                <select class="form-control border" name="transfer_from_bank" id="transfer_from_bank" style="border-color: #EOEOEO;">
                                     <option>Pilih Bank</option>
                                     <option value="BNI">BNI</option>
                                     <option value="BCA">BCA</option>

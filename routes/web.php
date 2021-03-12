@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CustomerRegisterController;
 use App\Http\Controllers\CustomerLoginController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PromoController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductVariantController;
 use App\Http\Controllers\TransactionController;
@@ -83,6 +84,7 @@ Route::post('/reviews/add', [ReviewController::class, 'create'])->name('reviews.
 Route::group(['prefix' => 'admin'], function() {
     Route::get('/login', [AdminLoginController::class, 'index'])->name('administrator.login');
     Route::post('/login', [AdminLoginController::class, 'login'])->name('administrator.post_login');
+
     Route::group(['middleware' => 'auth'], function() {
         Route::get('/logout', [AdminLoginController::class, 'logout'])->name('administrator.logout');
     
@@ -110,5 +112,15 @@ Route::group(['prefix' => 'admin'], function() {
         Route::post('/subcategory/add', [DashboardController::class, 'storeSubcategory'])->name('administrator.add_subcategory');
         Route::post('/brand/add', [DashboardController::class, 'storeBrand'])->name('administrator.add_brand');
         Route::get('/subcategories-fetch', [DashboardController::class, 'getSubcategories'])->name('administrator.fetch_subcategories');
+
+        Route::group(['prefix' => 'promos'], function() {
+            Route::get('/{type}', [PromoController::class, 'index'])->name('administrator.promo');
+            Route::post('/create', [PromoController::class, 'create'])->name('administrator.promo.create');
+            Route::get('/detail/{id}', [PromoController::class, 'show'])->name('administrator.promo.show');
+            Route::get('/detail/{promo_id}/{variant_id}', [PromoController::class, 'getPromoValue'])->name('administrator.promo.value');
+            Route::get('/update/{id}', [PromoController::class, 'update'])->name('administrator.promo.update');
+            Route::post('/publish', [PromoController::class, 'publish'])->name('administrator.promo.publish');
+            Route::post('/delete', [PromoController::class, 'destroy'])->name('administrator.promo.delete');
+        });
     });
 });

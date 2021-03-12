@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Subcategory;
 use App\Models\Product;
+use App\Models\ProductVariant;
+use App\Models\Promo;
+use App\Models\PromoDetail;
 
 class ProductController extends Controller
 {
@@ -115,9 +118,19 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $product = Product::where('id', $id)->with('brand', 'reviews', 'images', 'variant', 'category', 'subcategory')->first();
+        $product = Product::where('id', $id)->with('brand', 'variant.reviews', 'images', 'variant.promo_detail', 'category', 'subcategory')->first();
+        $promos = [];
+        foreach($product->variant as $pv) {
+            $details = PromoDetail::with('promo')->where('product_variant_id', $pv->id)->get();
+
+            foreach($details as $d) {
+                if($d->promo->is_published == 1 && $d->promo->status == 1){
+                    $promos[] = $d;
+                }
+            }
+        }
         
-        return view('dianca.product-detail', compact('product'));
+        return view('dianca.product-detail', compact('product', 'promos'));
     }
 
     /**

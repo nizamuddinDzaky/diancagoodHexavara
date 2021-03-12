@@ -27,7 +27,7 @@ class OrderController extends Controller
     public function showCart()
     {
         if(Auth::guard('customer')->check()){
-            $cart = Cart::with('details.variant.product')->with('details', function($query) {
+            $cart = Cart::with('details.variant.product', 'details.variant.promo_detail')->with('details', function($query) {
                 $query->orderBy('created_at', 'desc');
             })->where('customer_id', Auth::guard('customer')->user()->id)->first();
             $str = NULL;
