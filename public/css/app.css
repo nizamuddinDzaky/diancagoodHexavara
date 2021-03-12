@@ -5229,17 +5229,17 @@ input[type=button].btn-block {
   padding: 0.5rem 0.75rem;
   margin-left: -1px;
   line-height: 1.25;
-  color: #3490dc;
+  color: #f37020;
   background-color: #fff;
   border: 1px solid #dee2e6;
 }
 
 .page-link:hover {
   z-index: 2;
-  color: #1d68a7;
+  color: #f37020;
   text-decoration: none;
-  background-color: #e9ecef;
-  border-color: #dee2e6;
+  background-color: #e0e0e0;
+  border-color: #e0e0e0;
 }
 
 .page-link:focus {
@@ -5262,8 +5262,8 @@ input[type=button].btn-block {
 .page-item.active .page-link {
   z-index: 3;
   color: #fff;
-  background-color: #3490dc;
-  border-color: #3490dc;
+  background-color: #f37020;
+  border-color: #f37020;
 }
 
 .page-item.disabled .page-link {
@@ -5347,7 +5347,7 @@ a.badge:focus {
 
 .badge-primary {
   color: #fff;
-  background-color: #3490dc;
+  background-color: #f37020;
 }
 
 a.badge-primary:hover,

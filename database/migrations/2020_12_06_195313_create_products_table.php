@@ -23,7 +23,6 @@ class CreateProductsTable extends Migration
             $table->text('description')->nullable();
             $table->boolean('status')->default(true);
             $table->boolean('is_featured')->default(false);
-            $table->integer('promo')->nullable();
             $table->double('rate')->default(0);
             $table->timestamps();
         });

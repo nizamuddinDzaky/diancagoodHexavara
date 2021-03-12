@@ -6792,7 +6792,10 @@ h6 {
 .active {
     display: flex;
     box-sizing: border-box;
-    height: 490px;
+}
+
+.active_img {
+    height: 490px; 
     width: 500px;
 }
 

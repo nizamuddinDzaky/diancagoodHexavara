@@ -44,11 +44,6 @@ class Product extends Model
         return $this->hasMany(ProductVariant::class)->orderBy('price', 'ASC');;
     }
 
-    public function reviews()
-    {
-        return $this->hasMany(Review::class)->orderBy('created_at', 'DESC');
-    }
-
     public function images()
     {
         return $this->hasMany(ProductImage::class, 'product_id');

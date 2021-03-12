@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\ProductVariant;
 use App\Models\Promo;
+use App\Models\PromoDetail;
 use App\Models\Review;
 use App\Models\Cart;
 use App\Models\CartDetail;
@@ -197,7 +198,7 @@ class ProductSeeder extends Seeder
                 'category_id' => 1,
                 'subcategory_id' => 1,
                 'brand_id' => 2,
-                'name' => 'MASKER WAJAH ETUDE HOUSE',
+                'name' => 'MASKER WAJAH ETUDE HOUSE 2',
                 'slug' => 'sms',
                 'description' => 'MASKER WAJAH ETUDE HOUSE 40 gr (ORIGINAL GUARANTEE)
 
@@ -525,10 +526,71 @@ class ProductSeeder extends Seeder
 
         $promos = [
             [
-                'name' => 'Flash Sale!!!',
-                'start' => '2020-03-11 19:00:00',
-                'end' => '2020-03-15 19:00:00',
-                'status' => true
+                'name' => 'PROMO FLASH',
+                'promo_type' => 'flash',
+                'value_type' => 'percent',
+                'payment_duration' => 20,
+                'value' => 50,
+                'start_date' => Carbon::createFromDate(2021, 3, 11),
+                'start_time' => Carbon::createFromTime(0, 0, 0),
+                'end_date' => Carbon::createFromDate(2021, 3, 13),
+                'end_time' => Carbon::createFromTime(0, 0, 0),
+                'is_published' => 1,
+            ],
+            [
+                'name' => 'PROMO EVENT',
+                'promo_type' => 'event',
+                'value_type' => 'percent',
+                'payment_duration' => 25,
+                'value' => 25,
+                'start_date' => Carbon::createFromDate(2021, 3, 11),
+                'start_time' => Carbon::createFromTime(0, 0, 0),
+                'end_date' => Carbon::createFromDate(2021, 3, 13),
+                'end_time' => Carbon::createFromTime(0, 0, 0),
+                'is_published' => 0,
+            ],
+            [
+                'name' => 'PROMO BARANG',
+                'promo_type' => 'single',
+                'value_type' => 'price',
+                'payment_duration' => 30,
+                'value' => 15000,
+                'start_date' => Carbon::createFromDate(2021, 3, 11),
+                'start_time' => Carbon::createFromTime(0, 0, 0),
+                'end_date' => Carbon::createFromDate(2021, 3, 13),
+                'end_time' => Carbon::createFromTime(0, 0, 0),
+                'is_published' => 1,
+            ]
+        ];
+
+        $promo_details = [
+            [
+                'promo_id' => 1,
+                'product_variant_id' => 1,
+            ],
+            [
+                'promo_id' => 1,
+                'product_variant_id' => 2,
+            ],
+            [
+                'promo_id' => 1,
+                'product_variant_id' => 4,
+            ],
+            [
+                'promo_id' => 1,
+                'product_variant_id' => 5,
+            ],
+            [
+                'promo_id' => 2,
+                'product_variant_id' => 4,
+            ],
+            [
+                'promo_id' => 3,
+                'product_variant_id' => 1,
+            ],
+            [
+                'promo_id' => 3,
+                'product_variant_id' => 2,
             ]
         ];
 
@@ -542,5 +604,6 @@ class ProductSeeder extends Seeder
         Cart::insert($carts);
         CartDetail::insert($cartdetails);
         Promo::insert($promos);
+        PromoDetail::insert($promo_details);
     }
 }

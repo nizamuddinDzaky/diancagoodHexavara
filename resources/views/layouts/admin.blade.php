@@ -81,6 +81,7 @@
                             <a type="button" id="order" class="btn btn-outline-gray-2 weight-600 mr-4" href="{{ route('administrator.orders') }}">Order</a>
                             <a type="button" id="product" class="btn btn-outline-gray-2 weight-600 mr-4" href="{{ route('administrator.products') }}">Produk</a>
                             <a type="button" id="tracking" class="btn btn-outline-gray-2 weight-600 mr-4" href="{{ route('administrator.tracking', 0) }}">Tracking</a>
+                            <a type="button" id="promo" class="btn btn-outline-gray-2 weight-600" href="{{ route('administrator.promo', 'all') }}">Promo</a>
                             <a type="button" id="report" class="btn btn-outline-gray-2 weight-600" href="{{ route('administrator.all_report') }}">Laporan</a>
                         </div>
                     </div>
@@ -107,6 +108,8 @@
                 $("#tracking").addClass('filter-active-2');
             } else if(window.location.href.indexOf("/orders") > -1) {
                 $("#order").addClass('filter-active-2');
+            } else if(window.location.href.indexOf("/promos") > -1) {
+                $("#promo").addClass('filter-active-2');    
             }
             else if(window.location.href.indexOf("/report") > -1) {
                 $("#report").addClass('filter-active-2');

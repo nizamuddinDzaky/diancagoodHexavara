@@ -39,7 +39,7 @@
                     <div class="s_product_img">
                         <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
                             <div class="carousel-inner">
-                                <div class="carousel-item active">
+                                <div class="carousel-item active active_img">
                                     <img class="d-block w-100" id="display-product-image" src="{{ asset('storage/products/' . $product->images->first()->filename) }}"
                                         alt="{{ $product->name }}">
                                 </div>
@@ -73,7 +73,7 @@
                             @endif
                         @endfor
                     </div>
-                    <h2 id="price">Rp {{ number_format($product->variant->first()->price, 2, ',', '.') }}</h2>
+                    <div id="price" class="mb-0">Rp {{ number_format($product->variant->first()->price, 2, ',', '.') }}</div>
                     <form method="POST" action="{{ route('cart.add') }}">
                         @csrf
                         <div class="product_variant">
@@ -190,7 +190,7 @@
         const firstVariant = {{ $product->variant->first()->id }};
         $("#var"+firstVariant).prop("checked", true).trigger("change");
         $("#stock").html({{ $product->variant->first()->stock }});
-        $("#weight").html({{ $product->variant->first()->weight }});
+        $("#weight").html({{ $product->variant->first()->weight }}); 
     });
 
     $(document).ready(function() {
@@ -230,7 +230,27 @@
             success: function(res){
                 $("#stock").html(res.stock);
                 $("#weight").html(res.weight);
-                $("#price").html(res.price.toLocaleString("id-ID", {style: "currency", currency: "IDR"}));
+                var promos = <?php echo json_encode($promos); ?>;
+                var promo_value = 0;
+                for(var i in promos){
+                    if(promos[i].product_variant_id == res.id){
+                        if(promos[i].promo.value_type == 'price')
+                            promo_value += promos[i].promo.value;
+                        else
+                            promo_value += (promos[i].promo.value / 100) * res.price;
+                    }
+                }
+
+                console.log(promo_value);
+                
+                if(promo_value != 0){
+                    $("#price").html(`<h2 style="display:inline-block">` + (res.price - promo_value).toLocaleString("id-ID", {style: "currency", currency: "IDR"}) + `</h2> 
+                        <span class="badge badge-primary badge-pill ml-2" style="vertical-align:top">DISKON ` + promo_value.toLocaleString("id-ID", {style:"currency", currency:"IDR"}) + `</span>
+                        <h5 style="text-decoration:line-through">` + res.price.toLocaleString("id-ID", {style: "currency", currency: "IDR"}) + `</h5>
+                    `)
+                } else {
+                    $("#price").html(`<h2>` + res.price.toLocaleString("id-ID", {style: "currency", currency: "IDR"}) + `</h2>`);
+                }
             },
             error: function(xhr, status, err) {
                 console.log(xhr.responseText);
