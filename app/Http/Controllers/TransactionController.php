@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Customer;
 use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Models\Cart;
+use App\Models\Review;
 
 class TransactionController extends Controller
 {
@@ -20,6 +22,7 @@ class TransactionController extends Controller
         if(Auth::guard('customer')->check()) {
             if($status != 5) {
                 $orders = Order::with('details.variant.product.images', 'payment')->where('customer_id', Auth::guard('customer')->user()->id)->where('status', $status)->orderBy('created_at', 'DESC')->get();
+                // $reviews = OrderDetail::with('order', 'review')->where('order_id', '$orders->id')->get();
             } else {
                 $orders = Order::with('details.variant.product.images', 'payment')->where('customer_id', Auth::guard('customer')->user()->id)->orderBy('status', 'ASC')->get();
             }

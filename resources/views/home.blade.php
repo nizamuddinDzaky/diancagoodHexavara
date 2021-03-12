@@ -76,6 +76,13 @@
                         @else
                         <h5 class="text-gray-1">Rp {{ number_format($row->variant->first()->price) }}</h5>
                         @endif
+                        @for($i = 0; $i < 5; $i++)
+                            @if ($i < $row->rate)
+                            <span class="fa fa-star checked"></span>
+                            @else
+                            <span class="fa fa-star"></span>
+                            @endif
+                        @endfor
                     </div>
                 </div>
                 @empty
@@ -119,6 +126,15 @@
                                         <h5 class="text-gray-2 weight-700 font-20">Rp {{ number_format($row->variant->first()->price) }}</h5>
                                         @endif
                                         </div>
+                                        <div class="row ml-2 mb-2">
+                                            @for($i = 0; $i < 5; $i++)
+                                                @if ($i < $row->rate)
+                                                <span class="fa fa-star checked"></span>
+                                                @else
+                                                <span class="fa fa-star"></span>
+                                                @endif
+                                            @endfor
+                                        </div>
                                         <div class="row ml-2">
                                             <p>722 Terjual</p>
                                         </div>
@@ -158,6 +174,15 @@
                                         @else
                                         <h5 class="text-gray-2 weight-700 font-20">Rp {{ number_format($row->variant->first()->price) }}</h5>
                                         @endif
+                                        </div>
+                                        <div class="row ml-2 mb-2">
+                                            @for($i = 0; $i < 5; $i++)
+                                                @if ($i < $row->rate)
+                                                <span class="fa fa-star checked"></span>
+                                                @else
+                                                <span class="fa fa-star"></span>
+                                                @endif
+                                            @endfor
                                         </div>
                                         <div class="row ml-2">
                                             <p>378 Terjual</p>

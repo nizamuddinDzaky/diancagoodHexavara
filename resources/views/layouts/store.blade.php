@@ -77,6 +77,8 @@
                                     <div class="dropdown-divider"></div>
                                     <a href="{{ route('transaction.list', 5) }}" class="dropdown-item">Pembelian</a>
                                     <div class="dropdown-divider"></div>
+                                    <a href="{{ route('reviews.list') }}" class="dropdown-item">Ulasan</a>
+                                    <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" style="color:#EB5757"
                                         href="{{ route('customer.logout') }}">Keluar</a>
                                 </div>
