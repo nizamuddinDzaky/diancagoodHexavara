@@ -361,6 +361,7 @@ class OrderController extends Controller
                     }
                     return redirect()->route('transaction.list', ['status' => 0])->with(['success' => 'Bukti Pembayaran Sedang Diproses.']);
                 }
+                return redirect()->route('transaction.list', ['status' => 0])->with(['error' => 'Lewat Batas Pembayaran.']);
             } catch(\Exception $e) {
                 return redirect()->back()->with(['error' => $e->getMessage()]);
             }

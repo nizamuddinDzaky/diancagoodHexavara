@@ -11,6 +11,7 @@ use App\Models\Order;
 use App\Models\Payment;
 use App\Models\OrderDetail;
 use App\Models\Bank;
+use Carbon\Carbon;
 
 class UserSeeder extends Seeder
 {
@@ -91,7 +92,8 @@ class UserSeeder extends Seeder
             'shipping' => 'JNE',
             'status' => 0,
             'unique' => rand(1, 99),
-            'tracking_number' => 'JJA000021928'
+            'tracking_number' => 'JJA000021928',
+            'invalid_at' => Carbon::now()->addMinutes(30)
         ]);
 
         Payment::create([

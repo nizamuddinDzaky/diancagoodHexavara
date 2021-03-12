@@ -295,7 +295,6 @@ class ProductSeeder extends Seeder
                 -Dianca Goods-',
                 'status' => 1,
                 'is_featured' => 1,
-                'promo' => 0
             ],
         ];
 
