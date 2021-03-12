@@ -109,7 +109,8 @@ class UserSeeder extends Seeder
             'shipping' => 'JNE',
             'status' => 3,
             'unique' => rand(1, 99),
-            'tracking_number' => 'KKA000021901'
+            'tracking_number' => 'KKA000021901',
+            'invalid_at' => Carbon::now()->addMinutes(30)
         ]);
 
         Payment::create([
@@ -125,6 +126,13 @@ class UserSeeder extends Seeder
         ]);
 
         $order_details = [
+            [
+                'order_id' => 1,
+                'product_variant_id' => 1,
+                'price' => 200000,
+                'qty' => 2,
+                'weight' => 60
+            ],
             [
                 'order_id' => 2,
                 'product_variant_id' => 1,

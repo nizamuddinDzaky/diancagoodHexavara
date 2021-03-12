@@ -75,13 +75,15 @@ class ReviewController extends Controller
                 'text' => 'nullable|string'
             ]);
 
+            // dd($request);
+
             try {
                 $order_detail = OrderDetail::where('id', $request->order_detail_id)->where('review_status', 0)->first();
                 $variant = ProductVariant::where('id', $order_detail->product_variant_id)->first();
                 $product = Product::where('id', $variant->product_id)->first();
                 $review = Review::where('order_detail_id', $order_detail->id)->first();
                 if($review == NULL) {
-                    Review::create([
+                    $review = Review::create([
                         'order_detail_id' => $order_detail->id,
                         'product_id' => $product->id,
                         'product_variant_id' => $order_detail->product_variant_id,
