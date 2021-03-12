@@ -84,7 +84,7 @@ class ReviewController extends Controller
                     Review::create([
                         'order_detail_id' => $order_detail->id,
                         'product_id' => $product->id,
-                        'product_variant_id' => $variant->product_variant_id,
+                        'product_variant_id' => $order_detail->product_variant_id,
                         'customer_id' => Auth::guard('customer')->user()->id,
                         'text' => $request->text,
                         'rate' => $request->rate,
