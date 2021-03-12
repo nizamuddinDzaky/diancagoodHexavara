@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Models\Payment;
 use App\Models\Product;
 use App\Models\ProductVariant;
@@ -329,6 +330,94 @@ class DashboardController extends Controller
             $order->status = $status;
             $order->save();
             return redirect()->back()->with(['success' => 'Status Order Diubah!']);
+        }
+        return redirect(route('administrator.login'));
+    }
+
+    public function allReport()
+    {
+        if(Auth::guard('web')->check()) {
+            $start = Carbon::now()->startOfMonth()->format('Y-m-d H:i:s');
+            $end = Carbon::now()->endOfMonth()->format('Y-m-d H:i:s');
+
+            if (request()->from_date != '' && request()->to_date != '') {
+                $start = Carbon::parse(request()->from_date)->format('Y-m-d') . ' 00:00:01';
+                $end = Carbon::parse(request()->to_date)->format('Y-m-d') . ' 23:59:59';
+            }
+
+            $total_order = Order::whereBetween('created_at', [$start, $end])->count();
+
+            $monthly_income = Order::where('status', 1)->orWhere('status', 2)->orWhere('status', 3)->orWhere('status', 4)->orWhere('status', 5)->whereBetween('created_at', [$start, $end])->sum('subtotal');
+            
+            $finished = Order::whereBetween('updated_at', [$start, $end])->get();
+            $monthly_sold = 0;
+            foreach ($finished as $f) {
+                $monthly_sold += OrderDetail::where('order_id', $f->id)->sum('qty');
+            }
+
+            $sold = ProductVariant::with('product')->whereBetween('created_at', [$start, $end])->whereRaw('stock <= 0')->count();
+            // $sold = Product::with('variant')->whereRaw('product->variant->stock <= 0')->count();
+
+            $orders = Order::with('payment')->whereBetween('created_at', [$start, $end])->orderBy('created_at', 'ASC')->get();
+            return view('admin.all-report', compact('orders', 'monthly_income', 'monthly_sold', 'total_order', 'sold', 'start', 'end'));
+        }
+        return redirect(route('administrator.login'));
+    }
+
+    public function productReport()
+    {
+        if(Auth::guard('web')->check()) {
+            $start = Carbon::now()->startOfMonth()->format('Y-m-d H:i:s');
+            $end = Carbon::now()->endOfMonth()->format('Y-m-d H:i:s');
+
+            if (request()->from_date != '' && request()->to_date != '') {
+                $start = Carbon::parse(request()->from_date)->format('Y-m-d') . ' 00:00:01';
+                $end = Carbon::parse(request()->to_date)->format('Y-m-d') . ' 23:59:59';
+            }
+
+            $products = Product::with('variant', 'images')->orderBy('created_at', 'ASC')->get();
+            return view('admin.product-report', compact('products'));
+        }
+        return redirect(route('administrator.login'));
+    }
+
+    public function productSoldReport()
+    {
+        if(Auth::guard('web')->check()) {
+            $start = Carbon::now()->startOfMonth()->format('Y-m-d H:i:s');
+            $end = Carbon::now()->endOfMonth()->format('Y-m-d H:i:s');
+
+            if (request()->from_date != '' && request()->to_date != '') {
+                $start = Carbon::parse(request()->from_date)->format('Y-m-d') . ' 00:00:01';
+                $end = Carbon::parse(request()->to_date)->format('Y-m-d') . ' 23:59:59';
+            }
+
+            // $order = OrderDetail::whereBetween('updated_at', [$start, $end])->orderBy('created_at', 'ASC')->get();
+            // $variant = ProductVariant::where('id', $order->product_variant_id)->get();
+            $products = Product::with('variant', 'images')->whereBetween('updated_at', [$start, $end])->orderBy('created_at', 'ASC')->get();
+            return view('admin.product-sold-report', compact('products'));
+        }
+        return redirect(route('administrator.login'));
+    }
+
+    public function productSoldoutReport()
+    {
+        if(Auth::guard('web')->check()) {
+            $start = Carbon::now()->startOfMonth()->format('Y-m-d H:i:s');
+            $end = Carbon::now()->endOfMonth()->format('Y-m-d H:i:s');
+
+            if (request()->from_date != '' && request()->to_date != '') {
+                $start = Carbon::parse(request()->from_date)->format('Y-m-d') . ' 00:00:01';
+                $end = Carbon::parse(request()->to_date)->format('Y-m-d') . ' 23:59:59';
+            }
+
+            // $products = Product::with('product', 'images')->get();
+            // foreach ($products as $f) {
+            //     $soldout = ProductVariant::with('product')->where('product_id', $f->id)->whereRaw('stock <= 0')->get();
+            // }
+            // $products = ProductVariant::with('product')->whereRaw('stock <= 0')->get();
+            $products = Product::with('variant', 'images')->whereBetween('updated_at', [$start, $end])->orderBy('created_at', 'ASC')->get();
+            return view('admin.product-soldout-report', compact('products'));
         }
         return redirect(route('administrator.login'));
     }

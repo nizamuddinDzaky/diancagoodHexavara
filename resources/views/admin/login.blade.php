@@ -23,8 +23,8 @@
                         @if (session('error'))
                         <div class="alert alert-danger">{{ session('error') }}</div>
                         @endif
-                        <form action="{{ route('administrator.post_login') }}" class="form pl-3 pr-3 pt-4" id="login-form"
-                            method="post">
+                        <form action="{{ route('administrator.post_login') }}" class="form pl-3 pr-3 pt-4"
+                            id="login-form" method="post">
                             @csrf
                             <div class="form-group">
                                 <label for="email">Email</label><br>

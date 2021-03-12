@@ -260,6 +260,43 @@ class ProductSeeder extends Seeder
                 'status' => 1,
                 'is_featured' => 1,
             ],
+            [
+                'category_id' => 4,
+                'subcategory_id' => 1,
+                'brand_id' => 2,
+                'name' => 'STARTER KIT ETUDE HOUSE',
+                'slug' => 'sms',
+                'description' => 'STARTER KIT ETUDE HOUSE 40 gr (ORIGINAL GUARANTEE)
+
+                Perawatan Pemutih Spesial. Yuja (Citron) diekstrak dari Goheung dan efek pemutihnya akan memungkinkan Anda untuk memiliki kulit yang lebih cerah dan sehat. Melembabkan, Memutihkan Perawatan 2-in-1. Mengintensifkan efek pencerahan dengan memasok hidrasi. Aroma Yuja yang menenangkan Diekstrak dari 100% Yuja asli (citron), aroma membantu Anda untuk bersantai dari jauh di dalam tubuh Anda. Perawatan Tidur yang menyegarkan. Tekstur yang ringan dan formula yang menyerap cepat tidak akan meninggalkan noda pada bantal Anda.
+                
+                [FITUR]
+                Produk fungsional ganda. Pemutih + Anti Kerut.
+                Mencerahkan dan melembabkan kulit dengan 70% Ekstrak Goheung Yuja.
+                Meningkatkan warna kulit dan mencerahkan kulit dengan Glutathione, Arbutin dan Resmelin.
+                Menghidrasi kulit dengan Aquaxyl dan Fructan dan memberi vitalitas kulit dengan 10 jenis vitamin.
+                
+                [CARA PEMAKAIAN]
+                1. Setelah membersihkan wajah dengan cleansing, oleskan ke wajah sebagai langkah terakhir dari rutinitas perawatan kulit malam dasar Anda, hindari area mata dan bibir.
+                2. Ratakan ke seluruh wajah Anda.
+                3. Cuci muka Anda keesokan paginya.
+                
+                [KANDUNGAN PRODUK]
+                Citrus Junos Fruit Extract, Water, Butylene Glycol, Niacinamide, Glycerin, Panthenol, 1,2-Hexanediol, Simmondsia Chinensis (Jojoba) Seed Oil, Thuja Orientals Leaf Extract, Zanthoxylum Schinifolum Leaf Extract, Polygonum Cuspidatum root Extract, Mentha Piperita (Peppermint) leaf Extract, Mentha Aquatica Leaf Extract, Mentha Rotundifolia Leaf Extract, nelumbo Nucifera Flower Extract, Coptis Japonica Extract, Hippophae Rhamnodes Fruit Extract, Arbutin, Glutathione, Ascorbic Acid, Ascorbyl Glucoside, Biotin, Tocopherol, Cyanocobalamin, (-)-alpha-bisabolol, Ascorbyl Tetraisopalmitate, Menadione, Arginine, Trehalose, Madecassoside, Aenoside, Diphenylsiloxy Phenyl Trimethicone, Caprylyl Methicone, Inulin Lauryl Carbamate, Behenyl Alcohol, Sorbitan Oleate, Sorbitan Isostearate, Caprylyl/ Capryl Glucoside, Polyisobutene, Xanthan Gum, Carbomer, Acrylates/ C10-30 Alkyl Acrylate Crosspolymer, Dimethicone/ Phenyl Vinyl Dimethicone Crosspolymer, Benzyl Glycol, Ethylhexyglycerin, Raspberry Ketone, Disodium EDTA, Citrus Junos Peel Oil (3,000 ppm)
+                
+                ==========================
+                
+                *Setiap barang yang akan kami kirim selalu dicek dan dipastikan dalam kondisi baik dan tidak rusak. kerusakan paket setelah sampai di tangan pembeli bukan menjadi tanggung jawab kami.
+                
+                *setiap pengiriman product sudah termasuk packing menggunakan bubble wrap (gratis). 
+                
+                TIDAK MENJUAL BARANG YANG TIDAK ORIGINAL!
+                
+                -Dianca Goods-',
+                'status' => 1,
+                'is_featured' => 1,
+                'promo' => 0
+            ],
         ];
 
         $variants = [
@@ -310,6 +347,14 @@ class ProductSeeder extends Seeder
                 'weight' => 80,
                 'image' => '',
                 'stock' => 50
+            ],
+            [
+                'product_id' => 6,
+                'name' => '100gr',
+                'price' => 260000,
+                'weight' => 80,
+                'image' => '',
+                'stock' => 0
             ]
         ];
 
@@ -349,6 +394,10 @@ class ProductSeeder extends Seeder
             [
                 'filename' => 'MASKER WAJAH ETUDE HOUSE 0 1.png',
                 'product_id' => 5
+            ],
+            [
+                'filename' => 'MASKER WAJAH ETUDE HOUSE 0 1.png',
+                'product_id' => 6
             ],
         ];
 
