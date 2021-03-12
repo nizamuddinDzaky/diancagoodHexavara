@@ -72,8 +72,8 @@
                                 <div class="dropdown-menu">
                                     <button class="dropdown-item" data-toggle="modal" data-target="#show-promo"
                                         value="{{ $row->id }}">Detail</button>
-                                    <a class="dropdown-item"
-                                        href="{{ route('administrator.promo.update', ['id' => $row->id]) }}">Ubah</a>
+                                    <button class="dropdown-item"
+                                    data-toggle="modal" data-target="#update-promo" value="{{ $row->id }}">Ubah</button>
                                     <form action="{{ route('administrator.promo.publish', ['id' => $row->id]) }}"
                                         method="post">
                                         @csrf
@@ -263,6 +263,102 @@
         </div>
     </div>
 </div>
+<div class="modal fade w-100" id="update-promo" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header pl-0 pb-4">
+                <h3 class="modal-title w-100 text-center position-absolute">Update Promo</h3>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <form action="{{ route('administrator.promo.update') }}" method="POST">
+                        @csrf
+                        <div class="form-group px-2">
+                            <label for="input_type">Jenis Promo</label>
+                            <select class="form-control border-3" name="type" id="input_type">
+                                <option value="">Pilih</option>
+                                <option value="single">Promo Item</option>
+                                <option value="event">Promo Event</option>
+                                <option value="flash">Flash Sale</option>
+                            </select>
+                        </div>
+                        <div class="form-group px-2">
+                            <label for="input_name">Nama Promo</label>
+                            <input type="text" id="input_name" name="name" class="form-control border-3">
+                        </div>
+                        <div class="form-group px-2">
+                            <label for="input_payment_duration">Batas Waktu Pembayaran Setelah Checkout</label>
+                            <div class="input-group">
+                                <input type="text" id="input_payment_duration" name="payment_duration" class="form-control border-3">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text bg-3 border">menit</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group form-row px-2 justify-content-between">
+                            <div class="col-md-6">
+                                <label for="input_start_date">Tanggal Mulai</label>
+                                <input type="text" id="input_start_date" name="start_date" class="form-control border-3">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="input_start_time">Jam Mulai</label>
+                                <input type="text" id="input_start_time" name="start_time" class="form-control border-3">
+                            </div>
+                        </div>
+                        <div class="form-group form-row px-2">
+                            <div class="col-md-6">
+                                <label for="input_end_date">Tanggal Selesai</label>
+                                <input type="text" id="input_end_date" name="end_date" class="form-control border-3">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="input_end_time">Jam Selesai</label>
+                                <input type="text" id="input_end_time" name="end_time" class="form-control border-3">
+                            </div>
+                        </div>
+                        <div class="form-group px-2">
+                            <label for="input_value_type">Jenis Diskon</label>
+                            <select class="form-control border-3" name="value_type" id="input_value_type">
+                                <option value="percent" selected>Persentase</option>
+                                <option value="price">Harga</option>
+                            </select>
+                        </div>
+                        <div class="form-group px-2">
+                            <label for="input_value">Promo</label>
+                            <div class="input-group">
+                                <input type="text" name="value" id="input_value" class="form-control border-3">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text bg-3 border">%</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group px-2">
+                            <label for="input-product-select">Pilih Varian</label>
+                            <select id="input-product-select" name="product_variant[]" class="form-control border-3 w-100"
+                                multiple="multiple">
+                                @forelse($products as $row)
+                                <optgroup label="{{ $row->name }}">
+                                    @forelse($row->variant as $subrow)
+                                    <option value="{{ $subrow->id }}">{{ $row->name }} - {{ $subrow->name }}</option>
+                                    @empty
+                                    @endforelse
+                                </optgroup>
+                                @empty
+                                @endforelse
+                            </select>
+                        </div>
+                        <div class="form-group px-2 text-center">
+                            <button class="btn btn-outline-gray">Batal</button>
+                            <button class="btn btn-orange">Update Promo</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('js')
@@ -288,6 +384,9 @@ $(document).ready(function() {
 });
 
 $("#product-select").select2({
+    width: '100%'
+});
+$("#input-product-select").select2({
     width: '100%'
 });
 
@@ -377,16 +476,21 @@ $("#show-promo").on('show.bs.modal', function(e) {
                 $("#modal-value").html("<strong><b>" + symbol + "</b> " + res.value + "</strong>");
             } else {
                 var symbol = "Rp";
-                $("#modal-value").html("<strong><b>" + symbol + "</b> " + res.value.toLocaleString("id-ID", {style: "currency",currency: "IDR"}) + "</strong>");
+                $("#modal-value").html("<strong><b>" + symbol + "</b> " + res.value.toLocaleString(
+                    "id-ID", {
+                        style: "currency",
+                        currency: "IDR"
+                    }) + "</strong>");
             }
 
             $("#modal-payment-duration").html(res.payment_duration + " menit");
 
 
-            if(res.details != "") {
+            if (res.details != "") {
                 for (var i in res.details) {
-                    if(res.value_type == 'percent') {
-                        var value_amount = res.details[i].variant.price - ((res.value / 100) * res.details[i].variant.price);
+                    if (res.value_type == 'percent') {
+                        var value_amount = res.details[i].variant.price - ((res.value / 100) * res
+                            .details[i].variant.price);
                     } else {
                         var value_amount = res.details[i].variant.price - res.value;
                     }
@@ -396,11 +500,19 @@ $("#show-promo").on('show.bs.modal', function(e) {
                         <div class="card-body">
                             <div class="media">
                                 <div class="row d-flex">
-                                    <img class="mr-2" src="{{ asset('storage/products/` + res.details[i].variant.product.images[0].filename + `') }}" width="100px" height="100px">
+                                    <img class="mr-2" src="{{ asset('storage/products/` + res.details[i].variant
+                        .product.images[0].filename + `') }}" width="100px" height="100px">
                                     <div class="media-body">
-                                        <h6>` + res.details[i].variant.product.name + `<span class="ml-4"><small>Varian ` + res.details[i].variant.name + `</small></span></h6>
-                                        <h6>Harga Awal ` + res.details[i].variant.price.toLocaleString("id-ID", {style: "currency",currency: "IDR"}) + `</h6>
-                                        <h6><strong>Harga Setelah Diskon ` + value_amount.toLocaleString("id-ID", {style: "currency", currency: "IDR"}) + `</strong></h6>
+                                        <h6>` + res.details[i].variant.product.name +
+                        `<span class="ml-4"><small>Varian ` + res.details[i].variant.name + `</small></span></h6>
+                                        <h6>Harga Awal ` + res.details[i].variant.price.toLocaleString("id-ID", {
+                            style: "currency",
+                            currency: "IDR"
+                        }) + `</h6>
+                                        <h6><strong>Harga Setelah Diskon ` + value_amount.toLocaleString("id-ID", {
+                            style: "currency",
+                            currency: "IDR"
+                        }) + `</strong></h6>
                                     </div>
                                 </div>
                             </div>
@@ -420,6 +532,34 @@ $("#show-promo").on('show.bs.modal', function(e) {
 $("#show-promo").on('show.bs.modal', function(e) {
     $("#variant-list div").remove();
 })
+
+$("#update-promo").on('show.bs.modal', function(e) {
+    var promo_id = $(e.relatedTarget).val();
+    $.ajax({
+        url: '/admin/promos/change/' + promo_id,
+        type: 'GET',
+        data: {promo_id: parseInt(promo_id)},
+        dataType: 'JSON',
+        success: function(res){
+            console.log(res);
+            $("#input_name").val(res.name);
+            $("#input_payment_duration").val(res.payment_duration);
+            $("#input_start_date").val(res.start_date);
+            $("#input_start_time").val(res.start_time);
+            $("#input_end_date").val(res.end_date);
+            $("#input_end_time").val(res.end_time);
+            $('#input_value_type>option[value="' + res.value_type + '"]').prop('selected', true);
+            $("#input_value").val(res.value);
+
+            for(var i in res.details){
+                $('#input-product-select>option[value="' + res.details[i].variant.id + '"]').prop('selected', true);
+            }
+        },
+        error: function(xhr, status, err) {
+            console.log(xhr.responseText);
+        },
+    })
+});
 
 $('.pagination li').addClass('page-item');
 $('.pagination li a').addClass('page-link');

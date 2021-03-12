@@ -174,4 +174,10 @@ class PromoController extends Controller
         $promo_detail = PromoDetail::with('promo')->where('promo_id', $promo_id)->where('product_variant_id', $variant_id)->first();
         return json_encode($promo_detail);
     }
+
+    public function getPromo($promo_id)
+    {
+        $promo = Promo::with('details.variant.product')->where('id', $promo_id)->first();
+        return json_encode($promo);
+    }
 }

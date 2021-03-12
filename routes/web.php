@@ -124,7 +124,8 @@ Route::group(['prefix' => 'admin'], function() {
             Route::post('/create', [PromoController::class, 'create'])->name('administrator.promo.create');
             Route::get('/detail/{id}', [PromoController::class, 'show'])->name('administrator.promo.show');
             Route::get('/detail/{promo_id}/{variant_id}', [PromoController::class, 'getPromoValue'])->name('administrator.promo.value');
-            Route::get('/update/{id}', [PromoController::class, 'update'])->name('administrator.promo.update');
+            Route::get('/change/{promo_id}', [PromoController::class, 'getPromo'])->name('administrator.promo.change');
+            Route::post('/update/', [PromoController::class, 'update'])->name('administrator.promo.update');
             Route::post('/publish', [PromoController::class, 'publish'])->name('administrator.promo.publish');
             Route::post('/delete', [PromoController::class, 'destroy'])->name('administrator.promo.delete');
         });
