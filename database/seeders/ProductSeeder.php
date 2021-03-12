@@ -114,7 +114,8 @@ class ProductSeeder extends Seeder
                 -Dianca Goods-',
                 'status' => 1,
                 'is_featured' => 1,
-                'promo' => 0
+                'promo' => 0,
+                'rate' => 5
             ],
             [
                 'category_id' => 1,
@@ -151,7 +152,8 @@ class ProductSeeder extends Seeder
                 -Dianca Goods-',
                 'status' => 1,
                 'is_featured' => 1,
-                'promo' => 0
+                'promo' => 0,
+                'rate' => 5
             ],
             [
                 'category_id' => 1,
@@ -188,7 +190,8 @@ class ProductSeeder extends Seeder
                 -Dianca Goods-',
                 'status' => 1,
                 'is_featured' => 1,
-                'promo' => 0
+                'promo' => 1,
+                'rate' => 5
             ],
             [
                 'category_id' => 1,
@@ -225,7 +228,8 @@ class ProductSeeder extends Seeder
                 -Dianca Goods-',
                 'status' => 1,
                 'is_featured' => 1,
-                'promo' => 0
+                'promo' => 0,
+                'rate' => 5
             ],
             [
                 'category_id' => 3,
@@ -262,7 +266,8 @@ class ProductSeeder extends Seeder
                 -Dianca Goods-',
                 'status' => 1,
                 'is_featured' => 1,
-                'promo' => 0
+                'promo' => 0,
+                'rate' => 5
             ],
             [
                 'category_id' => 4,
@@ -299,7 +304,8 @@ class ProductSeeder extends Seeder
                 -Dianca Goods-',
                 'status' => 1,
                 'is_featured' => 1,
-                'promo' => 0
+                'promo' => 0,
+                'rate' => 5
             ],
         ];
 
@@ -407,6 +413,7 @@ class ProductSeeder extends Seeder
 
         $reviews = [
             [
+                'product_id' => 1,
                 'product_variant_id' => 1,
                 'customer_id' => 1,
                 'order_detail_id' => 1,
@@ -415,13 +422,59 @@ class ProductSeeder extends Seeder
                 'status' => 1,
             ],
             [
+                'product_id' => 1,
                 'product_variant_id' => 2,
                 'customer_id' => 1,
                 'order_detail_id' => 2,
                 'text' => null,
                 'rate' => 4,
                 'status' => 0,
-            ]
+            ],
+            [
+                'product_id' => 2,
+                'product_variant_id' => 1,
+                'customer_id' => 1,
+                'order_detail_id' => 1,
+                'text' => 'oke',
+                'rate' => 5,
+                'status' => 1,
+            ],
+            [
+                'product_id' => 3,
+                'product_variant_id' => 1,
+                'customer_id' => 1,
+                'order_detail_id' => 1,
+                'text' => 'oke',
+                'rate' => 5,
+                'status' => 1,
+            ],
+            [
+                'product_id' => 4,
+                'product_variant_id' => 1,
+                'customer_id' => 1,
+                'order_detail_id' => 1,
+                'text' => 'oke',
+                'rate' => 5,
+                'status' => 1,
+            ],
+            [
+                'product_id' => 5,
+                'product_variant_id' => 1,
+                'customer_id' => 1,
+                'order_detail_id' => 1,
+                'text' => 'oke',
+                'rate' => 5,
+                'status' => 1,
+            ],
+            [
+                'product_id' => 6,
+                'product_variant_id' => 1,
+                'customer_id' => 1,
+                'order_detail_id' => 1,
+                'text' => 'oke',
+                'rate' => 5,
+                'status' => 1,
+            ],
         ];
 
         $carts = [
@@ -470,6 +523,15 @@ class ProductSeeder extends Seeder
             ],
         ];
 
+        $promos = [
+            [
+                'name' => 'Flash Sale!!!',
+                'start' => '2020-03-11 19:00:00',
+                'end' => '2020-03-15 19:00:00',
+                'status' => true
+            ]
+        ];
+
         Category::insert($categories);
         Subcategory::insert($subcategories);
         Brand::insert($brands);
@@ -479,5 +541,6 @@ class ProductSeeder extends Seeder
         Review::insert($reviews);
         Cart::insert($carts);
         CartDetail::insert($cartdetails);
+        Promo::insert($promos);
     }
 }

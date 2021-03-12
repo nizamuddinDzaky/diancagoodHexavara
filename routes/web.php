@@ -76,7 +76,8 @@ Route::get('/cart/quick-add/{id}', [OrderController::class, 'quickAddToCart'])->
 Route::post('/cart/update', [OrderController::class, 'updateCart'])->name('cart.update');
 Route::post('/cart/semi-update', [OrderController::class, 'updateCartOrder'])->name('cart.semiupdate');
 
-Route::get('/reviews/{status}', [ReviewController::class, 'index'])->name('reviews.list');
+Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews.list');
+Route::get('/reviews/done', [ReviewController::class, 'reviewDone'])->name('reviews.done');
 Route::post('/reviews/add', [ReviewController::class, 'create'])->name('reviews.add');
 
 // admin

@@ -65,11 +65,13 @@
                         <span>Berat: <strong id="weight"></strong>gr</span>
                     </p>
                     <div class="row mb-2 ml-1">
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star"></span>
+                        @for($i = 0; $i < 5; $i++)
+                            @if ($i < $product->rate)
+                            <span class="fa fa-star checked"></span>
+                            @else
+                            <span class="fa fa-star"></span>
+                            @endif
+                        @endfor
                     </div>
                     <h2 id="price">Rp {{ number_format($product->variant->first()->price, 2, ',', '.') }}</h2>
                     <form method="POST" action="{{ route('cart.add') }}">
@@ -152,64 +154,30 @@
         <div class="row my-4">
             <div class="col-lg-12">
                 <h4 class="text-gray-2 weight-600 font-24 pb-3">Ulasan</h4>
-                <div class="row">
-                    <div class="col-lg-1 md-1 sm-1 text-center">
-                        <img src="/img/people.png" alt="ok" style="border-radius: 50%">
-                    </div>
-                    <div class="col-lg-3 md-3 sm-3">
-                        <h5 class="weight-400">Rizal Adam</h5>
-                        <p class="text-gray-3">Hari ini</p>
-                    </div>
-                    <div class="col-lg-8 md-8 sm-8">
-                        <div class="row mb-2 ml-1">
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star"></span>
+                @foreach($reviews as $rev)
+                    <div class="row">
+                        <div class="col-lg-1 md-1 sm-1 text-center">
+                            <img src="/img/people.png" alt="ok" style="border-radius: 50%">
                         </div>
-                        <h5 class="text-gray-3 weight-400 ml-1">Barang udah sampe dan original, pacar juga seneng banget dibeliin ini</h5>
+                        <div class="col-lg-3 md-3 sm-3">
+                            <h5 class="weight-400">{{ $rev->customer->name }}</h5>
+                            <p class="text-gray-3">{{ $rev->created_at }}</p>
+                        </div>
+                        <div class="col-lg-8 md-8 sm-8">
+                            <div class="row mb-2 ml-1">
+                                @for($i = 0; $i < 5; $i++)
+                                    @if ($i < $rev->rate)
+                                    <span class="fa fa-star checked"></span>
+                                    @else
+                                    <span class="fa fa-star"></span>
+                                    @endif
+                                @endfor
+                            </div>
+                            <h5 class="text-gray-3 weight-400 ml-1">{{ $rev->text}}</h5>
+                        </div>
                     </div>
-                </div>
                 <hr>
-                <div class="row">
-                    <div class="col-lg-1 md-1 sm-1 text-center">
-                        <img src="/img/people.png" alt="ok" style="border-radius: 50%">
-                    </div>
-                    <div class="col-lg-3 md-3 sm-3">
-                        <h5 class="weight-400">Bunga Putri</h5>
-                        <p class="text-gray-3">Kemarin</p>
-                    </div>
-                    <div class="col-lg-8 md-8 sm-8">
-                        <div class="row mb-2 ml-1">
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star checked"></span>
-                        </div>
-                        <h5 class="text-gray-3 weight-400 ml-1">Kualitas Sangat Baik</h5>
-                    </div>
-                </div>
-                <hr>
-                <div class="row">
-                    <div class="col-lg-1 md-1 sm-1 text-center">
-                        <img src="/img/people.png" alt="ok" style="border-radius: 50%">
-                    </div>
-                    <div class="col-lg-3 md-3 sm-3">
-                        <h5 class="weight-400">Anggi Putri Dewi</h5>
-                        <p class="text-gray-3">20 Desember 2020</p>
-                    </div>
-                    <div class="col-lg-8 md-8 sm-8">
-                        <div class="row mb-2 ml-1">
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star"></span>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </div>

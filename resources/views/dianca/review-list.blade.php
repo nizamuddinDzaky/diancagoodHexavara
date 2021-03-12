@@ -16,24 +16,38 @@
             <div class="alert alert-success">{{ session('error') }}</div>
             @endif
             <div class="row my-2">
-                <div class="col-lg-12">
-                    <div class="main_title">
-                        <h2 class="pl-3">Ulasan</h2>
-                    </div>
-                </div>
-            </div>
-            <div class="row my-2">
-                <div class="col-lg-12">
+                <div class="col-lg-6 md-6 sm-6 mb-3">
                     <ul class="filter-buttons">
                         <li>
-                            <a href="{{ route('reviews.list', 0) }}" type="button" class="btn btn-filter"
+                            <a href="{{ route('reviews.list') }}" type="button" class="btn btn-filter"
                                 id="unreviewed">Perlu Diulas</a>
                         </li>
                         <li>
-                            <a href="{{ route('reviews.list', 1) }}" type="button" class="btn btn-filter"
+                            <a href="{{ route('reviews.done') }}" type="button" class="btn btn-filter"
                                 id="reviewed">Ulasan Saya</a>
                         </li>
                     </ul>
+                </div>
+                <div class="col-lg-6 md-6 sm-6">
+                    <div class="btn-toolbar mb-1" role="toolbar">
+                        <form action="{{ route('reviews.list', 1) }}" method="get">
+                            <div class="input-group mb-3 float-left">
+                                <div class="col-lg-5 md-5 sm-5 mb-3">
+                                    <input type="date" name="from_date" id="from_date" class="form-control border" placeholder="From Date">
+                                </div>
+                                <div class="col-lg-5 md-5 sm-5 mb-3">
+                                    <input type="date" name="to_date" id="to_date" class="form-control border" placeholder="To Date">
+                                </div>
+                                <div class="col-lg-2 md-2 sm-2">
+                                    <button class="btn btn-orange" type="submit" id="filter">Filter</button>
+                                </div>
+                                <!-- <input type="text" id="created_at" name="date" class="form-control"> -->
+                                <!-- <div class="input-group-append">
+                                    <button class="btn btn-secondary" type="submit">Filter</button>
+                                </div> -->
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
             @forelse($orders as $row)
@@ -60,7 +74,7 @@
                                 </div>
                             </div>
                             @foreach($row->details as $od)
-                            @if($od->review->status == 1)
+                            @if($od->review_status == 1)
                             <div class="row mx-2 mt-2">
                                 <div class="col-lg-12">
                                     <div class="media">
@@ -74,6 +88,15 @@
                                             </h4>
                                             <p><small>Varian {{ $od->variant->name }} <span
                                                         class="ml-2">{{ $od->weight }} gr</span></small></p>
+                                            <div class="row mb-2 ml-1">
+                                                @for($i = 0; $i < 5; $i++)
+                                                    @if ($i < $od->review->rate)
+                                                    <span class="fa fa-star checked"></span>
+                                                    @else
+                                                    <span class="fa fa-star"></span>
+                                                    @endif
+                                                @endfor
+                                             </div>
                                             <p>{{ $od->review->text }}</p>
                                         </div>
                                     </div>
@@ -110,5 +133,20 @@ $(document).ready(function() {
         $("#reviewed").addClass('filter-active');
     }
 });
+</script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<script>
+    $('#filter').click(function() {
+        var from_date = $('#from_date').val();
+        var to_date = $('#to_date').val();
+        if(from_date != '' && to_date != '') {
+            fetch_data(from_date, to_date);
+        }
+        else {
+            alert('Both Date is required');
+        }
+    });
 </script>
 @endsection

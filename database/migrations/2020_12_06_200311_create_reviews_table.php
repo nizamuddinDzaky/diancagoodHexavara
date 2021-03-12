@@ -15,6 +15,7 @@ class CreateReviewsTable extends Migration
     {
         Schema::create('reviews', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('product_id');
             $table->unsignedBigInteger('product_variant_id');
             $table->bigInteger('customer_id');
             $table->bigInteger('order_detail_id');

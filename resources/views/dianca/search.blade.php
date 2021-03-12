@@ -108,6 +108,13 @@
                                     @else
                                     <h5 class="text-gray-1">Rp {{ number_format($row->variant->first()->price) }}</h5>
                                     @endif
+                                    @for($i = 0; $i < 5; $i++)
+                                        @if ($i < $row->rate)
+                                        <span class="fa fa-star checked"></span>
+                                        @else
+                                        <span class="fa fa-star"></span>
+                                        @endif
+                                    @endfor
                                 </div>
                             </div>
                         @empty

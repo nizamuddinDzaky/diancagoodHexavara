@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Subcategory;
 use App\Models\Product;
+use App\Models\Review;
 
 class ProductController extends Controller
 {
@@ -115,9 +116,11 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $product = Product::where('id', $id)->with('brand', 'reviews', 'images', 'variant', 'category', 'subcategory')->first();
+        $product = Product::where('id', $id)->with('brand', 'images', 'variant', 'category', 'subcategory')->first();
+        $reviews = Review::with('product_variant', 'customer', 'order_detail')->where('product_id', $product->id)->orderBy('created_at', 'ASC')->paginate(3);
         
-        return view('dianca.product-detail', compact('product'));
+
+        return view('dianca.product-detail', compact('product', 'reviews'));
     }
 
     /**

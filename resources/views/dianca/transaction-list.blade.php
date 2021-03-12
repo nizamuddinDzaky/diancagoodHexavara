@@ -172,7 +172,8 @@
                                                     <button class="btn btn-orange weight-600" data-toggle="modal"
                                                         data-target="#trackModal">Lacak Pengiriman</button>
                                                     @elseif($order->status == 3)
-                                                    <button class="btn btn-orange weight-600">Beli Lagi</button>
+                                                    <button class="btn btn-orange weight-600 mb-3">Beli Lagi</button>
+                                                    <a class="btn btn-orange weight-600" href="{{ route('reviews.list') }}">Beri Ulasan</a>
                                                     @endif
                                                 </div>
                                             </div>

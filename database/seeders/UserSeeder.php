@@ -94,23 +94,45 @@ class UserSeeder extends Seeder
             'tracking_number' => 'JJA000021928'
         ]);
 
+        Order::create([
+            'invoice' => 'HN001228122020RT',
+            'customer_id' => 1,
+            'customer_name' => 'cust verif',
+            'customer_email' => 'butsherlock@gmail.com',
+            'customer_phone' => '123123123',
+            'address_id' => 1,
+            'subtotal' => 800000,
+            'shipping_cost' => 20000,
+            'total_cost' => 820000,
+            'shipping' => 'JNE',
+            'status' => 3,
+            'unique' => rand(1, 99),
+            'tracking_number' => 'KKA000021901'
+        ]);
+
         Payment::create([
             'order_id' => 1,
             'transfer_to' => 'BNI',
             'method' => 'Transfer',
         ]);
 
+        Payment::create([
+            'order_id' => 2,
+            'transfer_to' => 'BNI',
+            'method' => 'Transfer',
+        ]);
+
         $order_details = [
             [
-                'order_id' => 1,
+                'order_id' => 2,
                 'product_variant_id' => 1,
-                'price' => 258000,
-                'qty' => 1,
+                'price' => 200000,
+                'qty' => 2,
                 'weight' => 60
             ],
             [
-                'order_id' => 1,
-                'product_variant_id' => 2,
+                'order_id' => 2,
+                'product_variant_id' => 3,
                 'price' => 300000,
                 'qty' => 2,
                 'weight' => 200
