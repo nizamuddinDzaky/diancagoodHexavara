@@ -39,9 +39,10 @@
         <div class="col-lg-12 md-12 sm-12">
             <ul class="" style="list-style-type:none;">
                 <li class="nav-item h-100">
-                    <a href="{{ route('administrator.product_report') }}" class="nav-link dropdown-toggle border" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">Semua Produk</a>
+                    <a href="{{ route('administrator.product_sold_report') }}" class="nav-link dropdown-toggle border" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">Produk Terjual</a>
                     <div class="dropdown-menu">
+                        <a class="dropdown-item" href="{{ route('administrator.product_report') }}">Semua Produk</a>
                         <a class="dropdown-item" href="{{ route('administrator.product_sold_report') }}">Produk Terjual</a>
                         <a class="dropdown-item" href="{{ route('administrator.product_soldout_report') }}">Produk Habis</a>
                     </div>
@@ -71,7 +72,6 @@
                     <tbody>
                         @forelse($products as $row)
                         <tr>
-                            @if( $row->variant->sum('stock') != 0 )
                             <td>
                                 <div class="row">
                                     <img class="ml-4 mr-2" src="{{ asset('storage/products/' . $row->images->first()->filename) }}" width="100px" height="100px">
@@ -89,8 +89,6 @@
                             <td>
                                 <div class="mt-3 pt-4"><h5>{{ $row->variant->sum('stock') }}</h5></div>
                             </td>
-                            @else
-                            @endif
                         </tr>
                         @empty
                         <tr>

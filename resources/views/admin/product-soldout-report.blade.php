@@ -39,9 +39,10 @@
         <div class="col-lg-12 md-12 sm-12">
             <ul class="" style="list-style-type:none;">
                 <li class="nav-item h-100">
-                    <a href="{{ route('administrator.product_report') }}" class="nav-link dropdown-toggle border" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">Semua Produk</a>
+                    <a href="{{ route('administrator.product_soldout_report') }}" class="nav-link dropdown-toggle border" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">Produk Habis</a>
                     <div class="dropdown-menu">
+                        <a class="dropdown-item" href="{{ route('administrator.product_report') }}">Semua Produk</a>
                         <a class="dropdown-item" href="{{ route('administrator.product_sold_report') }}">Produk Terjual</a>
                         <a class="dropdown-item" href="{{ route('administrator.product_soldout_report') }}">Produk Habis</a>
                     </div>

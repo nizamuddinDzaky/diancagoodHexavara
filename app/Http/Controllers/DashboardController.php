@@ -375,7 +375,7 @@ class DashboardController extends Controller
                 $end = Carbon::parse(request()->to_date)->format('Y-m-d') . ' 23:59:59';
             }
 
-            $products = Product::with('variant', 'images')->orderBy('created_at', 'ASC')->get();
+            $products = Product::with('variant', 'images')->whereBetween('updated_at', [$start, $end])->orderBy('created_at', 'ASC')->get();
             return view('admin.product-report', compact('products'));
         }
         return redirect(route('administrator.login'));

@@ -24,7 +24,12 @@ class ReviewController extends Controller
                 $end = Carbon::parse(request()->to_date)->format('Y-m-d') . ' 23:59:59';
                 $orders = Order::with('details.variant.product')->where('status', 3)->where('customer_id', Auth::guard('customer')->user()->id)->whereBetween('created_at', [$start, $end])->get();
 
-                return view('dianca.review-add', compact('orders'));
+                $jumlah = 0;
+                foreach ($orders as $f) {
+                    $jumlah += OrderDetail::with('order')->where('review_status', 0)->where('order_id', $f->id)->count();
+                }
+
+                return view('dianca.review-add', compact('orders', 'jumlah'));
             }
 
             else{

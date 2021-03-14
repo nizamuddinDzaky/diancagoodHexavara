@@ -30,7 +30,7 @@
                 </div>
                 <div class="col-lg-6 md-6 sm-6">
                     <div class="btn-toolbar mb-1" role="toolbar">
-                        <form action="{{ route('reviews.list', 1) }}" method="get">
+                        <form action="{{ route('reviews.done') }}" method="get">
                             <div class="input-group mb-3 float-left">
                                 <div class="col-lg-5 md-5 sm-5 mb-3">
                                     <input type="date" name="from_date" id="from_date" class="form-control border" placeholder="From Date">
