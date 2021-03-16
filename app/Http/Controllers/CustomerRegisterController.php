@@ -60,7 +60,7 @@ class CustomerRegisterController extends Controller
     {
         $customer = Customer::where('id', $id)->first();
 
-        $customer->update('activate_token', Str::random(4));
+        $customer->update(['activate_token'=> Str::random(4)]);
 
         Nexmo::message()->send([
             'to' => '6281286930463',
