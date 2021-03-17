@@ -64,8 +64,9 @@ Route::get('/product-variant/{id}', [ProductVariantController::class, 'getDetail
 Route::get('/profil', [ProfileController::class, 'index'])->name('profile');
 Route::post('/profil-edit', [ProfileController::class, 'editProfile'])->name('edit.profile');
 Route::get('/profil/alamat', [ProfileController::class, 'address'])->name('profile-address');
+Route::get('/detail-address', [ProfileController::class, 'getDetailAddreess'])->name('address.detail');
 Route::post('/profil/alamat-add', [ProfileController::class, 'addAddress'])->name('profile-address.add');
-Route::post('/profil/alamat-edit', [ProfileController::class, 'updateAddress'])->name('profile-address.edit');
+Route::post('/profil/alamat-edit/{id}', [ProfileController::class, 'updateAddress'])->name('profile-address.edit');
 Route::delete('/profil/alamat-delete/{id}', [ProfileController::class, 'deleteAddress'])->name('profile-address.delete');
 Route::get('/profil/rekening', [ProfileController::class, 'rekening'])->name('profile-rekening');
 Route::post('/profil/rekening-add', [ProfileController::class, 'addBankAccount'])->name('profile-rekening.add');
