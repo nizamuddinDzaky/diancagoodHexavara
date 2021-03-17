@@ -67,7 +67,7 @@ Route::get('/profil/alamat', [ProfileController::class, 'address'])->name('profi
 Route::get('/detail-address', [ProfileController::class, 'getDetailAddreess'])->name('address.detail');
 Route::post('/profil/alamat-add', [ProfileController::class, 'addAddress'])->name('profile-address.add');
 Route::post('/profil/alamat-edit/{id}', [ProfileController::class, 'updateAddress'])->name('profile-address.edit');
-Route::delete('/profil/alamat-delete/{id}', [ProfileController::class, 'deleteAddress'])->name('profile-address.delete');
+Route::get('/profil/alamat-delete/{id}', [ProfileController::class, 'deleteAddress'])->name('profile-address.delete');
 Route::get('/profil/rekening', [ProfileController::class, 'rekening'])->name('profile-rekening');
 Route::post('/profil/rekening-add', [ProfileController::class, 'addBankAccount'])->name('profile-rekening.add');
 Route::delete('/profil/rekening-delete/{id}', [ProfileController::class, 'deleteBankAccount'])->name('profile-rekening.delete');

@@ -130,6 +130,18 @@ class ProfileController extends Controller
 
     public function addAddress(Request $request)
     {
+        $countAddress = Address::where('customer_id', auth()->guard('customer')->user()->id)->count();
+
+        $is_main = 0;
+        
+        if (isset($request->is_main)) {
+            Address::where('customer_id', auth()->guard('customer')->user()->id)->update(['is_main'=>0]);
+            $is_main = 1;
+        }
+        if ($countAddress == 0) {
+            $is_main = 1;
+        }
+
         $validator = Validator::make($request->all(), [
             'address_type' => 'required|string',
             'receiver_name' => 'required|string',
@@ -146,9 +158,11 @@ class ProfileController extends Controller
             'receiver_name' => $request->receiver_name,
             'receiver_phone' => $request->receiver_phone,
             'district_id' => $request->district_id,
+            'province_id' => $request->province_id,
+            'city_id' => $request->city_id,
             'postal_code' => $request->postal_code,
             'address' => $request->address,
-            'is_main' => isset($request->is_main)??0,
+            'is_main' => $is_main,
             'customer_id' => $request->customer_id
         ]);
         
@@ -172,17 +186,25 @@ class ProfileController extends Controller
             'is_main' => 'boolean'
         ]);
 
+        $is_main = 0;
+        
+        if (isset($request->is_main)) {
+            Address::where('customer_id', auth()->guard('customer')->user()->id)->update(['is_main'=>0]);
+            $is_main = 1;
+        }
+        
+
         $address = Address::find($id);
         $address->update([
             'address_type' => $request->address_type,
             'receiver_name' => $request->receiver_name,
             'receiver_phone' => $request->receiver_phone,
-            'district_id' => $request->district_id,
             'postal_code' => $request->postal_code,
+            'district_id' => $request->district_id,
             'province_id' => $request->province_id,
             'city_id' => $request->city_id,
             'address' => $request->address,
-            'is_main' => isset($request->is_main) ?? 0,
+            'is_main' => $is_main,
         ]);
 
         return redirect(route('profile-address'));

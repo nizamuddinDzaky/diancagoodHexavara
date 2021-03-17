@@ -119,10 +119,11 @@
                             <div class="form-group px-2 pb-1">
                                 <label style="color: #4F4F4F">Jumlah Transfer</label><br>
                                 <div class="input-group">
-                                    <div class="input-group-prepend">
+                                    <!-- <div class="input-group-prepend">
                                         <div class="input-group-text bg-3 border">Rp</div>
-                                    </div>
-                                    <input type="text" name="amount" id="amount" class="form-control bg-white border" required>
+                                    </div> -->
+                                    <input type="text" id="amount" class="form-control bg-white border input-money" required>
+                                    <input type="text" name="amount" id="amount-hide" class="form-control bg-white border" required>
                                 </div>
                             </div>
                             <div class="form-group px-2 pb-1">
@@ -172,7 +173,9 @@
             'X-XSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-
+    $('#amount').keyup(function () {
+        $('#amount-hide').val(rupiah_to_int($(this).val())).change();
+    })
     $(function () {
         $('#date').daterangepicker({
             startDate: moment(),

@@ -58,9 +58,9 @@
                         <a type="button" class="btn btn-outline-orange" href="" aria-disabled="true" data-toggle="modal"
                             data-target="#editAddress">Edit Alamat</a>
                     </div>
-                    <input type="hidden" value="{{ $address->id }}" name="address_id">
                 </div>
                 @endif
+                <input type="hidden" value="{{ (auth()->guard('customer')->user()->address != 0) ? $address->id : '' }}" name="address_id" id="address_id">
                 <hr class="pb-2" style="border-color:F2F2F2">
                 <div class="row pt-2 pl-2">
                     <div class="col-lg-8">
@@ -488,11 +488,14 @@ $(document).ready(function() {
         if($("#is_main").prop('checked'))
             input7 = 1;
         var input8 = document.getElementById('customer_id');
+        var input9 = document.getElementById('province_id');
+        var input10 = document.getElementById('city_id');
 
         $.ajax({
             type: "POST",
             url: "/checkout-address",
             data: {
+
                 "_token": "{{ csrf_token() }}",
                 "address_type": input1.value,
                 "receiver_name": input2.value,
@@ -501,7 +504,9 @@ $(document).ready(function() {
                 "postal_code": input5.value,
                 "address": input6.value,
                 "is_main": input7,
-                "customer_id": input8.value
+                "customer_id": input8.value,
+                "province_id" : input9.value,
+                "city_id" : input10.value
             },
             dataType: "JSON",
             success: function(res) {
@@ -569,10 +574,23 @@ $(document).ready(function() {
                 e.dismiss;
             }, function (dismiss) {
                 return false;
-            })
-        } else {
-            $("#checkout-form").submit();
+            });
+            return false;
         }
+        if ($('#address_id').val() == '') {
+            swal({
+                title: "Detail Tidak Lengkap",
+                text: "Alamat Masih Kososng",
+                type: "warning",
+                reverseButtons: !0
+            }).then(function (e) {
+                e.dismiss;
+            }, function (dismiss) {
+                return false;
+            })
+            return false;
+        }
+        $("#checkout-form").submit();
     })
 })
 
