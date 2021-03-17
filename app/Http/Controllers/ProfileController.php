@@ -148,7 +148,7 @@ class ProfileController extends Controller
             'district_id' => $request->district_id,
             'postal_code' => $request->postal_code,
             'address' => $request->address,
-            'is_main' => $request->is_main,
+            'is_main' => isset($request->is_main)??0,
             'customer_id' => $request->customer_id
         ]);
         
@@ -179,8 +179,10 @@ class ProfileController extends Controller
             'receiver_phone' => $request->receiver_phone,
             'district_id' => $request->district_id,
             'postal_code' => $request->postal_code,
+            'province_id' => $request->province_id,
+            'city_id' => $request->city_id,
             'address' => $request->address,
-            'is_main' => $request->is_main
+            'is_main' => isset($request->is_main) ?? 0,
         ]);
 
         return redirect(route('profile-address'));
@@ -199,6 +201,23 @@ class ProfileController extends Controller
         ]);
         }
         return redirect(route('profile-address'));
+    }
+
+    public function getDetailAddreess()
+    {
+        $address = Address::find(request()->id);
+        if ($address) {
+            $response = [
+                'status' => true,
+                'data' => $address->toArray()
+            ];
+        }else{
+            $response = [
+                'status' => false,
+                'data' => ''
+            ];
+        }
+        return json_encode($response);
     }
 
     /**
