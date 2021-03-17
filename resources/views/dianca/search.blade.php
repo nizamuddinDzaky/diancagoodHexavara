@@ -53,7 +53,7 @@
                             </div>
                             <ul class="option-text text-gray-3 font-14" style="list-style-type:none;">
                             @foreach ($brand as $val)
-                                <li class="border-0 {{ (request()->segment(2) == $val->id && request()->segment(1) == 'brand') ? 'active' : '' }} pb-2 pt-2">
+                                <li class="border-0 {{ (request()->segment(2) == $val->id && request()->segment(1) == 'brand') ? 'active' : '' }} pb-2 pt-2" value="">
                                     <a href="{{ url('/brand/' . $val->id . '/' . $str) }}" class="option-text text-gray-3 font-14 hover" value="{{ $str }}"><h5>{{ $val->name }}</h5></a>
                                 </li>
                             @endforeach
@@ -67,17 +67,19 @@
                                 <div class="col-auto">
                                     <div class="input-group mb-2">
                                         <div class="input-group-prepend">
-                                            <div class="input-group-text" style="background:#F2F2F2">Rp</div>
+                                            <div class="input-group-text" style="background:#F2F2F2">Min</div>
                                         </div>
-                                        <input type="text" class="form-control" id="min-price" name="min-price" placeholder="Minimum">
+                                        <input type="text" class="form-control input-money" id="min-price" name="" placeholder="Minimum" value="{{ app('request')->input('min-price') ?? '0' }}">
+                                        <input type="hidden" class="form-control" id="min-price-hide" name="min-price" placeholder="Minimum" value="{{ app('request')->input('min-price') ?? '0' }}">
                                     </div>
                                 </div>
                                 <div class="col-auto">
                                     <div class="input-group mb-2">
                                         <div class="input-group-prepend">
-                                            <div class="input-group-text" style="background:#F2F2F2">Rp</div>
+                                            <div class="input-group-text" style="background:#F2F2F2">Max</div>
                                         </div>
-                                        <input type="text" class="form-control" id="max-price" name="max-price" placeholder="Maksimum">
+                                        <input type="text" class="form-control input-money" id="max-price" name="" placeholder="Maksimum" value="{{ app('request')->input('max-price') ?? '0' }}">
+                                        <input type="hidden" class="form-control" id="max-price-hide" name="max-price" placeholder="Maksimum" value="{{ app('request')->input('max-price') ?? '0' }}">
                                     </div>
                                 </div>
                                 <button class="btn btn-orange ml-3 mt-2 text-center" style="width: 15rem">Apply</button>
@@ -128,4 +130,35 @@
 @endsection
 
 @section('js')
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#min-price').keyup(function () {
+            $('#min-price-hide').val(rupiah_to_int($(this).val())).change();
+        })
+
+        $('#max-price').keyup(function () {
+            $('#max-price-hide').val(rupiah_to_int($(this).val())).change();
+        })
+
+        $('#max-price-hide').change(function () {
+            let min = parseInt($('#min-price-hide').val());
+            if (min != 0 && $(this).val() > 0) {
+                if ($(this).val() < min) {
+                    $(this).val(min)
+                    $('#max-price').val(min)
+                }
+            }
+        })
+
+        $('#min-price-hide').change(function () {
+            let max = parseInt($('#max-price-hide').val());
+            if (max != 0 && $(this).val() > 0) {
+                if ($(this).val() > max) {
+                    $(this).val(max)
+                    $('#min-price').val(max)
+                }
+            }
+        })
+    })
+</script>
 @endsection

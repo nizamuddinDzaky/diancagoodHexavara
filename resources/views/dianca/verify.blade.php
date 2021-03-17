@@ -66,7 +66,7 @@
                                 <div class="form-group pt-4 text-center">
                                     <input type="submit" value="Verifikasi" name="register_submit" id="register_submit"
                                         class="form-control form-control-lg bg-orange" style="color: white">
-                                    <label class="text-muted text-center pt-2">Tidak menerima kode? <a href="{{ route('customer.sms_verification') }}"
+                                    <label class="text-muted text-center pt-2">Tidak menerima kode? <a href="{{ route('customer.sms_verification', ['id'=>$id]) }}"
                                             style="color:orange"><strong>Kirim ulang</strong></a></label><br>
                                 </div>
                             </form>
