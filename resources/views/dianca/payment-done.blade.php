@@ -29,14 +29,15 @@
                             <h5 class="pl-3 text-gray-3 weight-600">Metode Pembayaran</h5>
                             <h5 class="pl-3 pb-2 text-gray-2 weight-600">{{ $order->payment->method }}</h5>
                             <h5 class="pl-3 text-gray-3 weight-600">Nomor Rekening</h5>
-                            <h5 class="pl-3 pb-2 text-gray-2 weight-600">800 152 6846<span class="text-orange float-right">Salin</span></h5>
+                            <h5 class="pl-3 pb-2 text-gray-2 weight-600"><span class="item-copy" id="span-rekening">800 152 6846</span><span class="text-orange float-right copy-to-clipboart" style="cursor: pointer;" onclick="copy_to_clipboard('span-rekening')">Salin</span></h5>
                             <h5 class="pl-3 text-gray-3 weight-600">Atas Nama</h5>
                             <h5 class="pl-3 pb-2 text-gray-2 weight-600">Toko Diancagoods</h5>
                             <h5 class="pl-3 text-gray-3 weight-600">Batas Pembayaran</h5>
                             <h5 class="pl-3 pb-2 text-gray-2 weight-600">{{ $order->invalid_at }}</h5>
                             <hr>
                             <h5 class="pl-3 text-gray-3 weight-600">Total Pembayaran</h5>
-                            <h3 class="pl-3 text-gray-2 weight-600">Rp {{ number_format($order->total_cost, 2, ',', '.') }}<span class="text-orange float-right font-16">Salin</span></h3>
+                            <input type="hidden" id="input-hidden-total-pembayaran" value="{{ $order->total_cost }}">
+                            <h3 class="pl-3 text-gray-2 weight-600"><span id="span-total-pembayaran">Rp {{ number_format($order->total_cost, 2, ',', '.') }}</span><span class="text-orange float-right font-16" style="cursor: pointer;" onclick="copy_to_clipboard('span-total-pembayaran')">Salin</span></h3>
                             <h6 class="pl-3 pb-3">Transfer tepat sampai 2 digit terakhir agar mempercepat proses verifikasi</h6>
                             <div class="pl-3">
                                 <a type="button" class="btn btn-outline-orange btn-block font-18" href="#" aria-disabled="true" data-toggle="modal" data-target="#uploadPaymentModal">Upload Bukti Pembayaran</a>
@@ -122,8 +123,8 @@
                                     <!-- <div class="input-group-prepend">
                                         <div class="input-group-text bg-3 border">Rp</div>
                                     </div> -->
-                                    <input type="text" id="amount" class="form-control bg-white border input-money" required>
-                                    <input type="text" name="amount" id="amount-hide" class="form-control bg-white border" required>
+                                    <input type="text" id="amount" class="form-control bg-white border input-money" required maxlength="24">
+                                    <input type="hidden" name="amount" id="amount-hide" class="form-control bg-white border" required>
                                 </div>
                             </div>
                             <div class="form-group px-2 pb-1">
@@ -168,6 +169,12 @@
 @section('js')
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <script>
+    // $('.copy-to-clipboart').click(function () {
+    //     let elm = $(this).parent().find('.item-copy');
+    //     console.log($(elm))
+    //     console.log(document.getElementById("span-rekening"));
+    //     copy_to_clipboard(document.getElementById("span-rekening"));
+    // })
     $.ajaxSetup({
         headers: {
             'X-XSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -189,6 +196,21 @@
 
     $("#submit_btn").on('click', function(e) {
         e.preventDefault();
+        console.log(parseInt($('#amount-hide').val()));
+        console.log(parseInt($('#input-hidden-total-pembayaran').val()));
+        if (parseInt($('#amount-hide').val()) > parseInt($('#input-hidden-total-pembayaran').val())) {
+            swal({
+                title: "Data Tidak Valid",
+                text: "Jumlah Transfer Melebihi Total Pembayaran",
+                type: "warning",
+                reverseButtons: !0
+            }).then(function (e) {
+                e.dismiss;
+            }, function (dismiss) {
+                return false;
+            })
+            return false;
+        }
         if($("#transfer_from_bank").val() == "" || $("#transfer_from_account").val() == "" || $("#name").val() == "" || $("amount").val() == ""){
             swal({
                 title: "Detail Tidak Lengkap",
@@ -200,9 +222,9 @@
             }, function (dismiss) {
                 return false;
             })
-        } else {
-            $("#payment-done-form").submit();
-        }
+            return false;
+        } 
+        $("#payment-done-form").submit();
     })
 </script>
 @endsection

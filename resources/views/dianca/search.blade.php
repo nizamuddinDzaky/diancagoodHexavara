@@ -34,36 +34,39 @@
             <div class="row my-2 pb-2 pt-3">
                 <div class="col-lg-3 pb-3">
                     <div class="card shadow-1">
-                        <div class="card-body">
-                            <div class="option">
-                                <h4 class="py-0 weight-600">Kategori Barang</h4>
-                                <i class="material-icons md-18 float-right">keyboard_arrow_up</i>
-                            </div>
-                            <ul class="option-text text-gray-3 font-14" style="list-style-type:none;">
-                            @foreach ($category as $v)
-                                <li class="border-0 {{ (request()->segment(2) == $v->id && request()->segment(1) == 'category') ? 'active' : '' }} pb-2 pt-2">
-                                    <a href="{{ url('/category/' . $v->id . '/' . $str ) }}" class="option-text text-gray-3 font-14" value="{{ $str }}"><h5>{{ $v->name }}</h5></a>
-                                </li>
-                            @endforeach
-                            </ul>
-                            <hr>
-                            <div class="option">
-                            <h4 class="py-0 weight-600">Brand</h4>
-                                <i class="material-icons md-18 float-right">keyboard_arrow_up</i>
-                            </div>
-                            <ul class="option-text text-gray-3 font-14" style="list-style-type:none;">
-                            @foreach ($brand as $val)
-                                <li class="border-0 {{ (request()->segment(2) == $val->id && request()->segment(1) == 'brand') ? 'active' : '' }} pb-2 pt-2" value="">
-                                    <a href="{{ url('/brand/' . $val->id . '/' . $str) }}" class="option-text text-gray-3 font-14 hover" value="{{ $str }}"><h5>{{ $val->name }}</h5></a>
-                                </li>
-                            @endforeach
-                            </ul>
-                            <hr>
-                            <div class="option">
-                            <h5 class="py-0 weight-600">Harga</h5>
-                                <i class="material-icons md-18 float-right">keyboard_arrow_up</i>
-                            </div>
-                            <form action="">
+                        <form action="{{ route('filter-product') }}">
+                            <div class="card-body">
+                                <div class="option">
+                                    <h4 class="py-0 weight-600">Kategori Barang</h4>
+                                    <i class="material-icons md-18 float-right">keyboard_arrow_up</i>
+                                </div>
+                                <ul class="option-text text-gray-3 font-14" style="list-style-type:none;">
+                                @foreach ($category as $v)
+                                    <li class="border-0 {{ in_array($v->id, $arrayFilterCategory) ? 'active' : ''  }} pb-2 pt-2">
+                                        <a href="javascript:void(0)" class="option-text text-gray-3 font-14 filter-category" value="{{ $str }}" data-id-category = "{{ $v->id }}"><h5>{{ $v->name }}</h5></a>
+                                    </li>
+                                @endforeach
+                                </ul>
+                                <input type="hidden" name="categoryFilter" id="input-hidden-category">
+                                <hr>
+                                <div class="option">
+                                <h4 class="py-0 weight-600">Brand</h4>
+                                    <i class="material-icons md-18 float-right">keyboard_arrow_up</i>
+                                </div>
+                                <ul class="option-text text-gray-3 font-14" style="list-style-type:none;">
+                                @foreach ($brand as $val)
+                                    <li class="border-0 {{ in_array($val->id, $arrayFilterBrand) ? 'active' : '' }} pb-2 pt-2" value="">
+                                        <a href="javascript:void(0)" class="option-text text-gray-3 font-14 hover filter-brand" value="{{ $str }}" data-id-brand = "{{ $val->id }}"><h5>{{ $val->name }}</h5></a>
+                                    </li>
+                                @endforeach
+                                </ul>
+                                <input type="hidden" name="categoryBrand" id="input-hidden-brand">
+                                <hr>
+                                <div class="option">
+                                <h5 class="py-0 weight-600">Harga</h5>
+                                    <i class="material-icons md-18 float-right">keyboard_arrow_up</i>
+                                </div>
+                                
                                 <div class="col-auto">
                                     <div class="input-group mb-2">
                                         <div class="input-group-prepend">
@@ -83,8 +86,10 @@
                                     </div>
                                 </div>
                                 <button class="btn btn-orange ml-3 mt-2 text-center" style="width: 15rem">Apply</button>
-                            </form>
-                        </div>
+                                
+                            </div>
+                        </form>
+
                     </div>
                 </div>
                 <div class="col-lg-9">
@@ -131,7 +136,10 @@
 
 @section('js')
 <script type="text/javascript">
+    var selected_category = @json($arrayFilterCategory);
+    var selected_brand = @json($arrayFilterBrand);
     $(document).ready(function () {
+        set_value_filter();
         $('#min-price').keyup(function () {
             $('#min-price-hide').val(rupiah_to_int($(this).val())).change();
         })
@@ -159,6 +167,41 @@
                 }
             }
         })
+
+        $('.filter-category').click(function () {
+            
+            let parent = $(this).parent();
+            let id_category = $(this).data('id-category').toString();
+
+            if ($(parent).hasClass('active')) {
+                selected_category = removeA(selected_category, id_category);
+                $(parent).removeClass('active');
+            }else{
+                selected_category.push(id_category)
+                $(parent).addClass('active');
+            }
+            
+            set_value_filter()
+        })
+
+        $('.filter-brand').click(function () {
+            let parent = $(this).parent();
+            let id_brand = $(this).data('id-brand').toString();
+
+            if ($(parent).hasClass('active')) {
+                selected_brand = removeA(selected_brand, id_brand);
+                $(parent).removeClass('active');
+            }else{
+                selected_brand.push(id_brand)
+                $(parent).addClass('active');
+            }
+            set_value_filter()
+        })
     })
+
+    function set_value_filter() {
+        $('#input-hidden-category').val(selected_category);
+        $('#input-hidden-brand').val(selected_brand);
+    }
 </script>
 @endsection

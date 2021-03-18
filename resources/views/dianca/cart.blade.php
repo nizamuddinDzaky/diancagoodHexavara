@@ -8,6 +8,10 @@
 <section class="section_gap mt-4">
     <div class="main_box pt-4">
         <div class="container text-gray-2">
+            <form method="post" action="{{ route('delete.multiple.cart') }}" id="form-item-cart" class="hidden">
+                @csrf
+                <input type="hidden" name="item-cart" id="item-cart">
+            </form>
             <form method="POST" action="{{ route('checkout') }}" id="checkout-form">
                 @csrf
                 <div class="row my-2">
@@ -22,7 +26,7 @@
                                 </div>
                             </div>
                             <div class="col-lg-6">
-                                <a class="float-right font-16 weight-600" style="color:#EB5757" onclick="deleteAll()">Hapus</a>
+                                <a class="float-right font-16 weight-600" style="color:#EB5757; cursor: pointer;" onclick="deleteAll()">Hapus</a>
                             </div>
                         </div>
                         <hr>
@@ -30,7 +34,7 @@
                             <div class="col-lg-12">
                             @forelse($cart->details as $cd)
                                 <div class="form-check text-gray-2 my-4">
-                                    <input class="form-check-input position-static align-top primary-checkbox" type="checkbox" name="cd[]" id="check{{ $cd->id }}" value="{{ $cd->id }}" onclick="selectCart({{ $cd->id }})">
+                                    <input class="form-check-input position-static align-top primary-checkbox cb-item-cart" type="checkbox" name="cd[]" id="check{{ $cd->id }}" value="{{ $cd->id }}" onclick="selectCart({{ $cd->id }})">
                                     <div class="card cart-card shadow-1 w-90">
                                         <div class="card-body">
                                             <div class="row">
@@ -68,7 +72,7 @@
                                                             </button>
                                                         </span>
                                                         <a type="button" class="float-right px-2 muted"><i class="material-icons md-24 py-0">favorite</i></a>
-                                                        <a type="button" class="float-right muted" onclick="removeFromCart({{ $cd->id }})"><i class="material-icons md-24 py-0">delete</i></a>
+                                                        <a type="button" class="float-right muted delete-cart" data-id = "{{ $cd->id }}" data-url-delete="{{ route('delete.cart', ['id'=>$cd->id]) }}" data-product-name="{{ $cd->variant->product->name }}"><i class="material-icons md-24 py-0">delete</i></a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -150,6 +154,22 @@
     });
 
     function selectCart(id) {
+        let total_cb_item = $('.cb-item-cart').length;
+        let count_checked = 0;
+
+        $('.cb-item-cart').each(function () {
+            if ($(this).prop('checked')) {
+                count_checked++;
+            }
+        })
+
+        if (count_checked == total_cb_item) {
+            $('#select-all').prop('checked', true);
+        }else{
+            $('#select-all').prop('checked', false);
+        }
+        // console.log($('.cb-item-cart').length);
+
         var input = document.getElementById('qty'+id);
 
         if($("#check"+id).prop('checked')) {
@@ -189,8 +209,69 @@
         }
     }
 
-    function deleteAll() {
+    $('.delete-cart').click(function () {
+        let id = $(this).data('id');
+        let name = $(this).data('product-name');
+        swal({
+            title: name,
+            text: "Apakah Anda Yakin ?",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya',
+            cancelButtonText: 'Tidak'
+        }).then((result) => {
+                // console.log("asd", result);
+            if (result.value) {
+                window.location.href = $(this).data('url-delete');
+            }
+        })
+    })
 
+    function deleteAll() {
+        let array_selected = [];
+
+        $('.cb-item-cart').each(function () {
+            if ($(this).prop('checked')) {
+                array_selected.push($(this).val());
+            }
+        })
+        if (array_selected.length == 0) {
+            swal({
+                title: "Tidak Ada Item yang Terpilih",
+                text: "Silahkan Pilih Item Yang ingin dihapus",
+                type: "warning",
+                reverseButtons: !0
+            }).then(function (e) {
+                e.dismiss;
+            }, function (dismiss) {
+                return false;
+            });
+        }else{
+            swal({
+                title: 'Hapus Beberapa Item',
+                text: "Apakah Anda Yakin Menghapus Item Yang Terpilih?",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya',
+                cancelButtonText: 'Tidak'
+            }).then((result) => {
+                    // console.log("asd", result);
+                if (result.value) {
+                    submit_delete_multi_cart(array_selected);
+                    // window.location.href = $(this).data('url-delete');
+                }
+            })
+        }
+        // console.log(array_selected)
+    }
+
+    function submit_delete_multi_cart(array_selected) {
+        $('#item-cart').val(array_selected);
+        $('#form-item-cart').submit();
     }
 
     function removeFromCart(id) {

@@ -468,6 +468,26 @@ class OrderController extends Controller
         return $body;
     }
 
+    public function deleteCart($id)
+    {
+        if(Auth::guard('customer')->check()){
+            $cart = CartDetail::find($id);
+            $cart->delete();
+            return redirect()->back();
+        }
+    }
+
+    public function deleteMultipleCart(Request $request)
+    {
+        $arrayId = explode(',', $request['item-cart']);
+        if(Auth::guard('customer')->check()){
+            $cart = CartDetail::whereIn('id', $arrayId);
+            $cart->delete();
+            return redirect()->back();
+        }
+        // echo "string";
+    }
+
     public function getCities()
     {
         $cities = City::where('province_id', request()->province_id)->get();
