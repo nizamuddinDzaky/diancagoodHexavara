@@ -70,7 +70,9 @@
                                         <h5>{{ $var->city ,  $var->postal_code}}</h5>
                                         <h5>Indonesia</h5>
                                         <button class="btn btn-outline-orange ml-4 mt-4 edit-address" data-toggle="modal" data-target="#editAddress" data-id="{{ $var->id }}" data-url-edit="{{ route('profile-address.edit', $var->id) }}" data-url-detail="{{ route('address.detail') }}">Ubah</button>
-                                        <button class="btn btn-outline-orange ml-4 mt-4">Hapus</button>
+                                        @if ($var->is_main != 1)
+                                        <a href= "{{ route('profile-address.delete', ['id' => $var->id]) }}" class="btn btn-outline-orange ml-4 mt-4">Hapus</a>
+                                        @endif
                                     </div>
                                     <!-- <div class="row">
                                         <button class="btn btn-outline-orange mr-2 mt-4 float-right" data-toggle="modal" data-target="#editAddress">Ubah</button>

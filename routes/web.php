@@ -29,6 +29,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/show', [HomeController::class, 'show'])->name('search-result');
 Route::get('/category/{id}', [HomeController::class, 'categoryFilter'])->name('category-result');
 Route::get('/category/{id}/{name}', [HomeController::class, 'categoryFilters'])->name('category-results');
+Route::get('/filter-product/', [HomeController::class, 'filterProduct'])->name('filter-product');
 Route::get('/brand/{id}', [HomeController::class, 'brandFilter'])->name('brand-result');
 Route::get('/brand/{id}/{name}', [HomeController::class, 'brandFilters'])->name('brand-results');
 Route::get('/about-us', [HomeController::class, 'aboutUs'])->name('about-us');
@@ -55,7 +56,8 @@ Route::post('/checkout-done', [OrderController::class, 'checkoutProcess'])->name
 Route::get('/finish-payment/{id}', [OrderController::class, 'paymentDone'])->name('payment.done');
 Route::post('/process-payment', [OrderController::class, 'makePayment'])->name('payment.done.process');
 Route::get('/cancel-order/{id}', [OrderController::class, 'cancelOrder'])->name('order.cancel');
-
+Route::get('/delete-cart/{id}', [OrderController::class, 'deleteCart'])->name('delete.cart');
+Route::post('/delete-car', [OrderController::class, 'deleteMultipleCart'])->name('delete.multiple.cart');
 Route::get('/transactions/{status}', [TransactionController::class, 'index'])->name('transaction.list');
 
 Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
@@ -67,7 +69,7 @@ Route::get('/profil/alamat', [ProfileController::class, 'address'])->name('profi
 Route::get('/detail-address', [ProfileController::class, 'getDetailAddreess'])->name('address.detail');
 Route::post('/profil/alamat-add', [ProfileController::class, 'addAddress'])->name('profile-address.add');
 Route::post('/profil/alamat-edit/{id}', [ProfileController::class, 'updateAddress'])->name('profile-address.edit');
-Route::delete('/profil/alamat-delete/{id}', [ProfileController::class, 'deleteAddress'])->name('profile-address.delete');
+Route::get('/profil/alamat-delete/{id}', [ProfileController::class, 'deleteAddress'])->name('profile-address.delete');
 Route::get('/profil/rekening', [ProfileController::class, 'rekening'])->name('profile-rekening');
 Route::post('/profil/rekening-add', [ProfileController::class, 'addBankAccount'])->name('profile-rekening.add');
 Route::delete('/profil/rekening-delete/{id}', [ProfileController::class, 'deleteBankAccount'])->name('profile-rekening.delete');

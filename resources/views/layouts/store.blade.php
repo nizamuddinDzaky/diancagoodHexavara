@@ -48,7 +48,7 @@
                                 <form action="{{ route('search-result') }}" method="get"
                                     class="form-inline d-inline w-100">
                                     <div class="input-group">
-                                        <input class="form-control" type="text" name="q" placeholder="Search"
+                                        <input class="form-control" type="text" name="q" placeholder="Search123123"
                                             aria-label="Search" value="{{ request()->q }}">
                                         <div class="input-group-append">
                                             <div class="input-group-text py-0">
