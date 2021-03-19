@@ -20,6 +20,8 @@ class CreateAddressesTable extends Migration
             $table->string('receiver_name');
             $table->string('receiver_phone');
             $table->unsignedBigInteger('district_id');
+            $table->unsignedBigInteger('province_id')->default(0);
+            $table->unsignedBigInteger('city_id')->default(0);
             $table->string('postal_code');
             $table->string('address');
             $table->boolean('is_main')->default(false);

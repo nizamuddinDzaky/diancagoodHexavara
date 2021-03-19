@@ -30,11 +30,11 @@
                 <div class="col">
                     <div class="f_p_item_category">
                         <div class="f_p_img">
-                            <a href="{{ url('/category/' . $row->slug) }}">
+                            <a href="{{ url('/category/' . $row->id) }}">
                                 <img id="pic{{ $row }}" class="home-category-center-cropped" src="{{ asset('storage/categories/' . $row->image) }}" alt="{{ $row->name }}">
                             </a>
                         </div>
-                        <a href="{{ url('/category/' . $row->slug) }}" class="pl-3">
+                        <a href="{{ url('/category/' . $row->id) }}" class="pl-3">
                             <h4 style="color: black">{{ $row->name }}</h4>
                         </a>
                     </div>

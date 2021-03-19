@@ -70,11 +70,58 @@ class HomeController extends Controller
 
     public function categoryFilter($id)
     {
+        $arrayFilterCategory = [];
+        $arrayFilterBrand = [];
+        array_push($arrayFilterCategory, $id);
         $product = Product::with('images', 'variant')->where('category_id', $id)->orderBy('created_at', 'DESC')->get();
         $category = Category::with('subcategory')->get();
         $brand = Brand::with('product')->get();
         $str = NULL;
-        return view('dianca.search', compact('product', 'category', 'brand', 'str'));
+        return view('dianca.search', 
+            compact(
+                'product',
+                'category',
+                'brand',
+                'str',
+                'arrayFilterCategory',
+                'arrayFilterBrand'
+            )
+        );
+    }
+
+    public function filterProduct(Request $request)
+    {
+
+        $queryProduct = Product::with('images', 'variant');
+        $arrayFilterCategory=[];
+        $arrayFilterBrand=[];
+
+        if ($request->input('categoryFilter')) {
+            $arrayFilterCategory = explode(',', $request->input('categoryFilter'));
+            $queryProduct = $queryProduct->whereIn('category_id', $arrayFilterCategory);
+        }
+
+        if ($request->input('categoryBrand')) {
+            $arrayFilterBrand = explode(',', $request->input('categoryBrand'));
+            $queryProduct = $queryProduct->whereIn('brand_id', $arrayFilterBrand);
+        }
+
+        $product = $queryProduct->orderBy('created_at', 'DESC')->get();
+
+        $category = Category::with('subcategory')->get();
+        $brand = Brand::with('product')->get();
+        $str = NULL;
+        return view(
+            'dianca.search',
+            compact(
+                'product', 
+                'category', 
+                'brand', 
+                'str', 
+                'arrayFilterCategory',
+                'arrayFilterBrand'
+            )
+        );
     }
 
     public function categoryFilters($id, $name)
@@ -99,13 +146,27 @@ class HomeController extends Controller
         return view('dianca.search', compact('product', 'category', 'brand', 'str'));
     }
 
-    public function brandFilter($id)
+    public function brandFilter(Request $request, $id)
     {
+        $arrayFilterCategory = [];
+        $arrayFilterBrand = [];
+        array_push($arrayFilterBrand, $id);
+
         $product = Product::with('images', 'variant')->where('brand_id', $id)->orderBy('created_at', 'DESC')->get();
         $category = Category::with('subcategory')->get();
         $brand = Brand::with('product')->get();
         $str = NULL;
-        return view('dianca.search', compact('product', 'category', 'brand', 'str'));
+        return view(
+            'dianca.search',
+            compact(
+                'product', 
+                'category', 
+                'brand', 
+                'str', 
+                'arrayFilterCategory',
+                'arrayFilterBrand'
+            )
+        );
     }
 
     public function brandFilters($id, $name)

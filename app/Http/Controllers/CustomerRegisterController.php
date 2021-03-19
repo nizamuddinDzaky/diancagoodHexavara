@@ -68,7 +68,7 @@ class CustomerRegisterController extends Controller
             'text' => 'Verification code : ' . $customer->activate_token
         ]);
         
-        return view('dianca.verify', compact('customer'));
+        return view('dianca.verify', compact('customer', 'id'));
     }
 
     public function verify(Request $request)

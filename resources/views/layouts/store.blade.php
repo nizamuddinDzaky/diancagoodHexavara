@@ -48,7 +48,7 @@
                                 <form action="{{ route('search-result') }}" method="get"
                                     class="form-inline d-inline w-100">
                                     <div class="input-group">
-                                        <input class="form-control" type="text" name="q" placeholder="Search"
+                                        <input class="form-control" type="text" name="q" placeholder="Search123123"
                                             aria-label="Search" value="{{ request()->q }}">
                                         <div class="input-group-append">
                                             <div class="input-group-text py-0">
@@ -188,6 +188,8 @@
         integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous">
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.26.0/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.2.6/jquery.inputmask.bundle.min.js"></script>
+    <script type="text/javascript" src="{{ asset('js/core.js') }}"></script>
     @yield('js')
 </body>
 
