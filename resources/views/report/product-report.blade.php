@@ -38,7 +38,19 @@
         </div>
     </div>
     <div class="row mb-1 float-right">
-        <div class="col-lg-12 md-12 sm-12">
+        <div class="col-lg-5 md-5 sm-5">
+            <ul class="" style="list-style-type:none;">
+                <li class="nav-item h-100">
+                    <a href="" class="nav-link dropdown-toggle border" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">Export</a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="{{ route('administrator.product_report_pdf', ['from_date' => $start, 'to_date' => $end]) }}">PDF</a>
+                        <a class="dropdown-item" href="{{ route('administrator.product_report_excel', ['from_date' => $start, 'to_date' => $end]) }}">Excel</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="col-lg-7 md-7 sm-7">
             <ul class="" style="list-style-type:none;">
                 <li class="nav-item h-100">
                     <a href="{{ route('administrator.product_report') }}" class="nav-link dropdown-toggle border" data-toggle="dropdown"
@@ -94,10 +106,10 @@
                                 </div>
                             </td>
                             <td>
-                                <div class="mt-3 pt-4 text-center"><h5>{{ $sold->qty }}</h5></div>
+                                <div class="mt-3 pt-4 text-center"><h5>{{ $val->sold }}</h5></div>
                             </td>
                             <td>
-                                <div class="mt-3 pt-4 text-center"><h5>Rp {{ number_format($sold->total) }}</h5></div>
+                                <div class="mt-3 pt-4 text-center"><h5>Rp {{ number_format($val->total) }}</h5></div>
                             </td>
                             <td>
                                 <div class="mt-3 pt-4 text-center"><h5>Rp 0</h5></div>

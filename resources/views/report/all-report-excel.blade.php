@@ -25,11 +25,21 @@
         }
     </style>
 </head>
+@php
+use App\Models\Order;
+use App\Models\Payment;
+
+$total_order = 0;
+$monthly_income = 0;
+foreach ($orders as $f) {
+    $total_order += Order::where('id', $f->id)->count();
+    $monthly_income += Order::where('id', $f->id)->sum('subtotal');
+}
+@endphp
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-12 md-12 sm-12">
-            <h3 style="align-center">LAPORAN PEMBAYARAN DIANCAGOODS</h3>
-            <h5>{!! date('d/M/Y', strtotime($start)) !!} - {!! date('d/M/Y', strtotime($end)) !!}</h5>
+            <h3 style="align-center">LAPORAN TRANSAKSI DIANCAGOODS</h3>
         </div>
     </div>
 </div>
@@ -40,19 +50,19 @@
                 <thead class="font-16">
                     <tr>
                         <th>
-                            <span>Channel Pembayaran</span>
+                            <span>Kode Pesanan</span>
                         </th>
                         <th>
-                            <span>Transaksi</span>
+                            <span>Jenis</span>
                         </th>
                         <th>
                             <span>Tanggal Transaksi</span>
                         </th>
                         <th>
-                            <span>Jumlah Pembayaran</span>
+                            <span>Transaksi</span>
                         </th>
                         <th>
-                            <span>Pembayaran Bersih</span>
+                            <span>Total Transaksi</span>
                         </th>
                     </tr>
                 </thead>
@@ -62,7 +72,7 @@
                         
                         <td class="weight-600">
                             <div style="max-height:1px;">
-                                <h5>{{ $row->payment->method }} {{ $row->payment->transfer_to }}</h5>
+                                <h5>{{ $row->invoice }}</h5>
                             </div>
                         </td>
                         <td>
@@ -82,7 +92,7 @@
                         </td>
                         <td>
                             <div style="max-height:1px;">
-                                <h5>Rp {{ number_format($row->payment->amount) }}</h5>
+                                <h5>Rp {{ number_format($row->subtotal) }}</h5>
                             </div>
                         </td>
                         
@@ -97,10 +107,10 @@
                     <tr>
                         <th colspan="3">Total</th>
                         <td>
-                            <h5>{{ $count_payment }}</h5>
+                            <h5>{{ $total_order }}</h5>
                         </td>
                         <td>
-                            <h5>Rp {{ number_format($total_payment) }}</h5>
+                            <h5>Rp {{ number_format($monthly_income) }}</h5>
                         </td>
                     </tr>
                 </tfoot>

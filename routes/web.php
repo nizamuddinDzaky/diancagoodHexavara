@@ -122,10 +122,12 @@ Route::group(['prefix' => 'admin'], function() {
         Route::get('/report/payment/pdf', [DashboardController::class, 'paymentReportPDF'])->name('administrator.payment_report_pdf');
         Route::get('/report/all/pdf', [DashboardController::class, 'allReportPDF'])->name('administrator.all_report_pdf');
         Route::get('/report/sales/pdf', [DashboardController::class, 'salesReportPDF'])->name('administrator.sales_report_pdf');
+        Route::get('/report/product/pdf', [DashboardController::class, 'productReportPDF'])->name('administrator.product_report_pdf');
 
         Route::get('/report/payment/excel', [DashboardController::class, 'paymentReportExcel'])->name('administrator.payment_report_excel');
         Route::get('/report/all/excel', [DashboardController::class, 'allReportExcel'])->name('administrator.all_report_excel');
         Route::get('/report/sales/excel', [DashboardController::class, 'salesReportExcel'])->name('administrator.sales_report_excel');
+        Route::get('/report/product/excel', [DashboardController::class, 'productReportExcel'])->name('administrator.product_report_excel');
 
         Route::get('/homepage-management', [DashboardController::class, 'homepageList'])->name('administrator.homepage');
         Route::post('/homepage-management/create', [DashboardController::class, 'homepageCreate'])->name('administrator.homepage.create');

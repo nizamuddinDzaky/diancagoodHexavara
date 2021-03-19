@@ -41,7 +41,7 @@
         <div class="col-lg-12 md-12 sm-12">
             <ul class="" style="list-style-type:none;">
                 <li class="nav-item h-100">
-                    <a href="{{ route('administrator.product_sold_report') }}" class="nav-link dropdown-toggle border" data-toggle="dropdown"
+                    <a href="{{ route('administrator.product_report') }}" class="nav-link dropdown-toggle border" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">Produk Terjual</a>
                     <div class="dropdown-menu">
                         <a class="dropdown-item" href="{{ route('administrator.product_report') }}">Semua Produk</a>
@@ -57,46 +57,57 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="table-responsive curved-border">
-                <table class="table table-bordered text-gray-2">
+                <table id="myTable" class="table table-bordered text-gray-2">
                     <thead class="font-16">
                         <tr>
-                            <th>
+                            <th onclick="sortTable(0)">
                                 <span>Nama Produk</span>
                             </th>
-                            <th>
-                                <span>Harga</span>
+                            <th onclick="sortTable(1)">
+                                <span>SKU</span>
                             </th>
                             <th>
-                                <span>Stok</span>
+                                <span>Unit Terjual</span>
+                            </th>
+                            <th>
+                                <span>Omzet Penjualan</span>
+                            </th>
+                            <th>
+                                <span>Pengembalian Dana</span>
                             </th>
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse($products as $row)
+                        @foreach ($products as $row)
+                        @foreach ($row->variant as $val)
+                        @if ($val->qty != 0)
                         <tr>
                             <td>
                                 <div class="row">
-                                    <img class="ml-4 mr-2" src="{{ asset('storage/products/' . $row->images->first()->filename) }}" width="100px" height="100px">
-                                    <div class="align-self-center mt-2"><a href="{{ route('administrator.edit_product', $row->id) }}" style="color:black"><h5>{{ $row->name }}</h5></a></div>
+                                    <img class="ml-4 mr-2" src="{{ asset('storage/products/' . $val->product->images->first()->filename) }}" width="100px" height="100px">
+                                    <div class="align-self-center mt-2"><a href="{{ route('administrator.edit_product', $val->product->id) }}" style="color:black"><h5>{{ $val->product->name }} {{ $val->name }}</h5></a></div>
                                 </div>
                                 
                             </td>
-                            <td>
-                                @if( number_format($row->variant->first()->price) != number_format($row->variant->last()->price))
-                                <div class="mt-3 pt-4"><h5>Rp {{ number_format($row->variant->first()->price) }} - Rp {{ number_format($row->variant->last()->price) }}</h5></div>
-                                @else
-                                <div class="mt-3 pt-4"><h5>Rp {{ number_format($row->variant->first()->price) }}</h5></div>
-                                @endif
+                            <td class="weight-600">
+                                <div class="mt-3 pt-4">
+                                    <a class="text-orange" href="{{ route('administrator.edit_product', $val->product->id) }}" style="color:black">PR{{ $val->product->id }}VR{{ $val->id }}</a>
+                                </div>
                             </td>
                             <td>
-                                <div class="mt-3 pt-4"><h5>{{ $row->variant->sum('stock') }}</h5></div>
+                                <div class="mt-3 pt-4 text-center"><h5>{{ $val->sold }}</h5></div>
+                            </td>
+                            <td>
+                                <div class="mt-3 pt-4 text-center"><h5>Rp {{ number_format($val->total) }}</h5></div>
+                            </td>
+                            <td>
+                                <div class="mt-3 pt-4 text-center"><h5>Rp 0</h5></div>
                             </td>
                         </tr>
-                        @empty
-                        <tr>
-                            <td colspan="6" class="text-center">Tidak ada data</td>
-                        </tr>
-                        @endforelse
+                        @else
+                        @endif
+                        @endforeach
+                        @endforeach
                     </tbody>
                     
                 </table>
@@ -135,5 +146,48 @@
                 $("#sales_report").addClass('filter-active-2');
             }
         });
+    </script>
+    <script>
+        function sortTable(n) {
+            var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+            table = document.getElementById("myTable");
+            switching = true;
+            
+            dir = "asc"; 
+            
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+                
+                for (i = 1; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+                    
+                    x = rows[i].getElementsByTagName("TD")[n];
+                    y = rows[i + 1].getElementsByTagName("TD")[n];
+                    
+                    if (dir == "asc") {
+                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                            shouldSwitch= true;
+                            break;
+                        }
+                    } else if (dir == "desc") {
+                        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                }
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                    switchcount ++;      
+                } else {
+                    if (switchcount == 0 && dir == "asc") {
+                        dir = "desc";
+                        switching = true;
+                    }
+                }
+            }
+        }
     </script>
 @endsection

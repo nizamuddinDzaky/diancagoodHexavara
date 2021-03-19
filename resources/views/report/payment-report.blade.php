@@ -80,7 +80,7 @@
                         @forelse ($orders as $row)
                         <tr>
                             <td class="weight-600">
-                                <h5>Transfer {{ $row->payment->transfer_to }}</h5>
+                                <h5>{{ $row->payment->method }} {{ $row->payment->transfer_to }}</h5>
                             </td>
                             <td>
                                 <h5>Penjualan</h5>

@@ -25,11 +25,21 @@
         }
     </style>
 </head>
+@php
+use App\Models\Order;
+use App\Models\Payment;
+
+$total_payment = 0;
+$count_payment = 0;
+foreach ($orders as $f) {
+    $total_payment += Payment::where('order_id', $f->id)->sum('amount');
+    $count_payment++;
+}
+@endphp
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-12 md-12 sm-12">
             <h3 style="align-center">LAPORAN PEMBAYARAN DIANCAGOODS</h3>
-            <h5>{!! date('d/M/Y', strtotime($start)) !!} - {!! date('d/M/Y', strtotime($end)) !!}</h5>
         </div>
     </div>
 </div>
