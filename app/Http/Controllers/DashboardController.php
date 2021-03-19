@@ -693,11 +693,11 @@ class DashboardController extends Controller
         if(Auth::guard('web')->check()) {
             $this->validate($request, [
                 'type' => 'required',
-                'input_name' => 'required'
+                'id' => 'required'
             ]);
 
             try {
-                $product = Product::where('name', $request->input_name)->first();
+                $product = Product::where('id', $request->id)->first();
                 $product->update([
                     'is_featured' => $request->type
                 ]);
