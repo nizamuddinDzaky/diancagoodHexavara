@@ -35,6 +35,7 @@
                 <div class="col-lg-3 pb-3">
                     <div class="card shadow-1">
                         <form action="{{ route('filter-product') }}">
+                            <input type="hidden" name="param" value="{{ request()->param }}">
                             <div class="card-body">
                                 <div class="option">
                                     <h4 class="py-0 weight-600">Kategori Barang</h4>
