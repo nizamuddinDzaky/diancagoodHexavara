@@ -421,53 +421,6 @@ class DashboardController extends Controller
         return redirect(route('administrator.login'));
     }
 
-    public function productSoldReport()
-    {
-        if(Auth::guard('web')->check()) {
-            $start = Carbon::now()->startOfMonth()->format('Y-m-d H:i:s');
-            $end = Carbon::now()->endOfMonth()->format('Y-m-d H:i:s');
-
-            if (request()->from_date != '' && request()->to_date != '') {
-                $start = Carbon::parse(request()->from_date)->format('Y-m-d') . ' 00:00:01';
-                $end = Carbon::parse(request()->to_date)->format('Y-m-d') . ' 23:59:59';
-            }
-
-            $products = Product::with('variant', 'images')->whereBetween('updated_at', [$start, $end])->orderBy('created_at', 'ASC')->get();
-            
-            foreach($products as $p){
-                foreach($p->variant as $pv){
-                    $pv['sold'] = OrderDetail::where('product_variant_id', $pv['id'])->whereBetween('created_at', [$start, $end])->sum('qty');
-                    $pv['total'] = OrderDetail::where('product_variant_id', $pv['id'])->whereBetween('created_at', [$start, $end])->sum('price');
-                }
-            }
-            
-            return view('report.product-report', compact('products', 'start', 'end'));
-        }
-        return redirect(route('administrator.login'));
-    }
-
-    public function productSoldoutReport()
-    {
-        if(Auth::guard('web')->check()) {
-            $start = Carbon::now()->startOfMonth()->format('Y-m-d H:i:s');
-            $end = Carbon::now()->endOfMonth()->format('Y-m-d H:i:s');
-
-            if (request()->from_date != '' && request()->to_date != '') {
-                $start = Carbon::parse(request()->from_date)->format('Y-m-d') . ' 00:00:01';
-                $end = Carbon::parse(request()->to_date)->format('Y-m-d') . ' 23:59:59';
-            }
-
-            // $products = Product::with('product', 'images')->get();
-            // foreach ($products as $f) {
-            //     $soldout = ProductVariant::with('product')->where('product_id', $f->id)->whereRaw('stock <= 0')->get();
-            // }
-            // $products = ProductVariant::with('product')->whereRaw('stock <= 0')->get();
-            $products = Product::with('variant', 'images')->whereBetween('updated_at', [$start, $end])->orderBy('created_at', 'ASC')->get();
-            return view('report.product-soldout-report', compact('products'));
-        }
-        return redirect(route('administrator.login'));
-    }
-
     public function paymentReport()
     {
         if(Auth::guard('web')->check()) {

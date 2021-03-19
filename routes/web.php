@@ -114,9 +114,7 @@ Route::group(['prefix' => 'admin'], function() {
         });
 
         Route::get('/report/all', [DashboardController::class, 'allReport'])->name('administrator.all_report');
-        Route::get('/report/product/all', [DashboardController::class, 'productReport'])->name('administrator.product_report');
-        Route::get('/report/product/sold', [DashboardController::class, 'productSoldReport'])->name('administrator.product_sold_report');
-        Route::get('/report/product/soldout', [DashboardController::class, 'productSoldoutReport'])->name('administrator.product_soldout_report');
+        Route::get('/report/product', [DashboardController::class, 'productReport'])->name('administrator.product_report');
         Route::get('/report/payment', [DashboardController::class, 'paymentReport'])->name('administrator.payment_report');
         Route::get('/report/sales', [DashboardController::class, 'salesReport'])->name('administrator.sales_report');
 
