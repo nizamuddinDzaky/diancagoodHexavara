@@ -4,6 +4,11 @@
 <title>Edit Produk</title>
 @endsection
 
+@section('css')
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css" rel="stylesheet" />
+@endsection
+
 @section('content')
 <div class="container-fluid">
     <div class="row">
@@ -19,8 +24,11 @@
                             <h4 class="weight-600 font-24">Informasi Produk</h4>
                         </div>
                     </div>
-                    <form method="POST" action="{{ route('administrator.update_product') }}" enctype="multipart/form-data">
+                    <form method="POST" id="update-product" action="{{ route('administrator.update_product') }}" enctype="multipart/form-data">
                         @csrf
+                        <div style="display:none" id="variant">
+                            
+                        </div>
                         <div class="row mt-2">
                             <div class="col-lg-1"></div>
                             <div class="col-lg-6">
@@ -33,7 +41,7 @@
                             <div class="col-lg-3">
                                 <div class="form-group">
                                     <label class="form-label" for="category_id">Kategori Produk</label>
-                                    <select id="category_id" name="category_id" class="form-control bg-light-2">
+                                    <select id="category_id" name="category_id" class="form-control bg-light-2 selector">
                                         <option value="">Pilih</option>
                                         @foreach($categories as $c)
                                         <option value="{{ $c->id }}">{{ $c->name }}</option>
@@ -48,7 +56,7 @@
                             <div class="col-lg-2">
                                 <div class="form-group">
                                     <label class="form-label" for="brand_id">Brand</label>
-                                    <select id="brand_id" name="brand_id" class="form-control bg-light-2">
+                                    <select id="brand_id" name="brand_id" class="form-control bg-light-2 selector">
                                         <option value="">Pilih</option>
                                         @foreach($brands as $b)
                                         <option value="{{ $b->id }}">{{ $b->name }}</option>
@@ -61,7 +69,7 @@
                             <div class="col-lg-3">
                                 <div class="form-group">
                                     <label class="form-label" for="subcategory_id">Subkategori</label>
-                                    <select id="subcategory_id" name="subcategory_id" class="form-control bg-light-2">
+                                    <select id="subcategory_id" name="subcategory_id" class="form-control bg-light-2 selector">
                                         <option value="">Pilih</option>
                                         @foreach($categories as $c)
                                         <option value="{{ $c->id }}">{{ $c->name }}</option>
@@ -89,7 +97,7 @@
                                             <label class="form-label" for="description">Deskripsi</label>
                                             <textarea name="description" class="form-control bg-light-2 no-border"
                                                 rows="5" required>
-                                                {{ $product->description ?? '' }}
+                                                {!! $product->description ?? '' !!}
                                             </textarea>
                                         </div>
                                     </div>
@@ -313,15 +321,72 @@
         </div>
     </div>
 </div>
+<div class="modal fade w-100" id="detail_variant" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header pl-0 pb-4">
+                <h3 class="modal-title w-100 text-center position-absolute text-gray-2 weight-600">Detail Varian
+                </h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row mt-2">
+                        <div class="col-lg-12">
+                            <div class="table-responsive curved-border">
+                                <table class="table table-bordered text-gray-2">
+                                    <tbody>
+                                        <tr class="d-flex">
+                                            <th class="col-4">Nama Varian</th>
+                                            <td class="col-8" id="detail-name"></td>
+                                        </tr>
+                                        <tr class="d-flex">
+                                            <th class="col-4">Stok</th>
+                                            <td class="col-8" id="detail-stock"></td>
+                                        </tr>
+                                        <tr class="d-flex">
+                                            <th class="col-4">Berat</th>
+                                            <td class="col-8" id="detail-weight"></td>
+                                        </tr>
+                                        <tr class="d-flex">
+                                            <th class="col-4">Harga</th>
+                                            <td class="col-8" id="detail-price"></td>
+                                        </tr>
+                                        <tr class="d-flex">
+                                            <th class="col-4">Foto</th>
+                                            <td class="col-8" id="detail-image"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-gray" data-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('js')
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
 $(document).ready(function() {
-    $("#category_id option[value=" + {{ $product->subcategory->category->id }} + "]").attr('selected', 'selected');
-    $("#subcategory_id option[value=" + {{ $product->subcategory->id }} + "]").attr('selected', 'selected');
-    $("#brand_id option[value=" + {{ $product->brand->id }} + "]").attr('selected', 'selected');
+    $(".selector").select2({
+        width: '100%',
+        theme: 'bootstrap'
+    });
+    
+    $('#category_id>option[value="' + {{ $product->category_id }} + '"]').prop('selected', true);
+    $('#subcategory_id>option[value="' + {{ $product->subcategory_id }} + '"]').prop('selected', true);
+    $('#brand_id>option[value="' + {{ $product->brand_id }} + '"]').prop('selected', true);
 
+    var variants = $("#variant");
     var category_button = $('#category_placeholder');
     var category_uploader = $('#category_input');
     var category_images = $('#category_container');
@@ -401,6 +466,7 @@ $("#category_id").on('change', function() {
         },
         success: function(res) {
             $("#subcategory_id").empty();
+            $('#subcategory_id').append('<option value="">Pilih</option>')
             $.each(res.data, function(key, item) {
                 $("#subcategory_id").append('<option value="' + item.id + '">' + item.name + '</option>');
             });
@@ -435,5 +501,24 @@ $('select[name=brand_id]').change(function() {
 $("#add-variant").on('click', function() {
     $('#modal_variant').modal('show');
 })
+
+function showDetail(id) {
+    var variant_id = id;
+    $("#detail_variant").modal('show');
+
+    $.ajax({
+        url: "/product-variant/" + variant_id,
+        type: "GET",
+        dataType: "JSON",
+        success: function(res){
+            $("#detail-name").html(res.name);
+            $("#detail-stock").html(res.stock);
+            $("#detail-weight").html(res.weight + " gr");
+            $("#detail-price").html(res.price.toLocaleString("id-ID", { style: "currency", currency: "IDR"}));
+            var path = 'storage/products/' + res.image;
+            $("#detail-image").html(`<img class="w-100" src="{{ asset('` + path + `') }}">`);
+        }
+    })
+}
 </script>
 @endsection

@@ -21,35 +21,34 @@
 
 <body>
     <header class="header_area">
-        <div class="main_menu">
+        <div class="container overflow-visible-2">
             <nav class="navbar navbar-expand-lg">
-                <div class="container-fluid pr-5 pl-5">
-                    <a class="navbar-brand logo_h pr-3" href="{{ url('/') }}">
-                        <img src="{{ asset('img/logo-1x.png') }}" alt="logo" style="width: 150px">
-                    </a>
-                    @if (auth()->guard('web')->check())
-                    <button class="navbar-toggler" type="button" data-toggle="collapse"
-                        data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    </button>
-                    <div>
-                        <ul class="nav">
-                            <li class="nav-item dropdown">
-                                <a class="btn dropdown-toggle" href="#" role="button" data-toggle="dropdown"
-                                    id="navbarmenu" style="margin-left=0px" tabindex="-1" aria-haspopup="true"
-                                    aria-expanded="false">Admin</a>
-                                <div class="dropdown-menu" aria-labelledby="navbarmenu">
-                                    <a class="dropdown-item" style="color:#EB5757"
-                                        href="{{ route('administrator.logout') }}">Keluar</a>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    @endif
+                <a class="navbar-brand logo_h pr-3" href="{{ url('/') }}">
+                    <img src="{{ asset('img/logo-1x.png') }}" alt="logo">
+                </a>
+                @if (auth()->guard('web')->check())
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#admin_nav"
+                    aria-controls="admin_nav" aria-expanded="false" aria-label="Toggle navigation"><i
+                        class="material-icons md-24">menu</i>
+                </button>
+                <div class="collapse navbar-collapse" id="admin_nav">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown"
+                                id="navbarmenu" aria-haspopup="true" aria-expanded="false">Admin</a>
+                            <div class="dropdown-menu" aria-labelledby="navbarmenu">
+                                <a class="dropdown-item" style="color:#EB5757"
+                                    href="{{ route('administrator.logout') }}">Keluar</a>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
+                @endif
             </nav>
         </div>
+
     </header>
+
 
     {{-- Success Alert --}}
     @if(session('success'))
@@ -78,11 +77,16 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="btn-toolbar mb-3" role="toolbar">
-                            <a type="button" id="order" class="btn btn-outline-gray-2 weight-600 mr-4" href="{{ route('administrator.orders') }}">Order</a>
-                            <a type="button" id="product" class="btn btn-outline-gray-2 weight-600 mr-4" href="{{ route('administrator.products') }}">Produk</a>
-                            <a type="button" id="tracking" class="btn btn-outline-gray-2 weight-600 mr-4" href="{{ route('administrator.tracking', 0) }}">Tracking</a>
-                            <a type="button" id="promo" class="btn btn-outline-gray-2 weight-600 mr-4" href="{{ route('administrator.promo', 'all') }}">Promo</a>
-                            <a type="button" id="report" class="btn btn-outline-gray-2 weight-600" href="{{ route('administrator.all_report') }}">Laporan</a>
+                            <a type="button" id="order" class="btn btn-outline-gray-2 weight-600 mr-4"
+                                href="{{ route('administrator.orders') }}">Order</a>
+                            <a type="button" id="product" class="btn btn-outline-gray-2 weight-600 mr-4"
+                                href="{{ route('administrator.products') }}">Produk</a>
+                            <a type="button" id="tracking" class="btn btn-outline-gray-2 weight-600 mr-4"
+                                href="{{ route('administrator.tracking', 0) }}">Tracking</a>
+                            <a type="button" id="promo" class="btn btn-outline-gray-2 weight-600 mr-4"
+                                href="{{ route('administrator.promo', 'all') }}">Promo</a>
+                            <a type="button" id="report" class="btn btn-outline-gray-2 weight-600"
+                                href="{{ route('administrator.all_report') }}">Laporan</a>
                         </div>
                     </div>
                 </div>
@@ -101,20 +105,19 @@
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.26.0/moment.min.js"></script>
     <script>
-        $(document).ready(function() {
-            if(window.location.href.indexOf("/products") > -1) {
-                $("#product").addClass('filter-active-2');
-            } else if(window.location.href.indexOf("/tracking") > -1) {
-                $("#tracking").addClass('filter-active-2');
-            } else if(window.location.href.indexOf("/orders") > -1) {
-                $("#order").addClass('filter-active-2');
-            } else if(window.location.href.indexOf("/promos") > -1) {
-                $("#promo").addClass('filter-active-2');    
-            }
-            else if(window.location.href.indexOf("/report") > -1) {
-                $("#report").addClass('filter-active-2');
-            }
-        });
+    $(document).ready(function() {
+        if (window.location.href.indexOf("/products") > -1) {
+            $("#product").addClass('filter-active-2');
+        } else if (window.location.href.indexOf("/tracking") > -1) {
+            $("#tracking").addClass('filter-active-2');
+        } else if (window.location.href.indexOf("/orders") > -1) {
+            $("#order").addClass('filter-active-2');
+        } else if (window.location.href.indexOf("/promos") > -1) {
+            $("#promo").addClass('filter-active-2');
+        } else if (window.location.href.indexOf("/report") > -1) {
+            $("#report").addClass('filter-active-2');
+        }
+    });
     </script>
     @yield('js')
 </body>

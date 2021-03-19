@@ -444,10 +444,10 @@
 
     $("#confirm-payment").on('click', function(e) {
         e.preventDefault();
-        swal({
+        Swal.fire({
             title: "Konfirmasi Pembayaran",
             text: "Apakah data pembayaran sudah benar?",
-            type: "warning",
+            icon: "warning",
             showCancelButton: true,
             reverseButtons: !0
         }).then(function (e) {

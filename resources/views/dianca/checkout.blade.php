@@ -560,10 +560,10 @@ $(document).ready(function() {
     $("#continue").on('click', function(e) {
         e.preventDefault();
         if($("#courier").val() == "" || $("#duration").val() == ""){
-            swal({
+            Swal.fire({
                 title: "Detail Tidak Lengkap",
                 text: "Pilih jasa pengiriman dan durasi pengiriman",
-                type: "warning",
+                icon: "warning",
                 reverseButtons: !0
             }).then(function (e) {
                 e.dismiss;

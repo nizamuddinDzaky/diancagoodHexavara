@@ -187,10 +187,10 @@
     $("#submit_btn").on('click', function(e) {
         e.preventDefault();
         if($("#transfer_from_bank").val() == "" || $("#transfer_from_account").val() == "" || $("#name").val() == "" || $("amount").val() == ""){
-            swal({
+            Swal.fire({
                 title: "Detail Tidak Lengkap",
                 text: "Pastikan semua kolom terisi",
-                type: "warning",
+                icon: "warning",
                 reverseButtons: !0
             }).then(function (e) {
                 e.dismiss;

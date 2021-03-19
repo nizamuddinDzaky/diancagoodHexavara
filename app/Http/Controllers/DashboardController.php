@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Payment;
 use App\Models\Product;
+use App\Models\ProductImage;
 use App\Models\ProductVariant;
 use App\Models\Category;
 use App\Models\Subcategory;
@@ -114,34 +116,45 @@ class DashboardController extends Controller
                 $this->validate($request, [
                     'name' => 'required|string',
                     'category_id' => 'required|integer|exists:categories,id',
+                    'subcategory_id' => 'integer|exists:subcategories,id',
                     'brand_id' => 'required|integer|exists:brands,id',
-                    'price' => 'required',
-                    'stock' => 'required',
                     'rate' => 'required',
                     'description' => 'string',
                     'image_product' => 'required',
-                    'image_product.*' => 'mimes:jpg,jpeg,png'
+                    'image_product.*' => 'image|mimes:jpg,jpeg,png',
+                    'variants' => 'array',
+                    'variants.*' => 'integer|exists:product_variants,id'
                 ]);
 
                 $product = Product::create([
                     'category_id' => $request->category_id,
+                    'subcategory_id' => $request->subcategory_id,
                     'brand_id' => $request->brand_id,
                     'name' => $request->name,
-                    'slug' => $request->name,
+                    'slug' => Str::slug($request->name),
                     'description' => $request->description,
                     'rate' => $request->rate
                 ]);
 
                 if ($request->hasFile('image_product')) {
                     foreach ($request->file('image_product') as $image) {
-                        $name = time() . $image->getClientOriginalName() . '.' . $image->getClientOriginalExtension();
-                        $image->storeAs('public/storage/products', $name);
+                        $name = time() . Str::slug($request->name) . '-' . $product->id . '.' . $image->getClientOriginalExtension();
+                        $image->storeAs('public/products', $name);
 
                         $product_image = ProductImage::create([
                             'product_id' => $product->id,
                             'filename' => $name
                         ]);
                     }
+                }
+
+                foreach($request->variants as $v) {
+                    $variant = ProductVariant::where('id', $v)->first();
+                    $image = ProductImage::where('product_variant_id', $variant->id)->first();
+                    $variant->product_id = $product->id;
+                    $variant->save();
+                    $image->product_id = $product->id;
+                    $image->save();
                 }
 
                 return redirect(route('administrator.products'))->with(['success' => 'Produk dan Varian Baru Ditambahkan!']);
@@ -173,12 +186,12 @@ class DashboardController extends Controller
                 'product_id' => 'required|integer|exists:products,id',
                 'name' => 'required|string',
                 'category_id' => 'required|integer|exists:categories,id',
-                'subcategory_id' => 'required|integer|exists:subcategories,id',
+                'subcategory_id' => 'integer|exists:subcategories,id',
                 'brand_id' => 'required|integer|exists:brands,id',
-                'price' => 'required',
-                'stock' => 'required',
                 'rate' => 'required',
                 'description' => 'string',
+                'variants' => 'array',
+                'variants.*' => 'integer|exists:product_variants,id'
             ]);
 
             try {
@@ -188,12 +201,21 @@ class DashboardController extends Controller
                     'subcategory_id' => $request->subcategory_id,
                     'brand_id' => $request->brand_id,
                     'name' => $request->name,
-                    'slug' => $request->name,
+                    'slug' => Str::slug($request->name),
                     'description' => $request->description,
                     'rate' => $request->rate
                 ]);
 
                 $product->save();
+
+                foreach($request->variants as $v) {
+                    $variant = ProductVariant::where('id', $v)->first();
+                    $image = ProductImage::where('product_variant_id', $variant->id)->first();
+                    $variant->product_id = $product->id;
+                    $variant->save();
+                    $image->product_id = $product->id;
+                    $image->save();
+                }
 
                 return redirect(route('administrator.products'))->with(['success' => 'Produk Berhasil Diperbarui!']);
             } catch(\Exception $e) {
@@ -211,7 +233,7 @@ class DashboardController extends Controller
                 'price' => 'required|integer',
                 'weight' => 'required|integer',
                 'stock' => 'required|integer',
-                'image_variant' => 'mimes:jpg,jpeg,png',
+                'image_variant' => 'image|mimes:jpg,jpeg,png'
             ]);
 
             $product_variant = ProductVariant::create([
@@ -221,20 +243,18 @@ class DashboardController extends Controller
                 'stock' => $request->stock,
             ]);
 
-            if ($request->hasFile('images_variant')) {
-                foreach ($request->file('image_variant') as $image) {
-                    $name = time() . $image->getClientOriginalName() . '.' . $image->getClientOriginalExtension();
-                    $image->storeAs('public/storage/variants', $name);
+            if ($request->hasFile('image_variant')) {
+                $file = $request->file('image_variant');
+                $name = time() . $product_variant->id . Str::slug($request->name) . '.' . $file->getClientOriginalExtension();
+                $file->storeAs('public/products', $name);
 
-                    $product_image = ProductImage::create([
-                        'product_id' => $product->id,
-                        'product_variant_id' => $product_variant->id,
-                        'filename' => $name
-                    ]);
+                $product_image = ProductImage::create([
+                    'product_variant_id' => $product_variant->id,
+                    'filename' => $name
+                ]);
                     
-                    $product_variant->image = $product_image->filename;
-                    $product_variant->save();
-                }
+                $product_variant->image = $product_image->filename;
+                $product_variant->save();
             }
 
             return json_encode($product_variant);
@@ -252,8 +272,8 @@ class DashboardController extends Controller
     
                 if($request->hasFile('image_category')) {
                     $image = $request->file('image_category');
-                    $name = time() . $image->getClientOriginalName() . '.' . $image->getClientOriginalExtension();
-                    $image->storeAs('public/storage/categories', $name);
+                    $name = time() . Str::slug($request->name) . '.' . $image->getClientOriginalExtension();
+                    $image->storeAs('public/categories', $name);
         
                     $category = Category::create([
                         'name' => $request->name,

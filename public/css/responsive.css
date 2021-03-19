@@ -369,10 +369,6 @@
 		max-width: 350px;
 		margin: 0px auto 30px;
 	}
-	.home-product-center-cropped {
-		width: 300px;
-		height: 300px;
-	}
 }
 
 @media (max-width:600px){
@@ -479,10 +475,6 @@
 	.f_p_item {
 		max-width: 263px;
 		margin: 0px auto 30px;
-	}
-	.home-product-center-cropped {
-		width: 200px;
-		height: 200px;
 	}
 	.most_product_inner .col-lg-3{
 		text-align: center;

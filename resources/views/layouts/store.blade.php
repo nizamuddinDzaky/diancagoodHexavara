@@ -13,87 +13,84 @@
     <link rel="stylesheet" href="{{ asset('css/responsive.css') }}">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/10.15.5/sweetalert2.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/10.15.5/sweetalert2.min.js"></script>
     @yield('css')
 
 </head>
 
 <body>
     <header class="header_area">
-        <div class="main_menu">
+        <div class="container-fluid overflow-visible-2">
             <nav class="navbar navbar-expand-lg">
-                <div class="container">
-                    <a class="navbar-brand logo_h pr-3" href="{{ url('/') }}">
-                        <img src="{{ asset('img/logo-1x.png') }}" alt="logo">
-                    </a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#category-search"
-                        aria-controls="category-search" aria-expanded="false" aria-label="Toggle navigation"><i
-                            class="material-icons md-24">menu</i>
-                    </button>
-                    <div class="collapse navbar-collapse" id="category-search">
-                        <ul class="navbar-nav d-flex mx-auto nav-fill w-100">
-                            <li class="nav-item h-100">
-                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">Kategori</a>
-                                <div class="dropdown-menu">
-                                    @forelse($categories as $c)
-                                    <a class="dropdown-item"
-                                        href="{{ route('category-result', $c->id) }}">{{ $c->name }}</a>
-                                    @empty
-                                    @endforelse
-                                </div>
-                            </li>
-                            <li class="nav-item h-100 search_bar">
-                                <form action="{{ route('search-result') }}" method="get"
-                                    class="form-inline d-inline w-100">
-                                    <div class="input-group">
-                                        <input class="form-control" type="text" name="q" placeholder="Search"
-                                            aria-label="Search" value="{{ request()->q }}">
-                                        <div class="input-group-append">
-                                            <div class="input-group-text py-0">
-                                                <i class="material-icons md-18">search</i>
-                                            </div>
+                <a class="navbar-brand logo_h pr-3" href="{{ url('/') }}">
+                    <img src="{{ asset('img/logo-1x.png') }}" alt="logo">
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#category-search"
+                    aria-controls="category-search" aria-expanded="false" aria-label="Toggle navigation"><i
+                        class="material-icons md-24">menu</i>
+                </button>
+                <div class="collapse navbar-collapse" id="category-search">
+                    <ul class="navbar-nav d-flex mx-auto nav-fill w-100">
+                        <li class="nav-item h-100">
+                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false">Kategori</a>
+                            <div class="dropdown-menu">
+                                @forelse($categories as $c)
+                                <a class="dropdown-item"
+                                    href="{{ route('category-result', $c->id) }}">{{ $c->name }}</a>
+                                @empty
+                                @endforelse
+                            </div>
+                        </li>
+                        <li class="nav-item h-100 search_bar">
+                            <form action="{{ route('search-result') }}" method="get" class="form-inline d-inline w-100">
+                                <div class="input-group">
+                                    <input class="form-control" type="text" name="q" placeholder="Search"
+                                        aria-label="Search" value="{{ request()->q }}">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text py-0">
+                                            <i class="material-icons md-18">search</i>
                                         </div>
                                     </div>
-                                </form>
-                            </li>
-                            <li class="nav-item align-self-center h-100">
-                                @if (!auth()->guard('customer')->check() || (!auth()->guard('customer')->user()->cart))
-                                <a type="button" class="nav-link nav_btn" href="{{ route('cart.show') }}" tabindex="-1"
-                                    aria-disabled="true"><i class="material-icons md-18">shopping_cart</i></a>
-                                @elseif (auth()->guard('customer')->check() && (auth()->guard('customer')->user()->cart))
-                                <a type="button" class="nav-link nav_btn" href="{{ route('cart.show') }}" tabindex="-1"
-                                    aria-disabled="true"><i class="material-icons md-18">shopping_cart</i><span
-                                        class="badge badge-pill badge-orange">{{ auth()->guard('customer')->user()->cart->details->sum('qty') ?? '0'}}</span></a>
-                                @endif
-                            </li>
-                            @if (auth()->guard('customer')->check())
-                            <li class="nav-item h-100">
-                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-                                    aria-expanded="false">{{ Auth::guard('customer')->user()->name }}</a>
-                                <div class="dropdown-menu">
-                                    <a href="{{ route('profile') }}" class="dropdown-item">Edit Profil</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a href="{{ route('transaction.list', 5) }}" class="dropdown-item">Pembelian</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a href="{{ route('reviews.list') }}" class="dropdown-item">Ulasan</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" style="color:#EB5757"
-                                        href="{{ route('customer.logout') }}">Keluar</a>
                                 </div>
-                            </li>
-                            @else
-                            <li class="nav-item align-self-center h-100 nav_btn">
-                                <a type="button" class="btn btn-outline-orange"
-                                    href="{{ route('customer.login') }}">Masuk</a>
-                            </li>
-                            <li class="nav-item align-self-center h-100 nav_btn">
-                                <a type="button" class="btn py-0" href="{{ route('customer.register') }}">Daftar</a>
-                            </li>
+                            </form>
+                        </li>
+                        <li class="nav-item align-self-center h-100">
+                            @if (!auth()->guard('customer')->check() || (!auth()->guard('customer')->user()->cart))
+                            <a type="button" class="nav-link nav_btn" href="{{ route('cart.show') }}" tabindex="-1"
+                                aria-disabled="true"><i class="material-icons md-18">shopping_cart</i></a>
+                            @elseif (auth()->guard('customer')->check() && (auth()->guard('customer')->user()->cart))
+                            <a type="button" class="nav-link nav_btn" href="{{ route('cart.show') }}" tabindex="-1"
+                                aria-disabled="true"><i class="material-icons md-18">shopping_cart</i><span
+                                    class="badge badge-pill badge-orange" id="cart_qty">{{ auth()->guard('customer')->user()->cart->details->sum('qty') ?? '0'}}</span></a>
                             @endif
-                        </ul>
-                    </div>
+                        </li>
+                        @if (auth()->guard('customer')->check())
+                        <li class="nav-item h-100">
+                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false">{{ Auth::guard('customer')->user()->name }}</a>
+                            <div class="dropdown-menu">
+                                <a href="{{ route('profile') }}" class="dropdown-item">Edit Profil</a>
+                                <div class="dropdown-divider"></div>
+                                <a href="{{ route('transaction.list', 5) }}" class="dropdown-item">Pembelian</a>
+                                <div class="dropdown-divider"></div>
+                                <a href="{{ route('reviews.list') }}" class="dropdown-item">Ulasan</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" style="color:#EB5757"
+                                    href="{{ route('customer.logout') }}">Keluar</a>
+                            </div>
+                        </li>
+                        @else
+                        <li class="nav-item align-self-center h-100 nav_btn">
+                            <a type="button" class="btn btn-outline-orange"
+                                href="{{ route('customer.login') }}">Masuk</a>
+                        </li>
+                        <li class="nav-item align-self-center h-100 nav_btn">
+                            <a type="button" class="btn py-0" href="{{ route('customer.register') }}">Daftar</a>
+                        </li>
+                        @endif
+                    </ul>
                 </div>
             </nav>
         </div>

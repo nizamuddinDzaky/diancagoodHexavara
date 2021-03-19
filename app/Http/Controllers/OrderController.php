@@ -55,7 +55,7 @@ class OrderController extends Controller
                         'cart_id' => $cart->id,
                         'product_variant_id' => $variant->id,
                         'qty' => $request->qty,
-                        'price' => $variant->price * $request->qty
+                        'price' => ($variant->price - $variant->promo_price) * $request->qty
                     ]);
     
                     $cart->total_cost += $cart_detail->price;
@@ -63,7 +63,7 @@ class OrderController extends Controller
                 } else {
                     $cart_variant = CartDetail::where('cart_id', $cart->id)->where('product_variant_id', $variant->id)->first();
                     $cart_variant->qty += $request->qty;
-                    $cart_variant->price += $variant->price * $request->qty;
+                    $cart_variant->price += ($variant->price  - $variant->promo_price) * $request->qty;
                     $cart_variant->save();
 
                     $cart->total_cost = CartDetail::where('cart_id', $cart->id)->sum('price');
@@ -85,7 +85,7 @@ class OrderController extends Controller
 
         $carts_variant->update([
             'qty' => $request->qty,
-            'price' => $request->qty * $product_variant->price
+            'price' => $request->qty * ($product_variant->price - $product_variant->promo_price)
         ]);
 
         if($product_variant->stock < $carts_variant->qty) {
@@ -114,10 +114,10 @@ class OrderController extends Controller
         $return = array();
         
         if($request->add == 1) {
-            $return['totalcost'] = $request->curr_total + ($request->qty * $product_variant->price);
+            $return['totalcost'] = $request->curr_total + ($request->qty * ($product_variant->price - $product_variant->promo_price));
             $return['qty'] = $request->curr_qty + $request->qty;
         } else if($request->add == 0) {
-            $return['totalcost'] = $request->curr_total - ($request->qty * $product_variant->price);
+            $return['totalcost'] = $request->curr_total - ($request->qty * ($product_variant->price - $product_variant->price));
             $return['qty'] = $request->curr_qty - $request->qty;
         }
 
@@ -419,7 +419,7 @@ class OrderController extends Controller
                     $cart->save();
                 }
                 
-                return redirect(route('cart.show'));
+                return redirect()->route('cart.show', array('qty' => $cart->details->sum('qty')));
             }
             
             return redirect()->back()->with(['error' => 'Produk tidak dapat ditambahkan ke keranjang.']);
@@ -450,6 +450,27 @@ class OrderController extends Controller
 
         $body = json_decode($response->getBody(), true);
         return $body;
+    }
+
+    public function removeFromCart(Request $request)
+    {
+        if(Auth::guard('customer')->check) {
+            $this->validate($request, [
+                'id' => 'array'
+            ]);
+
+            foreach($request->id as $id) {
+                $cart = Cart::where('customer_id', Auth::guard('customer')->user()->id)->first();
+                $cart_detail = CartDetail::where('cart_id', $cart->id)->where('product_variant_id', $id)->first();
+                $cart->total_cost -= $cart_detail->price;
+                $cart->save();
+
+                $cart_detail->delete();
+            }
+
+            return redirect()->back()->with(['success' => 'Produk dihapus dari keranjang!']);
+        }
+        return redirect(route('customer.login'));
     }
 
     public function getCities()
