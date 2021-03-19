@@ -45,10 +45,11 @@
                             </div>
                         </li>
                         <li class="nav-item h-100 search_bar">
-                            <form action="{{ route('search-result') }}" method="get" class="form-inline d-inline w-100">
+                            <form action="{{ route('filter-product') }}" method="get"
+                                class="form-inline d-inline w-100">
                                 <div class="input-group">
-                                    <input class="form-control" type="text" name="q" placeholder="Search"
-                                        aria-label="Search" value="{{ request()->q }}">
+                                    <input class="form-control" type="text" name="param" placeholder="Search"
+                                        aria-label="Search" value="{{ request()->param }}">
                                     <div class="input-group-append">
                                         <div class="input-group-text py-0">
                                             <i class="material-icons md-18">search</i>
@@ -178,6 +179,8 @@
         </div>
         <div class="footer-copyright text-center py-3">Copyright ©2020 DiancaGoods</div>
     </footer>
+    @section('js')
+    @endsection
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"

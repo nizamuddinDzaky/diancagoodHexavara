@@ -96,7 +96,7 @@ class HomeController extends Controller
     public function filterProduct(Request $request)
     {
 
-        $queryProduct = Product::with('images', 'variant');
+        $queryProduct = Product::with('images', 'variant', 'brand');
         $arrayFilterCategory=[];
         $arrayFilterBrand=[];
 
@@ -108,6 +108,10 @@ class HomeController extends Controller
         if ($request->input('categoryBrand')) {
             $arrayFilterBrand = explode(',', $request->input('categoryBrand'));
             $queryProduct = $queryProduct->whereIn('brand_id', $arrayFilterBrand);
+        }
+
+        if ($request->input('param')) {
+            $queryProduct = $queryProduct->where('name', $request->input('param'));
         }
 
         $product = $queryProduct->orderBy('created_at', 'DESC')->get();
