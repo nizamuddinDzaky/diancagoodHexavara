@@ -9,8 +9,10 @@
     <div class="row">
         <div class="col-lg-7 md-7 sm-7">
             <div class="btn-toolbar mb-1" role="toolbar">
-                <a type="button" id="all_report" class="btn btn-outline-gray-2 weight-600 mr-4 mb-3" href="{{ route('administrator.all_report') }}">Semua Transaksi</a>
-                <a type="button" id="product_report" class="btn btn-outline-gray-2 weight-600 mr-4 mb-3" href="{{ route('administrator.product_report') }}">Laporan Produk</a>
+                <a type="button" id="all_report" class="btn btn-outline-gray-2 weight-600 mr-2 mb-3" href="{{ route('administrator.all_report') }}">Semua Transaksi</a>
+                <a type="button" id="product_report" class="btn btn-outline-gray-2 weight-600 mr-2 mb-3" href="{{ route('administrator.product_report') }}">Laporan Produk</a>
+                <a type="button" id="payment_report" class="btn btn-outline-gray-2 weight-600 mr-2 mb-3" href="{{ route('administrator.payment_report') }}">Laporan Pembayaran</a>
+                <a type="button" id="sales_report" class="btn btn-outline-gray-2 weight-600 mb-3" href="{{ route('administrator.sales_report') }}">Laporan Penjualan</a>
             </div>
         </div>
         <div class="col-lg-5 md-5 sm-5">
@@ -35,88 +37,59 @@
             </div>
         </div>
     </div>
-</div>
-<div class="container-fluid">
-    <div class="row">
-        <!-- <div class="col-lg-12 md-12 sm-12"> -->
-        <div class="col-lg-3 pb-4">
-            <div class="card border-orange h-100">
-                <div class="card-body">
-                    <h5 class="weight-600" style="color:#F37020">TOTAL TRANSAKSI</h5>
-                    <h3 class="mt-3 mb-4 pb-4">{{ $total_order }}</h3>
-                </div>
-            </div>
+    <div class="row mb-1 float-right">
+        <div class="col-lg-12 md-12 sm-12">
+            <ul class="" style="list-style-type:none;">
+                <li class="nav-item h-100">
+                    <a href="{{ route('administrator.product_sold_report') }}" class="nav-link dropdown-toggle border" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">Produk Terjual</a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="{{ route('administrator.product_report') }}">Semua Produk</a>
+                        <a class="dropdown-item" href="{{ route('administrator.product_sold_report') }}">Produk Terjual</a>
+                        <a class="dropdown-item" href="{{ route('administrator.product_soldout_report') }}">Produk Habis</a>
+                    </div>
+                </li>
+            </ul>
         </div>
-        <div class="col-lg-3 pb-4">
-            <div class="card border-orange h-100">
-                <div class="card-body">
-                    <h5 class="weight-600" style="color:#F37020">PEMASUKAN</h5>
-                    <h3 class="mt-3 mb-4 pb-4">{{ $monthly_income }}</h3>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 pb-4">
-            <div class="card border-orange h-100">
-                <div class="card-body">
-                    <h5 class="weight-600" style="color:#F37020">PRODUK TERJUAL</h5>
-                    <h3 class="mt-3 mb-4 pb-4">{{ $monthly_sold }}</h3>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 pb-4">
-            <div class="card border-orange h-100">
-                <div class="card-body">
-                    <h5 class="weight-600" style="color:#F37020">PRODUK TERJUAL (SOLD)</h5>
-                    <h3 class="mt-3 mb-4 pb-4">{{ $sold }}</h3>
-                </div>
-            </div>
-        </div>
-        <!-- </div> -->
     </div>
 </div>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-lg-12 md-12 sm-12">
+        <div class="col-lg-12">
             <div class="table-responsive curved-border">
-                <table class="table table-bordered text-gray-2 text-center">
+                <table class="table table-bordered text-gray-2">
                     <thead class="font-16">
                         <tr>
                             <th>
-                                <span>Status</span>
+                                <span>Nama Produk</span>
                             </th>
                             <th>
-                                <span>No Pemesanan</span>
+                                <span>Harga</span>
                             </th>
                             <th>
-                                <span>Tanggal</span>
-                            </th>
-                            <th>
-                                <span>Tipe Transaksi</span>
+                                <span>Stok</span>
                             </th>
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ($orders as $row)
+                        @forelse($products as $row)
                         <tr>
                             <td>
-                                @if($row->status == 0)
-                                <h5>Pending</h5>
-                                @elseif($row->status == 1)
-                                <h5>Proses</h5>
-                                @elseif($row->status == 2)
-                                <h5>Dikirim</h5>
-                                @elseif($row->status == 3)
-                                <h5>Selesai</h5>
+                                <div class="row">
+                                    <img class="ml-4 mr-2" src="{{ asset('storage/products/' . $row->images->first()->filename) }}" width="100px" height="100px">
+                                    <div class="align-self-center mt-2"><a href="{{ route('administrator.edit_product', $row->id) }}" style="color:black"><h5>{{ $row->name }}</h5></a></div>
+                                </div>
+                                
+                            </td>
+                            <td>
+                                @if( number_format($row->variant->first()->price) != number_format($row->variant->last()->price))
+                                <div class="mt-3 pt-4"><h5>Rp {{ number_format($row->variant->first()->price) }} - Rp {{ number_format($row->variant->last()->price) }}</h5></div>
+                                @else
+                                <div class="mt-3 pt-4"><h5>Rp {{ number_format($row->variant->first()->price) }}</h5></div>
                                 @endif
                             </td>
-                            <td class="weight-600">
-                                <a class="text-orange" href="{{ route('administrator.orders.show', $row->id) }}" class="text-gray-2">{{ $row->invoice }}</a>
-                            </td>
                             <td>
-                                <h5>{{ $row->created_at->format('d-m-Y h:i:s A') }}</h5>
-                            </td>
-                            <td>
-                                <h5>Transfer dari {{ $row->payment->transfer_to }}</h5>
+                                <div class="mt-3 pt-4"><h5>{{ $row->variant->sum('stock') }}</h5></div>
                             </td>
                         </tr>
                         @empty
@@ -125,6 +98,7 @@
                         </tr>
                         @endforelse
                     </tbody>
+                    
                 </table>
             </div>
         </div>
@@ -147,13 +121,18 @@
                 alert('Both Date is required');
             }
         });
-    </script>
-    <script>
         $(document).ready(function() {
             if(window.location.href.indexOf("/report/all") > -1) {
                 $("#all_product").addClass('filter-active-2');
-            } else if(window.location.href.indexOf("/report/product") > -1) {
+            } 
+            else if(window.location.href.indexOf("/report/product") > -1) {
                 $("#product_report").addClass('filter-active-2');
+            }
+            else if(window.location.href.indexOf("/report/payment") > -1) {
+                $("#payment_report").addClass('filter-active-2');
+            }
+            else if(window.location.href.indexOf("/report/sales") > -1) {
+                $("#sales_report").addClass('filter-active-2');
             }
         });
     </script>
