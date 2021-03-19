@@ -164,14 +164,29 @@ class OrderController extends Controller
                 'customer_id' => 'required|exists:customers,id'
             ]);
 
+            $countAddress = Address::where('customer_id', auth()->guard('customer')->user()->id)->count();
+
+            $is_main = 0;
+            
+            if ($request->is_main == 1) {
+                Address::where('customer_id', auth()->guard('customer')->user()->id)->update(['is_main'=>0]);
+                $is_main = 1;
+            }
+            if ($countAddress == 0) {
+                $is_main = 1;
+            }
+            // print_r($request->all());die;
+
             $address = Address::create([
+                'province_id' => $request->province_id,
+                'city_id' =>$request->city_id,
                 'address_type' => $request->address_type,
                 'receiver_name' => $request->receiver_name,
                 'receiver_phone' => $request->receiver_phone,
                 'district_id' => $request->district_id,
                 'postal_code' => $request->postal_code,
                 'address' => $request->address,
-                'is_main' => $request->is_main,
+                'is_main' => $is_main,
                 'customer_id' => $request->customer_id
             ]);
             
@@ -219,6 +234,7 @@ class OrderController extends Controller
 
     public function payment(Request $request)
     {
+        // echo "string";die;
         if(Auth::guard('customer')->check()) {
             $this->validate($request, [
                 'courier' => 'required',
@@ -471,6 +487,26 @@ class OrderController extends Controller
             return redirect()->back()->with(['success' => 'Produk dihapus dari keranjang!']);
         }
         return redirect(route('customer.login'));
+    }
+    
+    public function deleteCart($id)
+    {
+        if(Auth::guard('customer')->check()){
+            $cart = CartDetail::find($id);
+            $cart->delete();
+            return redirect()->back();
+        }
+    }
+
+    public function deleteMultipleCart(Request $request)
+    {
+        $arrayId = explode(',', $request['item-cart']);
+        if(Auth::guard('customer')->check()){
+            $cart = CartDetail::whereIn('id', $arrayId);
+            $cart->delete();
+            return redirect()->back();
+        }
+        // echo "string";
     }
 
     public function getCities()

@@ -8,6 +8,10 @@
 <section class="section_gap mt-4">
     <div class="main_box pt-4">
         <div class="container text-gray-2">
+            <form method="post" action="{{ route('delete.multiple.cart') }}" id="form-item-cart" class="hidden">
+                @csrf
+                <input type="hidden" name="item-cart" id="item-cart">
+            </form>
             <form method="POST" action="{{ route('checkout') }}" id="checkout-form">
                 @csrf
                 <div class="row my-2">
@@ -23,8 +27,7 @@
                                 </div>
                             </div>
                             <div class="col-lg-6">
-                                <a class="float-right font-16 weight-600" style="color:#EB5757"
-                                    onclick="deleteAll()">Hapus</a>
+                                <a class="float-right font-16 weight-600" style="color:#EB5757; cursor: pointer;" onclick="deleteAll()">Hapus</a>
                             </div>
                         </div>
                         <hr>
@@ -91,11 +94,8 @@
                                                                 <span class="material-icons md-10">add</span>
                                                             </button>
                                                         </span>
-                                                        <a type="button" class="float-right px-2 muted"><i
-                                                                class="material-icons md-24 py-0">favorite</i></a>
-                                                        <a type="button" class="float-right muted"
-                                                            onclick="removeFromCart({{ $cd->id }})"><i
-                                                                class="material-icons md-24 py-0">delete</i></a>
+                                                        <a type="button" class="float-right px-2 muted"><i class="material-icons md-24 py-0">favorite</i></a>
+                                                        <a type="button" class="float-right muted delete-cart" data-id = "{{ $cd->id }}" data-url-delete="{{ route('delete.cart', ['id'=>$cd->id]) }}" data-product-name="{{ $cd->variant->product->name }}"><i class="material-icons md-24 py-0">delete</i></a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -219,11 +219,130 @@ function selectCart(id) {
     }
 }
 
-function deleteAll() {
+    $("#select-all").click(function() {
+        $("input[type=checkbox]").prop('checked', $(this).prop('checked'));
+    });
 
-}
+    function selectCart(id) {
+        let total_cb_item = $('.cb-item-cart').length;
+        let count_checked = 0;
 
-function removeFromCart(id) {
+        $('.cb-item-cart').each(function () {
+            if ($(this).prop('checked')) {
+                count_checked++;
+            }
+        })
+
+        if (count_checked == total_cb_item) {
+            $('#select-all').prop('checked', true);
+        }else{
+            $('#select-all').prop('checked', false);
+        }
+        // console.log($('.cb-item-cart').length);
+
+        var input = document.getElementById('qty'+id);
+
+        if($("#check"+id).prop('checked')) {
+            $.ajax({
+                type: "POST",
+                url: "/cart/semi-update",
+                data: {
+                    add: 1,
+                    id: id,
+                    qty: input.value,
+                    curr_qty: document.getElementById("qty").innerHTML,
+                    curr_total: parseInt(document.getElementById("total_cost").innerHTML.replace(/[^0-9-,]/g, ''))
+                },
+                dataType: "JSON",
+                success: function(res) {
+                    $("#total_cost").html(res.totalcost.toLocaleString("id-ID", myObj));
+                    $("#qty").html(res.qty);
+                }
+            });
+        } else {
+            $.ajax({
+                type: "POST",
+                url: "/cart/semi-update",
+                data: {
+                    add: 0,
+                    id: id,
+                    qty: input.value,
+                    curr_qty: document.getElementById("qty").innerHTML,
+                    curr_total: parseInt(document.getElementById("total_cost").innerHTML.replace(/[^0-9-,]/g, ''))
+                },
+                dataType: "JSON",
+                success: function(res) {
+                    $("#total_cost").html(res.totalcost.toLocaleString("id-ID", myObj));
+                    $("#qty").html(res.qty);
+                }
+            });
+        }
+    }
+
+    $('.delete-cart').click(function () {
+        let id = $(this).data('id');
+        let name = $(this).data('product-name');
+        swal({
+            title: name,
+            text: "Apakah Anda Yakin ?",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya',
+            cancelButtonText: 'Tidak'
+        }).then((result) => {
+                // console.log("asd", result);
+            if (result.value) {
+                window.location.href = $(this).data('url-delete');
+            }
+        })
+    })
+
+    function deleteAll() {
+        let array_selected = [];
+
+        $('.cb-item-cart').each(function () {
+            if ($(this).prop('checked')) {
+                array_selected.push($(this).val());
+            }
+        })
+        if (array_selected.length == 0) {
+            swal({
+                title: "Tidak Ada Item yang Terpilih",
+                text: "Silahkan Pilih Item Yang ingin dihapus",
+                type: "warning",
+                reverseButtons: !0
+            }).then(function (e) {
+                e.dismiss;
+            }, function (dismiss) {
+                return false;
+            });
+        }else{
+            swal({
+                title: 'Hapus Beberapa Item',
+                text: "Apakah Anda Yakin Menghapus Item Yang Terpilih?",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya',
+                cancelButtonText: 'Tidak'
+            }).then((result) => {
+                    // console.log("asd", result);
+                if (result.value) {
+                    submit_delete_multi_cart(array_selected);
+                    // window.location.href = $(this).data('url-delete');
+                }
+            })
+        }
+        // console.log(array_selected)
+    }
+
+    function submit_delete_multi_cart(array_selected) {
+        $('#item-cart').val(array_selected);
+        $('#form-item-cart').submit();
+    }
 
 }
 

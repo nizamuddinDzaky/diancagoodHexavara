@@ -17,9 +17,9 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $newproducts = Product::where('status', 1)->with('variant.promo_detail', 'images')->orderBy('created_at', 'ASC')->limit(4)->get();
-        $bestseller = Product::where('status', 1)->where('is_featured', 1)->with('variant', 'images')->orderBy('created_at', 'ASC')->limit(3)->get();
-        $featured = Product::where('status', 1)->where('is_featured', 2)->with('variant', 'images')->orderBy('created_at', 'ASC')->limit(3)->get();
+        $newproducts = Product::where('status', 1)->where('is_featured', 1)->with('variant', 'images')->orderBy('created_at', 'ASC')->limit(4)->get();
+        $bestseller = Product::where('status', 1)->where('is_featured', 2)->with('variant', 'images')->orderBy('created_at', 'ASC')->limit(3)->get();
+        $featured = Product::where('status', 1)->where('is_featured', 3)->with('variant', 'images')->orderBy('created_at', 'ASC')->limit(3)->get();
         $category = Category::with('subcategory')->orderBy('created_at', 'ASC')->limit(4)->get();
         // dd(Promo::where(DB::raw("CONCAT(`end_date`, ' ', `end_time`)"), '>=', Carbon::now()->toDateTimeString())->get());
         $promos = Promo::with('details.variant.product.images')->where('is_published', 1)->where(DB::raw("CONCAT(`end_date`, ' ', `end_time`)"), '>=', Carbon::now()->toDateTimeString())->where(DB::raw("CONCAT(`start_date`, ' ', `start_time`)"), '<=', Carbon::now()->toDateTimeString())->paginate(4);
@@ -74,11 +74,58 @@ class HomeController extends Controller
 
     public function categoryFilter($id)
     {
+        $arrayFilterCategory = [];
+        $arrayFilterBrand = [];
+        array_push($arrayFilterCategory, $id);
         $product = Product::with('images', 'variant')->where('category_id', $id)->orderBy('created_at', 'DESC')->get();
         $category = Category::with('subcategory')->get();
         $brand = Brand::with('product')->get();
         $str = NULL;
-        return view('dianca.search', compact('product', 'category', 'brand', 'str'));
+        return view('dianca.search', 
+            compact(
+                'product',
+                'category',
+                'brand',
+                'str',
+                'arrayFilterCategory',
+                'arrayFilterBrand'
+            )
+        );
+    }
+
+    public function filterProduct(Request $request)
+    {
+
+        $queryProduct = Product::with('images', 'variant');
+        $arrayFilterCategory=[];
+        $arrayFilterBrand=[];
+
+        if ($request->input('categoryFilter')) {
+            $arrayFilterCategory = explode(',', $request->input('categoryFilter'));
+            $queryProduct = $queryProduct->whereIn('category_id', $arrayFilterCategory);
+        }
+
+        if ($request->input('categoryBrand')) {
+            $arrayFilterBrand = explode(',', $request->input('categoryBrand'));
+            $queryProduct = $queryProduct->whereIn('brand_id', $arrayFilterBrand);
+        }
+
+        $product = $queryProduct->orderBy('created_at', 'DESC')->get();
+
+        $category = Category::with('subcategory')->get();
+        $brand = Brand::with('product')->get();
+        $str = NULL;
+        return view(
+            'dianca.search',
+            compact(
+                'product', 
+                'category', 
+                'brand', 
+                'str', 
+                'arrayFilterCategory',
+                'arrayFilterBrand'
+            )
+        );
     }
 
     public function categoryFilters($id, $name)
@@ -103,13 +150,27 @@ class HomeController extends Controller
         return view('dianca.search', compact('product', 'category', 'brand', 'str'));
     }
 
-    public function brandFilter($id)
+    public function brandFilter(Request $request, $id)
     {
+        $arrayFilterCategory = [];
+        $arrayFilterBrand = [];
+        array_push($arrayFilterBrand, $id);
+
         $product = Product::with('images', 'variant')->where('brand_id', $id)->orderBy('created_at', 'DESC')->get();
         $category = Category::with('subcategory')->get();
         $brand = Brand::with('product')->get();
         $str = NULL;
-        return view('dianca.search', compact('product', 'category', 'brand', 'str'));
+        return view(
+            'dianca.search',
+            compact(
+                'product', 
+                'category', 
+                'brand', 
+                'str', 
+                'arrayFilterCategory',
+                'arrayFilterBrand'
+            )
+        );
     }
 
     public function brandFilters($id, $name)

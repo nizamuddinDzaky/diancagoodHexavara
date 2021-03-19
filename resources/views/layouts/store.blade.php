@@ -13,7 +13,8 @@
     <link rel="stylesheet" href="{{ asset('css/responsive.css') }}">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/10.15.5/sweetalert2.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/10.15.5/sweetalert2.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/10.15.5/sweetalert2.min.js"></script>
     @yield('css')
 
@@ -63,7 +64,8 @@
                             @elseif (auth()->guard('customer')->check() && (auth()->guard('customer')->user()->cart))
                             <a type="button" class="nav-link nav_btn" href="{{ route('cart.show') }}" tabindex="-1"
                                 aria-disabled="true"><i class="material-icons md-18">shopping_cart</i><span
-                                    class="badge badge-pill badge-orange" id="cart_qty">{{ auth()->guard('customer')->user()->cart->details->sum('qty') ?? '0'}}</span></a>
+                                    class="badge badge-pill badge-orange"
+                                    id="cart_qty">{{ auth()->guard('customer')->user()->cart->details->sum('qty') ?? '0'}}</span></a>
                             @endif
                         </li>
                         @if (auth()->guard('customer')->check())
@@ -185,6 +187,9 @@
         integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous">
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.26.0/moment.min.js"></script>
+    <script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.2.6/jquery.inputmask.bundle.min.js"></script>
+    <script type="text/javascript" src="{{ asset('js/core.js') }}"></script>
     @yield('js')
 </body>
 

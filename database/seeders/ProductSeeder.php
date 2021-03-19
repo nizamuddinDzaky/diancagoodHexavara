@@ -115,7 +115,9 @@ class ProductSeeder extends Seeder
                 -Dianca Goods-',
                 'status' => 1,
                 'is_featured' => 1,
-                'rate' => 5
+                'rate' => 5,
+                'created_at' => '2021-03-16 20:24:49',
+                'updated_at' => '2021-03-16 20:24:29'
             ],
             [
                 'category_id' => 1,
@@ -152,7 +154,9 @@ class ProductSeeder extends Seeder
                 -Dianca Goods-',
                 'status' => 1,
                 'is_featured' => 1,
-                'rate' => 5
+                'rate' => 5,
+                'created_at' => '2021-03-16 20:24:49',
+                'updated_at' => '2021-03-16 20:24:29'
             ],
             [
                 'category_id' => 1,
@@ -188,8 +192,10 @@ class ProductSeeder extends Seeder
                 
                 -Dianca Goods-',
                 'status' => 1,
-                'is_featured' => 1,
-                'rate' => 5
+                'is_featured' => 0,
+                'rate' => 5,
+                'created_at' => '2021-03-16 20:24:49',
+                'updated_at' => '2021-03-16 20:24:29'
             ],
             [
                 'category_id' => 1,
@@ -225,8 +231,10 @@ class ProductSeeder extends Seeder
                 
                 -Dianca Goods-',
                 'status' => 1,
-                'is_featured' => 1,
-                'rate' => 5
+                'is_featured' => 0,
+                'rate' => 5,
+                'created_at' => '2021-03-16 20:24:49',
+                'updated_at' => '2021-03-16 20:24:29'
             ],
             [
                 'category_id' => 3,
@@ -262,8 +270,10 @@ class ProductSeeder extends Seeder
                 
                 -Dianca Goods-',
                 'status' => 1,
-                'is_featured' => 1,
-                'rate' => 5
+                'is_featured' => 0,
+                'rate' => 5,
+                'created_at' => '2021-03-16 20:24:49',
+                'updated_at' => '2021-03-16 20:24:29'
             ],
             [
                 'category_id' => 4,
@@ -299,8 +309,10 @@ class ProductSeeder extends Seeder
                 
                 -Dianca Goods-',
                 'status' => 1,
-                'is_featured' => 1,
-                'rate' => 5
+                'is_featured' => 0,
+                'rate' => 5,
+                'created_at' => '2021-03-16 20:24:49',
+                'updated_at' => '2021-03-16 20:24:29'
             ],
         ];
 
@@ -308,10 +320,11 @@ class ProductSeeder extends Seeder
             [
                 'product_id' => 1,
                 'name' => '60gr',
-                'price' => 258000,
+                'price' => 200000,
                 'weight' => 60,
                 'stock' => 125,
-                'image' => 'yuja niacin brightening sleeping mask 1.png'
+                'image' => 'yuja niacin brightening sleeping mask 1.png',
+                'created_at' => '2021-03-16 20:24:49'
             ],
             [
                 'product_id' => 1,
@@ -319,47 +332,53 @@ class ProductSeeder extends Seeder
                 'price' => 300000,
                 'weight' => 100,
                 'stock' => 100,
-                'image' => 'yuja niacin brightening sleeping mask 1.png'
+                'image' => 'yuja niacin brightening sleeping mask 1.png',
+                'created_at' => '2021-03-16 20:24:49'
             ],
             [
                 'product_id' => 2,
                 'name' => '100ml',
-                'price' => 189000,
+                'price' => 150000,
                 'weight' => 100,
                 'stock' => 75,
                 'image' => '',
+                'created_at' => '2021-03-16 20:24:49'
             ],
             [
                 'product_id' => 3,
                 'name' => '100ml',
-                'price' => 328000,
+                'price' => 325000,
                 'weight' => 100,
                 'image' => '',
                 'stock' => 80,
+                'created_at' => '2021-03-16 20:24:49'
             ],
             [
                 'product_id' => 4,
                 'name' => '40gr',
-                'price' => 150000,
+                'price' => 125000,
                 'weight' => 80,
                 'image' => '',
-                'stock' => 50
+                'stock' => 50,
+                'created_at' => '2021-03-16 20:24:49'
             ],
             [
                 'product_id' => 5,
                 'name' => '40gr',
-                'price' => 200000,
+                'price' => 225000,
                 'weight' => 80,
                 'image' => '',
-                'stock' => 50
+                'stock' => 50,
+                'created_at' => '2021-03-16 20:24:49'
             ],
             [
                 'product_id' => 6,
                 'name' => '100gr',
-                'price' => 260000,
+                'price' => 250000,
                 'weight' => 80,
                 'image' => '',
-                'stock' => 0
+                'stock' => 0,
+                'created_at' => '2021-03-16 20:24:49'
             ]
         ];
 
