@@ -65,7 +65,7 @@
                                 @elseif (auth()->guard('customer')->check() && (auth()->guard('customer')->user()->cart))
                                 <a type="button" class="nav-link nav_btn" href="{{ route('cart.show') }}" tabindex="-1"
                                     aria-disabled="true"><i class="material-icons md-18">shopping_cart</i><span
-                                        class="badge badge-pill badge-orange">{{ auth()->guard('customer')->user()->cart->details->sum('qty') ?? '0'}}</span></a>
+                                        class="badge badge-pill badge-orange" id="qty-cart-icon">{{ auth()->guard('customer')->user()->cart->details->sum('qty') ?? '0'}}</span></a>
                                 @endif
                             </li>
                             @if (auth()->guard('customer')->check())

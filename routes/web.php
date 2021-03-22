@@ -48,7 +48,8 @@ Route::get('/cities', [OrderController::class, 'getCities'])->name('cities');
 Route::get('/districts', [OrderController::class, 'getDistricts'])->name('districts');
 Route::get('/order-detail/{id}', [OrderController::class, 'getOrderDetail'])->name('order');
 
-Route::post('/checkout', [OrderController::class, 'checkout'])->name('checkout');
+Route::post('/submit-item-cart', [OrderController::class, 'submitItemCart'])->name('checkout.submit-item-cart');
+Route::get('/checkout', [OrderController::class, 'checkout'])->name('checkout');
 Route::post('/checkout-address', [OrderController::class, 'address'])->name('checkout.address');
 Route::post('/checkout-address-edit', [OrderController::class, 'updateAddress'])->name('checkout.updateAddress');
 Route::post('/checkout-payment', [OrderController::class, 'payment'])->name('checkout.payment');
@@ -57,12 +58,15 @@ Route::get('/finish-payment/{id}', [OrderController::class, 'paymentDone'])->nam
 Route::post('/process-payment', [OrderController::class, 'makePayment'])->name('payment.done.process');
 Route::get('/cancel-order/{id}', [OrderController::class, 'cancelOrder'])->name('order.cancel');
 Route::get('/delete-cart/{id}', [OrderController::class, 'deleteCart'])->name('delete.cart');
-Route::post('/delete-car', [OrderController::class, 'deleteMultipleCart'])->name('delete.multiple.cart');
+Route::post('/delete-cart', [OrderController::class, 'deleteMultipleCart'])->name('delete.multiple.cart');
+Route::get('/change-address/{id}', [OrderController::class, 'changeAddress'])->name('checkout.change-address');
+
 Route::get('/transactions/{status}', [TransactionController::class, 'index'])->name('transaction.list');
 
 Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
 Route::get('/product-variant/{id}', [ProductVariantController::class, 'getDetail'])->name('product_variant.detail');
 
+Route::get('/list-address', [ProfileController::class, 'listAdressCheckout'])->name('checkout.list-address');
 Route::get('/profil', [ProfileController::class, 'index'])->name('profile');
 Route::post('/profil-edit', [ProfileController::class, 'editProfile'])->name('edit.profile');
 Route::get('/profil/alamat', [ProfileController::class, 'address'])->name('profile-address');

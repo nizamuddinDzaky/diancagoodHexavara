@@ -307,6 +307,8 @@
             $("#city_id").append('<option value="" >Pilih</option>');
             $("#district_id").append('<option value="" >Pilih</option>');
         }
+
+        
         // $('editAddress').click(function (e) {
         //     e.preventDefault();
         //     $('#editAddress-form').submit();

@@ -12,7 +12,7 @@
                 @csrf
                 <input type="hidden" name="item-cart" id="item-cart">
             </form>
-            <form method="POST" action="{{ route('checkout') }}" id="checkout-form">
+            <form method="POST" action="{{ route('checkout.submit-item-cart') }}" id="checkout-form">
                 @csrf
                 <div class="row my-2">
                     <div class="col-lg-8">
@@ -113,6 +113,7 @@
     }
 
     function update(id, isIncrement) {
+        console.log("adssad");
         var input = document.getElementById('qty'+id);
         if(isIncrement)
             input.value++;
@@ -130,16 +131,19 @@
             success: function(res) {
                 var total_cost = 0;
                 var qty = 0;
+                let qty_carticon = 0
                 res.details.forEach(function(cd) {
                     if($("#check"+cd.id).prop('checked')){
                         total_cost += parseInt(cd.price);
                         qty += parseInt(cd.qty);
                     }
+                    qty_carticon += parseInt(cd.qty)
 
                     if(cd.id == id) {
                         $("#subtotal"+cd.id).html(cd.price.toLocaleString("id-ID", myObj));
                     }
                 })
+                $('#qty-cart-icon').text(parseInt(qty_carticon));
                 $("#total_cost").html(parseInt(total_cost).toLocaleString("id-ID", myObj));
                 $("#qty").html(parseInt(qty));
             },
