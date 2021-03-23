@@ -7,6 +7,7 @@
 @section('css')
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css" rel="stylesheet" />
 @endsection
 
 @section('content')
@@ -72,8 +73,8 @@
                                 <div class="dropdown-menu">
                                     <button class="dropdown-item" data-toggle="modal" data-target="#show-promo"
                                         value="{{ $row->id }}">Detail</button>
-                                    <button class="dropdown-item"
-                                    data-toggle="modal" data-target="#update-promo" value="{{ $row->id }}">Ubah</button>
+                                    <button class="dropdown-item" data-toggle="modal" data-target="#update-promo"
+                                        value="{{ $row->id }}">Ubah</button>
                                     <form action="{{ route('administrator.promo.publish', ['id' => $row->id]) }}"
                                         method="post">
                                         @csrf
@@ -169,7 +170,7 @@
                         </div>
                         <div class="form-group px-2">
                             <label for="value_type">Jenis Diskon</label>
-                            <select class="form-control border-3" name="value_type" id="value_type">
+                            <select class="form-control border-3 sign_type" name="value_type" id="value_type">
                                 <option value="percent" selected>Persentase</option>
                                 <option value="price">Harga</option>
                             </select>
@@ -179,7 +180,7 @@
                             <div class="input-group">
                                 <input type="text" name="value" id="value" class="form-control border-3">
                                 <div class="input-group-prepend">
-                                    <div class="input-group-text bg-3 border">%</div>
+                                    <div class="input-group-text bg-3 border sign">%</div>
                                 </div>
                             </div>
                         </div>
@@ -292,7 +293,8 @@
                         <div class="form-group px-2">
                             <label for="input_payment_duration">Batas Waktu Pembayaran Setelah Checkout</label>
                             <div class="input-group">
-                                <input type="text" id="input_payment_duration" name="payment_duration" class="form-control border-3">
+                                <input type="text" id="input_payment_duration" name="payment_duration"
+                                    class="form-control border-3">
                                 <div class="input-group-prepend">
                                     <div class="input-group-text bg-3 border">menit</div>
                                 </div>
@@ -301,11 +303,13 @@
                         <div class="form-group form-row px-2 justify-content-between">
                             <div class="col-md-6">
                                 <label for="input_start_date">Tanggal Mulai</label>
-                                <input type="text" id="input_start_date" name="start_date" class="form-control border-3">
+                                <input type="text" id="input_start_date" name="start_date"
+                                    class="form-control border-3">
                             </div>
                             <div class="col-md-6">
                                 <label for="input_start_time">Jam Mulai</label>
-                                <input type="text" id="input_start_time" name="start_time" class="form-control border-3">
+                                <input type="text" id="input_start_time" name="start_time"
+                                    class="form-control border-3">
                             </div>
                         </div>
                         <div class="form-group form-row px-2">
@@ -320,7 +324,7 @@
                         </div>
                         <div class="form-group px-2">
                             <label for="input_value_type">Jenis Diskon</label>
-                            <select class="form-control border-3" name="value_type" id="input_value_type">
+                            <select class="form-control border-3 sign_type" name="value_type" id="input_value_type">
                                 <option value="percent" selected>Persentase</option>
                                 <option value="price">Harga</option>
                             </select>
@@ -330,14 +334,14 @@
                             <div class="input-group">
                                 <input type="text" name="value" id="input_value" class="form-control border-3">
                                 <div class="input-group-prepend">
-                                    <div class="input-group-text bg-3 border">%</div>
+                                    <div class="input-group-text bg-3 border sign">%</div>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group px-2">
                             <label for="input-product-select">Pilih Varian</label>
-                            <select id="input-product-select" name="product_variant[]" class="form-control border-3 w-100"
-                                multiple="multiple">
+                            <select id="input-product-select" name="product_variant[]"
+                                class="form-control border-3 w-100" multiple="multiple">
                                 @forelse($products as $row)
                                 <optgroup label="{{ $row->name }}">
                                     @forelse($row->variant as $subrow)
@@ -384,10 +388,10 @@ $(document).ready(function() {
 });
 
 $("#product-select").select2({
-    width: '100%'
+    width: '100%',
 });
 $("#input-product-select").select2({
-    width: '100%'
+    width: '100%',
 });
 
 $(function() {
@@ -538,10 +542,12 @@ $("#update-promo").on('show.bs.modal', function(e) {
     $.ajax({
         url: '/admin/promos/change/' + promo_id,
         type: 'GET',
-        data: {promo_id: parseInt(promo_id)},
+        data: {
+            promo_id: parseInt(promo_id)
+        },
         dataType: 'JSON',
-        success: function(res){
-            console.log(res);
+        success: function(res) {
+            $("#input_type").val(res.promo_type);
             $("#input_name").val(res.name);
             $("#input_payment_duration").val(res.payment_duration);
             $("#input_start_date").val(res.start_date);
@@ -549,17 +555,30 @@ $("#update-promo").on('show.bs.modal', function(e) {
             $("#input_end_date").val(res.end_date);
             $("#input_end_time").val(res.end_time);
             $('#input_value_type>option[value="' + res.value_type + '"]').prop('selected', true);
+            if(res.value_type == 'price')
+                $(".sign").html('Rp');
             $("#input_value").val(res.value);
 
-            for(var i in res.details){
-                $('#input-product-select>option[value="' + res.details[i].variant.id + '"]').prop('selected', true);
+            var items = [];
+            for (var i in res.details) {
+                items.push(res.details[i].variant.id);
             }
+
+            $("#input-product-select").val(items).change();
+            
         },
         error: function(xhr, status, err) {
             console.log(xhr.responseText);
         },
     })
 });
+
+$('.sign_type').on('change', function() {
+    if($(this).val() == 'price')
+        $('.sign').html("Rp");
+    else
+        $('.sign').html("%");
+})
 
 $('.pagination li').addClass('page-item');
 $('.pagination li a').addClass('page-link');

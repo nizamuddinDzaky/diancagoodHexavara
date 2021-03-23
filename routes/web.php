@@ -83,6 +83,7 @@ Route::post('/cart/add', [OrderController::class, 'addToCart'])->name('cart.add'
 Route::get('/cart/quick-add/{id}', [OrderController::class, 'quickAddToCart'])->name('cart.quick_add');
 Route::post('/cart/update', [OrderController::class, 'updateCart'])->name('cart.update');
 Route::post('/cart/semi-update', [OrderController::class, 'updateCartOrder'])->name('cart.semiupdate');
+Route::post('/cart/remove', [OrderController::class, 'removeFromCart'])->name('cart.remove');
 
 Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews.list');
 Route::get('/reviews/done', [ReviewController::class, 'reviewDone'])->name('reviews.done');
@@ -117,9 +118,25 @@ Route::group(['prefix' => 'admin'], function() {
         });
 
         Route::get('/report/all', [DashboardController::class, 'allReport'])->name('administrator.all_report');
-        Route::get('/report/all-product', [DashboardController::class, 'productReport'])->name('administrator.product_report');
-        Route::get('/report/sold-product', [DashboardController::class, 'productSoldReport'])->name('administrator.product_sold_report');
-        Route::get('/report/soldout-product', [DashboardController::class, 'productSoldoutReport'])->name('administrator.product_soldout_report');
+        Route::get('/report/product', [DashboardController::class, 'productReport'])->name('administrator.product_report');
+        Route::get('/report/payment', [DashboardController::class, 'paymentReport'])->name('administrator.payment_report');
+        Route::get('/report/sales', [DashboardController::class, 'salesReport'])->name('administrator.sales_report');
+
+        Route::get('/report/payment/pdf', [DashboardController::class, 'paymentReportPDF'])->name('administrator.payment_report_pdf');
+        Route::get('/report/all/pdf', [DashboardController::class, 'allReportPDF'])->name('administrator.all_report_pdf');
+        Route::get('/report/sales/pdf', [DashboardController::class, 'salesReportPDF'])->name('administrator.sales_report_pdf');
+        Route::get('/report/product/pdf', [DashboardController::class, 'productReportPDF'])->name('administrator.product_report_pdf');
+
+        Route::get('/report/payment/excel', [DashboardController::class, 'paymentReportExcel'])->name('administrator.payment_report_excel');
+        Route::get('/report/all/excel', [DashboardController::class, 'allReportExcel'])->name('administrator.all_report_excel');
+        Route::get('/report/sales/excel', [DashboardController::class, 'salesReportExcel'])->name('administrator.sales_report_excel');
+        Route::get('/report/product/excel', [DashboardController::class, 'productReportExcel'])->name('administrator.product_report_excel');
+
+        Route::get('/homepage-management', [DashboardController::class, 'homepageList'])->name('administrator.homepage');
+        Route::post('/homepage-management/create', [DashboardController::class, 'homepageCreate'])->name('administrator.homepage.create');
+        Route::get('/homepage-management/change/{id}', [DashboardController::class, 'homepageChange'])->name('administrator.homepage.change');
+        Route::post('/homepage-management/update', [DashboardController::class, 'homepageUpdate'])->name('administrator.homepage.update');
+        Route::post('/homepage-management/delete', [DashboardController::class, 'homepageDelete'])->name('administrator.homepage.delete');
     
         Route::post('/category/add', [DashboardController::class, 'storeCategory'])->name('administrator.add_category');
         Route::post('/subcategory/add', [DashboardController::class, 'storeSubcategory'])->name('administrator.add_subcategory');

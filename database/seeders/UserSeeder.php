@@ -86,14 +86,15 @@ class UserSeeder extends Seeder
             'customer_email' => 'butsherlock@gmail.com',
             'customer_phone' => '123123123',
             'address_id' => 1,
-            'subtotal' => 858000,
-            'shipping_cost' => 20000,
-            'total_cost' => 878000,
+            'subtotal' => 400000,
+            'shipping_cost' => 25000,
+            'total_cost' => 425000,
             'shipping' => 'JNE',
             'status' => 0,
             'unique' => rand(1, 99),
             'tracking_number' => 'JJA000021928',
-            'invalid_at' => Carbon::now()->addMinutes(30)
+            'invalid_at' => Carbon::now()->addMinutes(30),
+            'created_at' => '2021-03-16 20:24:49'
         ]);
 
         Order::create([
@@ -103,49 +104,91 @@ class UserSeeder extends Seeder
             'customer_email' => 'butsherlock@gmail.com',
             'customer_phone' => '123123123',
             'address_id' => 1,
-            'subtotal' => 800000,
-            'shipping_cost' => 20000,
-            'total_cost' => 820000,
+            'subtotal' => 500000,
+            'shipping_cost' => 15000,
+            'total_cost' => 515000,
             'shipping' => 'JNE',
             'status' => 3,
             'unique' => rand(1, 99),
             'tracking_number' => 'KKA000021901',
-            'invalid_at' => Carbon::now()->addMinutes(30)
+            'invalid_at' => Carbon::now()->addMinutes(30),
+            'created_at' => '2021-03-16 21:24:49'
+        ]);
+
+        Order::create([
+            'invoice' => 'ZP001328122084KT',
+            'customer_id' => 1,
+            'customer_name' => 'cust verif',
+            'customer_email' => 'butsherlock@gmail.com',
+            'customer_phone' => '123123123',
+            'address_id' => 1,
+            'subtotal' => 150000,
+            'shipping_cost' => 25000,
+            'total_cost' => 175000,
+            'shipping' => 'JNE',
+            'status' => 0,
+            'unique' => rand(1, 99),
+            'tracking_number' => 'MHA000021541',
+            'invalid_at' => Carbon::now()->addMinutes(30),
+            'created_at' => '2021-02-16 20:24:49'
         ]);
 
         Payment::create([
             'order_id' => 1,
             'transfer_to' => 'BNI',
             'method' => 'Transfer',
+            'amount' => 425000,
+            'created_at' => '2021-03-16 21:24:49'
         ]);
 
         Payment::create([
             'order_id' => 2,
             'transfer_to' => 'BNI',
             'method' => 'Transfer',
+            'amount' => 515000,
+            'created_at' => '2021-03-16 21:24:49'
+        ]);
+
+        Payment::create([
+            'order_id' => 3,
+            'transfer_to' => 'BRI',
+            'method' => 'Transfer',
+            'amount' => 175000,
+            'created_at' => '2021-02-16 21:24:49'
         ]);
 
         $order_details = [
             [
                 'order_id' => 1,
                 'product_variant_id' => 1,
-                'price' => 200000,
+                'price' => 400000,
                 'qty' => 2,
-                'weight' => 60
+                'weight' => 60,
+                'created_at' => '2021-03-16 20:24:49'
             ],
             [
                 'order_id' => 2,
                 'product_variant_id' => 1,
                 'price' => 200000,
-                'qty' => 2,
-                'weight' => 60
+                'qty' => 1,
+                'weight' => 60,
+                'created_at' => '2021-03-16 21:24:49'
             ],
             [
                 'order_id' => 2,
                 'product_variant_id' => 3,
                 'price' => 300000,
                 'qty' => 2,
-                'weight' => 200
+                'weight' => 200,
+                'created_at' => '2021-03-16 21:24:49'
+            ],
+            [
+                'order_id' => 3,
+                'product_variant_id' => 3,
+                'price' => 150000,
+                'qty' => 1,
+                'weight' => 200,
+                'created_at' => '2021-02-16 21:24:49'
             ],
         ];
 

@@ -27,13 +27,13 @@
                     <div class="card shadow-1">
                         <div class="card-body">
                             <div class="row text-center" style="color: #4F4F4F">
-                                <div class="col-lg-4 md-4 sm-4 {{ request()->segment(2) == '' ? 'active' : '' }}">
+                                <div class="col-lg-4 md-4 sm-4">
                                     <a href="{{ route('profile') }}" style="color: #4F4F4F">Biodata Diri</a>
                                 </div>
-                                <div class="col-lg-4 md-4 sm-4 {{ request()->segment(2) == 'alamat' ? 'active' : '' }}">
-                                    <a href="{{ route('profile-address') }}" style="color: #4F4F4F">Daftar Alamat</a>
+                                <div class="col-lg-4 md-4 sm-4">
+                                    <a href="{{ route('profile-address') }}" style="color: #F37020">Daftar Alamat</a>
                                 </div>
-                                <div class="col-lg-4 md-4 sm-4 {{ request()->segment(2) == 'rekening' ? 'active' : '' }}">
+                                <div class="col-lg-4 md-4 sm-4">
                                     <a href="{{ route('profile-rekening') }}" style="color: #4F4F4F">Rekening Bank</a>
                                 </div>
                             </div>
@@ -74,10 +74,6 @@
                                         <a href= "{{ route('profile-address.delete', ['id' => $var->id]) }}" class="btn btn-outline-orange ml-4 mt-4">Hapus</a>
                                         @endif
                                     </div>
-                                    <!-- <div class="row">
-                                        <button class="btn btn-outline-orange mr-2 mt-4 float-right" data-toggle="modal" data-target="#editAddress">Ubah</button>
-                                        <button class="btn btn-outline-orange mt-4">Hapus</button>
-                                    </div> -->
                                 </div>
                                 @endforeach
                             </div>

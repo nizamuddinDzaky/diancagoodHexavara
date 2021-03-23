@@ -131,10 +131,10 @@
     $("#submit_btn").on('click', function(e) {
         e.preventDefault();
         if($("#payment_method").val() == "" || $("#bank").val() == ""){
-            swal({
+            Swal.fire({
                 title: "Detail Tidak Lengkap",
                 text: "Pilih metode pembayaran dan bank",
-                type: "warning",
+                icon: "warning",
                 reverseButtons: !0
             }).then(function (e) {
                 e.dismiss;

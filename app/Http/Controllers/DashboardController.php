@@ -5,15 +5,25 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Payment;
 use App\Models\Product;
+use App\Models\ProductImage;
 use App\Models\ProductVariant;
 use App\Models\Category;
 use App\Models\Subcategory;
 use App\Models\Brand;
 use Carbon\Carbon;
+use PDF;
+use Excel;
+use File;
+use stdClass;
+use App\Exports\PaymentReport;
+use App\Exports\SalesReport;
+use App\Exports\TransactionReport;
+use App\Exports\ProductReport;
 
 class DashboardController extends Controller
 {
@@ -74,6 +84,8 @@ class DashboardController extends Controller
         return redirect(route('administrator.login'));
     }
 
+    // produk
+    
     public function showProducts()
     {
         if(Auth::guard('web')->check()) {
@@ -114,34 +126,45 @@ class DashboardController extends Controller
                 $this->validate($request, [
                     'name' => 'required|string',
                     'category_id' => 'required|integer|exists:categories,id',
+                    'subcategory_id' => 'integer|exists:subcategories,id',
                     'brand_id' => 'required|integer|exists:brands,id',
-                    'price' => 'required',
-                    'stock' => 'required',
                     'rate' => 'required',
                     'description' => 'string',
                     'image_product' => 'required',
-                    'image_product.*' => 'mimes:jpg,jpeg,png'
+                    'image_product.*' => 'image|mimes:jpg,jpeg,png',
+                    'variants' => 'array',
+                    'variants.*' => 'integer|exists:product_variants,id'
                 ]);
 
                 $product = Product::create([
                     'category_id' => $request->category_id,
+                    'subcategory_id' => $request->subcategory_id,
                     'brand_id' => $request->brand_id,
                     'name' => $request->name,
-                    'slug' => $request->name,
+                    'slug' => Str::slug($request->name),
                     'description' => $request->description,
                     'rate' => $request->rate
                 ]);
 
                 if ($request->hasFile('image_product')) {
                     foreach ($request->file('image_product') as $image) {
-                        $name = time() . $image->getClientOriginalName() . '.' . $image->getClientOriginalExtension();
-                        $image->storeAs('public/storage/products', $name);
+                        $name = time() . Str::slug($request->name) . '-' . $product->id . '.' . $image->getClientOriginalExtension();
+                        $image->storeAs('public/products', $name);
 
                         $product_image = ProductImage::create([
                             'product_id' => $product->id,
                             'filename' => $name
                         ]);
                     }
+                }
+
+                foreach($request->variants as $v) {
+                    $variant = ProductVariant::where('id', $v)->first();
+                    $image = ProductImage::where('product_variant_id', $variant->id)->first();
+                    $variant->product_id = $product->id;
+                    $variant->save();
+                    $image->product_id = $product->id;
+                    $image->save();
                 }
 
                 return redirect(route('administrator.products'))->with(['success' => 'Produk dan Varian Baru Ditambahkan!']);
@@ -173,12 +196,12 @@ class DashboardController extends Controller
                 'product_id' => 'required|integer|exists:products,id',
                 'name' => 'required|string',
                 'category_id' => 'required|integer|exists:categories,id',
-                'subcategory_id' => 'required|integer|exists:subcategories,id',
+                'subcategory_id' => 'integer|exists:subcategories,id',
                 'brand_id' => 'required|integer|exists:brands,id',
-                'price' => 'required',
-                'stock' => 'required',
                 'rate' => 'required',
                 'description' => 'string',
+                'variants' => 'array',
+                'variants.*' => 'integer|exists:product_variants,id'
             ]);
 
             try {
@@ -188,12 +211,21 @@ class DashboardController extends Controller
                     'subcategory_id' => $request->subcategory_id,
                     'brand_id' => $request->brand_id,
                     'name' => $request->name,
-                    'slug' => $request->name,
+                    'slug' => Str::slug($request->name),
                     'description' => $request->description,
                     'rate' => $request->rate
                 ]);
 
                 $product->save();
+
+                foreach($request->variants as $v) {
+                    $variant = ProductVariant::where('id', $v)->first();
+                    $image = ProductImage::where('product_variant_id', $variant->id)->first();
+                    $variant->product_id = $product->id;
+                    $variant->save();
+                    $image->product_id = $product->id;
+                    $image->save();
+                }
 
                 return redirect(route('administrator.products'))->with(['success' => 'Produk Berhasil Diperbarui!']);
             } catch(\Exception $e) {
@@ -211,7 +243,7 @@ class DashboardController extends Controller
                 'price' => 'required|integer',
                 'weight' => 'required|integer',
                 'stock' => 'required|integer',
-                'image_variant' => 'mimes:jpg,jpeg,png',
+                'image_variant' => 'image|mimes:jpg,jpeg,png'
             ]);
 
             $product_variant = ProductVariant::create([
@@ -221,20 +253,18 @@ class DashboardController extends Controller
                 'stock' => $request->stock,
             ]);
 
-            if ($request->hasFile('images_variant')) {
-                foreach ($request->file('image_variant') as $image) {
-                    $name = time() . $image->getClientOriginalName() . '.' . $image->getClientOriginalExtension();
-                    $image->storeAs('public/storage/variants', $name);
+            if ($request->hasFile('image_variant')) {
+                $file = $request->file('image_variant');
+                $name = time() . $product_variant->id . Str::slug($request->name) . '.' . $file->getClientOriginalExtension();
+                $file->storeAs('public/products', $name);
 
-                    $product_image = ProductImage::create([
-                        'product_id' => $product->id,
-                        'product_variant_id' => $product_variant->id,
-                        'filename' => $name
-                    ]);
+                $product_image = ProductImage::create([
+                    'product_variant_id' => $product_variant->id,
+                    'filename' => $name
+                ]);
                     
-                    $product_variant->image = $product_image->filename;
-                    $product_variant->save();
-                }
+                $product_variant->image = $product_image->filename;
+                $product_variant->save();
             }
 
             return json_encode($product_variant);
@@ -252,8 +282,8 @@ class DashboardController extends Controller
     
                 if($request->hasFile('image_category')) {
                     $image = $request->file('image_category');
-                    $name = time() . $image->getClientOriginalName() . '.' . $image->getClientOriginalExtension();
-                    $image->storeAs('public/storage/categories', $name);
+                    $name = time() . Str::slug($request->name) . '.' . $image->getClientOriginalExtension();
+                    $image->storeAs('public/categories', $name);
         
                     $category = Category::create([
                         'name' => $request->name,
@@ -334,6 +364,8 @@ class DashboardController extends Controller
         return redirect(route('administrator.login'));
     }
 
+    // Report
+
     public function allReport()
     {
         if(Auth::guard('web')->check()) {
@@ -359,7 +391,7 @@ class DashboardController extends Controller
             // $sold = Product::with('variant')->whereRaw('product->variant->stock <= 0')->count();
 
             $orders = Order::with('payment')->whereBetween('created_at', [$start, $end])->orderBy('created_at', 'ASC')->get();
-            return view('admin.all-report', compact('orders', 'monthly_income', 'monthly_sold', 'total_order', 'sold', 'start', 'end'));
+            return view('report.all-report', compact('orders', 'monthly_income', 'monthly_sold', 'total_order', 'sold', 'start', 'end'));
         }
         return redirect(route('administrator.login'));
     }
@@ -376,12 +408,20 @@ class DashboardController extends Controller
             }
 
             $products = Product::with('variant', 'images')->whereBetween('updated_at', [$start, $end])->orderBy('created_at', 'ASC')->get();
-            return view('admin.product-report', compact('products'));
+            
+            foreach($products as $p){
+                foreach($p->variant as $pv){
+                    $pv['sold'] = OrderDetail::where('product_variant_id', $pv['id'])->whereBetween('created_at', [$start, $end])->sum('qty');
+                    $pv['total'] = OrderDetail::where('product_variant_id', $pv['id'])->whereBetween('created_at', [$start, $end])->sum('price');
+                }
+            }
+            
+            return view('report.product-report', compact('products', 'start', 'end'));
         }
         return redirect(route('administrator.login'));
     }
 
-    public function productSoldReport()
+    public function paymentReport()
     {
         if(Auth::guard('web')->check()) {
             $start = Carbon::now()->startOfMonth()->format('Y-m-d H:i:s');
@@ -391,16 +431,21 @@ class DashboardController extends Controller
                 $start = Carbon::parse(request()->from_date)->format('Y-m-d') . ' 00:00:01';
                 $end = Carbon::parse(request()->to_date)->format('Y-m-d') . ' 23:59:59';
             }
+            $orders = Order::with('payment')->whereBetween('created_at', [$start, $end])->orderBy('created_at', 'ASC')->get();
 
-            // $order = OrderDetail::whereBetween('updated_at', [$start, $end])->orderBy('created_at', 'ASC')->get();
-            // $variant = ProductVariant::where('id', $order->product_variant_id)->get();
-            $products = Product::with('variant', 'images')->whereBetween('updated_at', [$start, $end])->orderBy('created_at', 'ASC')->get();
-            return view('admin.product-sold-report', compact('products'));
+            $total_payment = 0;
+            $count_payment = 0;
+            foreach ($orders as $f) {
+                $total_payment += Payment::where('order_id', $f->id)->sum('amount');
+                $count_payment++;
+            }
+
+            return view('report.payment-report', compact('orders', 'total_payment', 'count_payment', 'start', 'end'));
         }
         return redirect(route('administrator.login'));
     }
 
-    public function productSoldoutReport()
+    public function salesReport()
     {
         if(Auth::guard('web')->check()) {
             $start = Carbon::now()->startOfMonth()->format('Y-m-d H:i:s');
@@ -410,14 +455,231 @@ class DashboardController extends Controller
                 $start = Carbon::parse(request()->from_date)->format('Y-m-d') . ' 00:00:01';
                 $end = Carbon::parse(request()->to_date)->format('Y-m-d') . ' 23:59:59';
             }
+            $orders = Order::with('details')->whereBetween('created_at', [$start, $end])->orderBy('created_at', 'ASC')->get();
 
-            // $products = Product::with('product', 'images')->get();
-            // foreach ($products as $f) {
-            //     $soldout = ProductVariant::with('product')->where('product_id', $f->id)->whereRaw('stock <= 0')->get();
-            // }
-            // $products = ProductVariant::with('product')->whereRaw('stock <= 0')->get();
+            return view('report.sales-report', compact('orders', 'start', 'end'));
+        }
+        return redirect(route('administrator.login'));
+    }
+
+    // Export as PDF
+
+    public function paymentReportPDF()
+    {
+    	if(Auth::guard('web')->check()) {
+            $start = Carbon::parse(request()->from_date)->format('Y-m-d') . ' 00:00:01';
+            $end = Carbon::parse(request()->to_date)->format('Y-m-d') . ' 23:59:59';
+
+            $orders = Order::with('payment')->whereBetween('created_at', [$start, $end])->orderBy('created_at', 'ASC')->get();
+
+            $total_payment = 0;
+            $count_payment = 0;
+            foreach ($orders as $f) {
+                $total_payment += Payment::where('order_id', $f->id)->sum('amount');
+                $count_payment++;
+            }
+            
+            view()->share('orders', $orders);
+            $pdf = PDF::loadView('report.payment-report-print', ['orders'=>$orders, 'start'=>$start, 'end'=>$end, 'count_payment'=>$count_payment, 'total_payment'=>$total_payment]);
+            return $pdf->download('laporan-pembayaran-diancagoods.pdf');
+        }
+        return redirect(route('administrator.login'));
+    }
+
+    public function allReportPDF()
+    {
+    	if(Auth::guard('web')->check()) {
+            $start = Carbon::parse(request()->from_date)->format('Y-m-d') . ' 00:00:01';
+            $end = Carbon::parse(request()->to_date)->format('Y-m-d') . ' 23:59:59';
+
+            $orders = Order::with('payment')->whereBetween('created_at', [$start, $end])->orderBy('created_at', 'ASC')->get();
+
+            $total_order = Order::whereBetween('created_at', [$start, $end])->count();
+
+            $monthly_income = Order::whereBetween('created_at', [$start, $end])->sum('subtotal');
+            
+            view()->share('orders', $orders);
+            $pdf = PDF::loadView('report.all-report-print', ['orders'=>$orders, 'start'=>$start, 'end'=>$end, 'total_order'=>$total_order, 'monthly_income'=>$monthly_income]);
+            return $pdf->download('laporan-transaksi-diancagoods.pdf');
+        }
+        return redirect(route('administrator.login'));
+    }
+
+    public function salesReportPDF()
+    {
+    	if(Auth::guard('web')->check()) {
+            $start = Carbon::parse(request()->from_date)->format('Y-m-d') . ' 00:00:01';
+            $end = Carbon::parse(request()->to_date)->format('Y-m-d') . ' 23:59:59';
+
+            $orders = Order::with('details')->whereBetween('created_at', [$start, $end])->orderBy('created_at', 'ASC')->get();
+            
+            $total_sales = 0;
+            $monthly_income = 0;
+            foreach ($orders as $f) {
+                $monthly_income += OrderDetail::where('order_id', $f->id)->whereBetween('created_at', [$start, $end])->sum('price');
+                $total_sales += OrderDetail::where('order_id', $f->id)->sum('qty');
+            }
+            
+            view()->share('orders', $orders);
+            $pdf = PDF::loadView('report.sales-report-print', ['orders'=>$orders, 'start'=>$start, 'end'=>$end, 'total_sales'=>$total_sales, 'monthly_income'=>$monthly_income]);
+            return $pdf->download('laporan-penjualan-diancagoods.pdf');
+        }
+        return redirect(route('administrator.login'));
+    }
+
+    public function productReportPDF()
+    {
+    	if(Auth::guard('web')->check()) {
+            $start = Carbon::parse(request()->from_date)->format('Y-m-d') . ' 00:00:01';
+            $end = Carbon::parse(request()->to_date)->format('Y-m-d') . ' 23:59:59';
+
             $products = Product::with('variant', 'images')->whereBetween('updated_at', [$start, $end])->orderBy('created_at', 'ASC')->get();
-            return view('admin.product-soldout-report', compact('products'));
+            
+            foreach($products as $p){
+                foreach($p->variant as $pv){
+                    $pv['sold'] = OrderDetail::where('product_variant_id', $pv['id'])->whereBetween('created_at', [$start, $end])->sum('qty');
+                    $pv['total'] = OrderDetail::where('product_variant_id', $pv['id'])->whereBetween('created_at', [$start, $end])->sum('price');
+                }
+            }
+
+            $total_count = 0;
+            $total_sold = 0;
+            $total_count = OrderDetail::whereBetween('created_at', [$start, $end])->sum('qty');
+            $total_sold = OrderDetail::whereBetween('created_at', [$start, $end])->sum('price');
+
+            // $total_count = $products->sum('sold');
+            // $total_sold = $products->sum('total');
+            
+            view()->share('products', $products);
+            $pdf = PDF::loadView('report.product-report-print', ['products'=>$products, 'start'=>$start, 'end'=>$end, 'total_count'=>$total_count, 'total_sold'=>$total_sold]);
+            return $pdf->download('laporan-produk-diancagoods.pdf');
+        }
+        return redirect(route('administrator.login'));
+    }
+
+    // Export as Excel
+
+    public function paymentReportExcel()
+    {
+    	if(Auth::guard('web')->check()) {
+            $start = Carbon::parse(request()->from_date)->format('Y-m-d') . ' 00:00:01';
+            $end = Carbon::parse(request()->to_date)->format('Y-m-d') . ' 23:59:59';
+
+            return Excel::download(new PaymentReport($start, $end), 'laporan-pembayaran-diancagoods.xlsx');
+        }
+        return redirect(route('administrator.login'));
+    }
+
+    public function allReportExcel()
+    {
+    	if(Auth::guard('web')->check()) {
+            $start = Carbon::parse(request()->from_date)->format('Y-m-d') . ' 00:00:01';
+            $end = Carbon::parse(request()->to_date)->format('Y-m-d') . ' 23:59:59';
+
+            return Excel::download(new TransactionReport($start, $end), 'laporan-transaksi-diancagoods.xlsx');
+        }
+        return redirect(route('administrator.login'));
+    }
+
+    public function salesReportExcel()
+    {
+    	if(Auth::guard('web')->check()) {
+            $start = Carbon::parse(request()->from_date)->format('Y-m-d') . ' 00:00:01';
+            $end = Carbon::parse(request()->to_date)->format('Y-m-d') . ' 23:59:59';
+            
+            return Excel::download(new SalesReport($start, $end), 'laporan-penjualan-diancagoods.xlsx');
+        }
+        return redirect(route('administrator.login'));
+    }
+
+    public function productReportExcel()
+    {
+    	if(Auth::guard('web')->check()) {
+            $start = Carbon::parse(request()->from_date)->format('Y-m-d') . ' 00:00:01';
+            $end = Carbon::parse(request()->to_date)->format('Y-m-d') . ' 23:59:59';
+            
+            return Excel::download(new ProductReport($start, $end), 'laporan-produk-diancagoods.xlsx');
+        }
+        return redirect(route('administrator.login'));
+    }
+
+    // Home Management
+    public function homepageList(){
+        if(Auth::guard('web')->check()){
+            $product = Product::with('variant', 'images')->where('is_featured', 1)->orWhere('is_featured', 2)->orWhere('is_featured', 3)->orderBy('created_at', 'ASC')->get();
+            $product_option = Product::with('variant', 'images')->where('is_featured', 0)->orderBy('name', 'ASC')->get();
+            return view('admin.homepage-list', compact('product', 'product_option'));
+        }
+        return redirect(route('administrator.login'));
+    }
+
+    public function homepageCreate(Request $request)
+    {
+        if(Auth::guard('web')->check()) {
+            $this->validate($request, [
+                'type' => 'required',
+                'product_select' => 'required'
+            ]);
+
+            try {
+                $product = Product::where('id', $request->product_select)->first();
+                $product->update([
+                    'is_featured' => $request->type
+                ]);
+                
+                return redirect(route('administrator.homepage'));
+            } catch(\Exception $e) {
+                return redirect()->back()->with(['error' => $e->getMessage()]);
+            }
+        }
+        return redirect(route('administrator.login'));
+    }
+
+    public function homepageChange($product_id)
+    {
+        $product = Product::with('variant', 'images')->where('id', $product_id)->first();
+        return json_encode($product);
+    }
+
+    public function homepageUpdate(Request $request)
+    {
+        if(Auth::guard('web')->check()) {
+            $this->validate($request, [
+                'type' => 'required',
+                'id' => 'required'
+            ]);
+
+            try {
+                $product = Product::where('id', $request->id)->first();
+                $product->update([
+                    'is_featured' => $request->type
+                ]);
+                
+                return redirect(route('administrator.homepage'));
+            } catch(\Exception $e) {
+                return redirect()->back()->with(['error' => $e->getMessage()]);
+            }
+        }
+        return redirect(route('administrator.login'));
+    }
+
+    public function homepageDelete(Request $request)
+    {
+        if(Auth::guard('web')->check()) {
+            $this->validate($request, [
+                'id' => 'integer'
+            ]);
+
+            try {
+                $product = Product::where('id', $request->id)->first();
+                $product->update([
+                    'is_featured' => 0
+                ]);
+                
+                return redirect(route('administrator.homepage'));
+            } catch(\Exception $e) {
+                return redirect()->back()->with(['error' => $e->getMessage()]);
+            }
         }
         return redirect(route('administrator.login'));
     }

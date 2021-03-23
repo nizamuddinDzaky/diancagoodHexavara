@@ -27,12 +27,19 @@ class OrderController extends Controller
     public function showCart()
     {
         if(Auth::guard('customer')->check()){
+            $session_cart = [];
+            if(request()->session()->has('id_item_cart')){
+                $session_cart = request()->session()->get('id_item_cart');    
+            }
+
             $cart = Cart::with('details.variant.product', 'details.variant.promo_detail')->with('details', function($query) {
                 $query->orderBy('created_at', 'desc');
             })->where('customer_id', Auth::guard('customer')->user()->id)->first();
+            // echo count($cart);die;
+            // print_r($cart->details[0]->variant->promo_detail);die;
             $str = NULL;
             $cart_json = json_encode($cart);
-            return view('dianca.cart', compact('cart', 'cart_json', 'str'));
+            return view('dianca.cart', compact('cart', 'cart_json', 'str', 'session_cart'));
         }
         return redirect(route('customer.login'));;
     }
@@ -55,7 +62,7 @@ class OrderController extends Controller
                         'cart_id' => $cart->id,
                         'product_variant_id' => $variant->id,
                         'qty' => $request->qty,
-                        'price' => $variant->price * $request->qty
+                        'price' => ($variant->price - $variant->promo_price) * $request->qty
                     ]);
     
                     $cart->total_cost += $cart_detail->price;
@@ -63,7 +70,7 @@ class OrderController extends Controller
                 } else {
                     $cart_variant = CartDetail::where('cart_id', $cart->id)->where('product_variant_id', $variant->id)->first();
                     $cart_variant->qty += $request->qty;
-                    $cart_variant->price += $variant->price * $request->qty;
+                    $cart_variant->price += ($variant->price  - $variant->promo_price) * $request->qty;
                     $cart_variant->save();
 
                     $cart->total_cost = CartDetail::where('cart_id', $cart->id)->sum('price');
@@ -85,7 +92,7 @@ class OrderController extends Controller
 
         $carts_variant->update([
             'qty' => $request->qty,
-            'price' => $request->qty * $product_variant->price
+            'price' => $request->qty * ($product_variant->price - $product_variant->promo_price)
         ]);
 
         if($product_variant->stock < $carts_variant->qty) {
@@ -114,10 +121,10 @@ class OrderController extends Controller
         $return = array();
         
         if($request->add == 1) {
-            $return['totalcost'] = $request->curr_total + ($request->qty * $product_variant->price);
+            $return['totalcost'] = $request->curr_total + ($request->qty * ($product_variant->price - $product_variant->promo_price));
             $return['qty'] = $request->curr_qty + $request->qty;
         } else if($request->add == 0) {
-            $return['totalcost'] = $request->curr_total - ($request->qty * $product_variant->price);
+            $return['totalcost'] = $request->curr_total - ($request->qty * ($product_variant->price - $product_variant->price));
             $return['qty'] = $request->curr_qty - $request->qty;
         }
 
@@ -486,7 +493,7 @@ class OrderController extends Controller
                     $cart->save();
                 }
                 
-                return redirect(route('cart.show'));
+                return redirect()->route('cart.show', array('qty' => $cart->details->sum('qty')));
             }
             
             return redirect()->back()->with(['error' => 'Produk tidak dapat ditambahkan ke keranjang.']);
@@ -519,9 +526,44 @@ class OrderController extends Controller
         return $body;
     }
 
+    public function removeFromCart(Request $request)
+    {
+        if(Auth::guard('customer')->check) {
+            $this->validate($request, [
+                'id' => 'array'
+            ]);
+
+            foreach($request->id as $id) {
+                $cart = Cart::where('customer_id', Auth::guard('customer')->user()->id)->first();
+                $cart_detail = CartDetail::where('cart_id', $cart->id)->where('product_variant_id', $id)->first();
+                $cart->total_cost -= $cart_detail->price;
+                $cart->save();
+
+                $cart_detail->delete();
+            }
+
+            return redirect()->back()->with(['success' => 'Produk dihapus dari keranjang!']);
+        }
+        return redirect(route('customer.login'));
+    }
+    
     public function deleteCart($id)
     {
         if(Auth::guard('customer')->check()){
+            
+            if(request()->session()->has('id_item_cart')){
+                $session_cart = request()->session()->get('id_item_cart');    
+                $key = array_search($id,$session_cart);
+                if(!is_bool($key)){
+                    unset($session_cart[$key]);
+                }
+                if(count($session_cart) == 0 ){
+                    request()->session()->forget('id_item_cart');
+                    request()->session()->save();
+                }else{
+                    request()->session()->put('id_item_cart', $session_cart);
+                }
+            }
             $cart = CartDetail::find($id);
             $cart->delete();
             return redirect()->back();
@@ -532,6 +574,23 @@ class OrderController extends Controller
     {
         $arrayId = explode(',', $request['item-cart']);
         if(Auth::guard('customer')->check()){
+
+            if(request()->session()->has('id_item_cart')){
+                $session_cart = request()->session()->get('id_item_cart');    
+                foreach($arrayId as $id){
+                    $key = array_search($id,$session_cart);
+                    if(!is_bool($key)){
+                        unset($session_cart[$key]);
+                    }
+                }
+                // echo count($session_cart);die;
+                if(count($session_cart) == 0 ){
+                    request()->session()->forget('id_item_cart');
+                    request()->session()->save();
+                }else{
+                    request()->session()->put('id_item_cart', $session_cart);
+                }
+            }
             $cart = CartDetail::whereIn('id', $arrayId);
             $cart->delete();
             return redirect()->back();

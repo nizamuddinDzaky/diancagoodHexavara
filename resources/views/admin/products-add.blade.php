@@ -4,6 +4,12 @@
 <title>Tambah Produk</title>
 @endsection
 
+@section('css')
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css"
+    rel="stylesheet" />
+@endsection
+
 @section('content')
 <div class="container-fluid">
     <div class="row">
@@ -19,8 +25,10 @@
                             <h4 class="weight-600 font-24">Informasi Produk</h4>
                         </div>
                     </div>
-                    <form method="POST" action="{{ route('administrator.add_product') }}" enctype="multipart/form-data">
+                    <form method="POST" id="store-product" action="{{ route('administrator.add_product') }}" enctype="multipart/form-data">
                         @csrf
+                        <div style="display:none" id="variant">
+                        </div>
                         <div class="row mt-2">
                             <div class="col-lg-1"></div>
                             <div class="col-lg-6">
@@ -33,7 +41,8 @@
                             <div class="col-lg-3">
                                 <div class="form-group">
                                     <label class="form-label" for="category_id">Kategori Produk</label>
-                                    <select id="category_id" name="category_id" class="form-control bg-light-2">
+                                    <select id="category_id" name="category_id"
+                                        class="form-control bg-light-2 selector">
                                         <option value="" selected>Pilih</option>
                                         @foreach($categories as $c)
                                         <option value="{{ $c->id }}">{{ $c->name }}</option>
@@ -48,7 +57,7 @@
                             <div class="col-lg-2">
                                 <div class="form-group">
                                     <label class="form-label" for="brand_id">Brand</label>
-                                    <select id="brand_id" name="brand_id" class="form-control bg-light-2">
+                                    <select id="brand_id" name="brand_id" class="form-control bg-light-2 selector">
                                         <option value="" selected>Pilih</option>
                                         @foreach($brands as $b)
                                         <option value="{{ $b->id }}">{{ $b->name }}</option>
@@ -61,7 +70,8 @@
                             <div class="col-lg-3">
                                 <div class="form-group">
                                     <label class="form-label" for="subcategory_id">Subkategori</label>
-                                    <select id="subcategory_id" name="subcategory_id" class="form-control bg-light-2">
+                                    <select id="subcategory_id" name="subcategory_id"
+                                        class="form-control bg-light-2 selector">
                                         <option value="">Pilih</option>
                                     </select>
                                 </div>
@@ -95,11 +105,9 @@
                                             <table class="table table-bordered text-gray-2">
                                                 <thead>
                                                     <tr class="d-flex">
-                                                        <th class="col-3">Nama Varian</th>
-                                                        <th class="col-2">Harga</th>
-                                                        <th class="col-2">Berat</th>
-                                                        <th class="col-2">Stok</th>
-                                                        <th class="col-3">Gambar</th>
+                                                        <th class="col-6">Nama Varian</th>
+                                                        <th class="col-3">Harga</th>
+                                                        <th class="col-3"></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="variants-list">
@@ -123,7 +131,7 @@
                         <div class="row mt-2">
                             <div class="col-lg-7"></div>
                             <div class="col-lg-3">
-                                <button type="submit" class="btn btn-orange float-right font-16 px-5 py-2 mr-0">Submit &
+                                <button type="button" id="store-product-button"  class="btn btn-orange float-right font-16 px-5 py-2 mr-0">Submit &
                                     Publish</button>
                             </div>
                         </div>
@@ -324,87 +332,145 @@
         </div>
     </div>
 </div>
+<div class="modal fade w-100" id="detail_variant" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header pl-0 pb-4">
+                <h3 class="modal-title w-100 text-center position-absolute text-gray-2 weight-600">Detail Varian
+                </h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row mt-2">
+                        <div class="col-lg-12">
+                            <div class="table-responsive curved-border">
+                                <table class="table table-bordered text-gray-2">
+                                    <tbody>
+                                        <tr class="d-flex">
+                                            <th class="col-4">Nama Varian</th>
+                                            <td class="col-8" id="detail-name"></td>
+                                        </tr>
+                                        <tr class="d-flex">
+                                            <th class="col-4">Stok</th>
+                                            <td class="col-8" id="detail-stock"></td>
+                                        </tr>
+                                        <tr class="d-flex">
+                                            <th class="col-4">Berat</th>
+                                            <td class="col-8" id="detail-weight"></td>
+                                        </tr>
+                                        <tr class="d-flex">
+                                            <th class="col-4">Harga</th>
+                                            <td class="col-8" id="detail-price"></td>
+                                        </tr>
+                                        <tr class="d-flex">
+                                            <th class="col-4">Foto</th>
+                                            <td class="col-8" id="detail-image"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-gray" data-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('js')
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
-    var category_button = $('#category_placeholder');
-    var category_uploader = $('#category_input');
-    var category_images = $('#category_container');
-    var product_button = $('#product_placeholder');
-    var product_uploader = $('#product_input');
-    var product_images = $('#product_container');
-    var variant_button = $('#variant_placeholder');
-    var variant_uploader = $('#variant_input');
-    var variant_images = $('#variant_container');
+$(".selector").select2({
+    width: '100%',
+    theme: 'bootstrap'
+});
 
-    // Upload category images
-    category_button.on('click', function() {
-        category_uploader.click();
+var variants = $("#variant");
+
+var category_button = $('#category_placeholder');
+var category_uploader = $('#category_input');
+var category_images = $('#category_container');
+var product_button = $('#product_placeholder');
+var product_uploader = $('#product_input');
+var product_images = $('#product_container');
+var variant_button = $('#variant_placeholder');
+var variant_uploader = $('#variant_input');
+var variant_images = $('#variant_container');
+
+// Upload category images
+category_button.on('click', function() {
+    category_uploader.click();
+});
+
+category_uploader.on('change', function() {
+    $('#img_category').remove();
+
+    var reader = new FileReader();
+    var data = $(this)[0].files;
+
+    $.each(data, function(index, file) {
+        if (/(\.|\/)(gif|jpe?g|png)$/i.test(file.type)) {
+            var reader = new FileReader();
+            reader.onload = (function(file) {
+                return function(e) {
+                    var img = $(
+                        '<div class="img" id="img_category" style="background-image: url(\'' +
+                        e
+                        .target.result +
+                        '\');" rel="' + e.target.result +
+                        '"><span><strong>Hapus</strong></span></div>'
+                    );
+                    category_images.append(img);
+                };
+            })(file);
+            reader.readAsDataURL(file);
+        }
     });
+});
 
-    category_uploader.on('change', function() {
-        $('#img_category').remove();
+category_images.on('click', '.img', function() {
+    $(this).remove();
+})
 
-        var reader = new FileReader();
-        var data = $(this)[0].files;
+// Upload product images
+product_button.on('click', function() {
+    product_uploader.click();
+});
 
-        $.each(data, function(index, file) {
-            if (/(\.|\/)(gif|jpe?g|png)$/i.test(file.type)) {
-                var reader = new FileReader();
-                reader.onload = (function(file) {
-                    return function(e) {
-                        var img = $(
-                            '<div class="img" id="img_category" style="background-image: url(\'' +
-                            e
-                            .target.result +
-                            '\');" rel="' + e.target.result +
-                            '"><span><strong>Hapus</strong></span></div>'
-                        );
-                        category_images.append(img);
-                    };
-                })(file);
-                reader.readAsDataURL(file);
-            }
-        });
+product_uploader.on('change', function() {
+    var reader = new FileReader();
+    var data = $(this)[0].files;
+
+    $.each(data, function(index, file) {
+        if (/(\.|\/)(gif|jpe?g|png)$/i.test(file.type)) {
+            var reader = new FileReader();
+            reader.onload = (function(file) {
+                return function(e) {
+                    var img = $(
+                        '<div class="img" style="background-image: url(\'' +
+                        e
+                        .target.result +
+                        '\');" rel="' + e.target.result +
+                        '"><span><strong>Hapus</strong></span></div>'
+                    );
+                    product_images.append(img);
+                };
+            })(file);
+            reader.readAsDataURL(file);
+        }
     });
+});
 
-    category_images.on('click', '.img', function() {
-        $(this).remove();
-    })
-
-    // Upload product images
-    product_button.on('click', function() {
-        product_uploader.click();
-    });
-
-    product_uploader.on('change', function() {
-        var reader = new FileReader();
-        var data = $(this)[0].files;
-
-        $.each(data, function(index, file) {
-            if (/(\.|\/)(gif|jpe?g|png)$/i.test(file.type)) {
-                var reader = new FileReader();
-                reader.onload = (function(file) {
-                    return function(e) {
-                        var img = $(
-                            '<div class="img" style="background-image: url(\'' +
-                            e
-                            .target.result +
-                            '\');" rel="' + e.target.result +
-                            '"><span><strong>Hapus</strong></span></div>'
-                        );
-                        product_images.append(img);
-                    };
-                })(file);
-                reader.readAsDataURL(file);
-            }
-        });
-    });
-
-    product_images.on('click', '.img', function() {
-        $(this).remove();
-    })
+product_images.on('click', '.img', function() {
+    $(this).remove();
+})
 
 $("#category_id").on('change', function() {
     $.ajax({
@@ -415,6 +481,7 @@ $("#category_id").on('change', function() {
         },
         success: function(res) {
             $("#subcategory_id").empty();
+            $('#subcategory_id').append('<option value="">Pilih</option>')
             $.each(res.data, function(key, item) {
                 $("#subcategory_id").append('<option value="' + item.id + '">' +
                     item.name + '</option>');
@@ -436,7 +503,7 @@ $('select[name=subcategory_id]').change(function() {
         var category = $("#category_id option:selected").text();
         $('input[name=popup_category_name]').val(category);
         $('input[name=popup_category_id]').val(category_id);
-        console.log($('input[name=popup_category_id]').val());
+        // console.log($('input[name=popup_category_id]').val());
         $('#modal_subcategory').modal('show');
     }
 });
@@ -451,66 +518,100 @@ $("#add-variant").on('click', function() {
     $('#modal_variant').modal('show');
 })
 
- // Upload variant images
- variant_button.on('click', function() {
-        variant_uploader.click();
+$(".show-variant").on('click', function() {
+    $('#detail_variant').modal('show');
+})
+
+// Upload variant images
+variant_button.on('click', function() {
+    variant_uploader.click();
+});
+
+variant_uploader.on('change', function() {
+    console.log(variant_uploader.val());
+    $('#img_variant').remove();
+
+    // var reader = new FileReader();
+    var data = $(this)[0].files;
+
+    $.each(data, function(index, file) {
+        if (/(\.|\/)(gif|jpe?g|png)$/i.test(file.type)) {
+            var reader = new FileReader();
+            reader.onload = (function(file) {
+                return function(e) {
+                    var img = $(
+                        '<div class="img" id="img_variant" style="background-image: url(\'' +
+                        e
+                        .target.result +
+                        '\');" rel="' + e.target.result +
+                        '"><span><strong>Hapus</strong></span></div>'
+                    );
+                    variant_images.append(img);
+                };
+            })(file);
+            reader.readAsDataURL(file);
+        }
     });
+});
 
-    variant_uploader.on('change', function() {
-        $('#img_variant').remove();
-
-        var reader = new FileReader();
-        var data = $(this)[0].files;
-
-        $.each(data, function(index, file) {
-            if (/(\.|\/)(gif|jpe?g|png)$/i.test(file.type)) {
-                var reader = new FileReader();
-                reader.onload = (function(file) {
-                    return function(e) {
-                        var img = $(
-                            '<div class="img" id="img_variant" style="background-image: url(\'' +
-                            e
-                            .target.result +
-                            '\');" rel="' + e.target.result +
-                            '"><span><strong>Hapus</strong></span></div>'
-                        );
-                        variant_images.append(img);
-                    };
-                })(file);
-                reader.readAsDataURL(file);
-            }
-        });
-    });
-
-    variant_images.on('click', '.img', function() {
-        $(this).remove();
-    })
+variant_images.on('click', '.img', function() {
+    $(this).remove();
+})
 
 $("form#form-variant").submit(function(e) {
     e.preventDefault();
-    const data = new FormData($(this)[0]);
-    data.append('image_variant', $("#variant_input")[0].files[0]);
+    const data = new FormData(this);
     $.ajax({
         "_token": "{{ csrf_token() }}",
         url: "add-variant",
         type: 'POST',
         data: data,
         enctype: 'multipart/form-data',
-        success: function(res) {
-            console.log(res);
-            const variant = $('<tr class="d-flex"><td class="col-3">' + res.name + '</td><td class="col-2">' + res.price + '</td><td class="col-2">'+ res.weight + '</td><td class="col-2">' + res.stock + '</td></td><td class="col-3"></td></tr>')
-            $("#variants-list").append(variant);
-    
-            $('#modal_variant').modal('hide');
-        },
-        error: function(xhr, status, err) {
-            console.log(xhr.responseText);
-        },
         dataType: 'JSON',
         cache: false,
         contentType: false,
         processData: false,
+        success: function(res) {
+            console.log(res);
+            const variant = $('<tr class="d-flex"><td class="col-6">' + res.name +
+                '</td><td class="col-3">' + res.price +
+                '</td><td class="col-3"><button type="button" class="btn btn-orange show-variant" onclick="showDetail(' +res.id + ')">Detail</button></td></tr>'
+                )
+            variants.append(`
+                <input type="hidden" name="variants[]" value=` + res.id +`>
+            `);
+            $("#variants-list").append(variant);
+
+            $('#modal_variant').modal('hide');
+        },
+        error: function(xhr, status, err) {
+            console.log(xhr.responseText);
+        }
     });
+})
+
+function showDetail(id) {
+    var variant_id = id;
+    $("#detail_variant").modal('show');
+
+    $.ajax({
+        url: "/product-variant/" + variant_id,
+        type: "GET",
+        dataType: "JSON",
+        success: function(res){
+            $("#detail-name").html(res.name);
+            $("#detail-stock").html(res.stock);
+            $("#detail-weight").html(res.weight + " gr");
+            $("#detail-price").html(res.price.toLocaleString("id-ID", { style: "currency", currency: "IDR"}));
+            var path = 'storage/products/' + res.image;
+            $("#detail-image").html(`<img class="w-100" src="{{ asset('` + path + `') }}">`);
+        }
+    })
+}
+
+$("#store-product-button").on('click', function(e) {
+    console.log($("#variant").val());
+    $("#store-product").submit();
 })
 
 $.ajaxSetup({

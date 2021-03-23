@@ -191,6 +191,7 @@
         $("#var"+firstVariant).prop("checked", true).trigger("change");
         $("#stock").html({{ $product->variant->first()->stock }});
         $("#weight").html({{ $product->variant->first()->weight }}); 
+        console.log($("#display-product-image").attr('src'));
     });
 
     $(document).ready(function() {
@@ -240,8 +241,6 @@
                             promo_value += (promos[i].promo.value / 100) * res.price;
                     }
                 }
-
-                console.log(promo_value);
                 
                 if(promo_value != 0){
                     $("#price").html(`<h2 style="display:inline-block">` + (res.price - promo_value).toLocaleString("id-ID", {style: "currency", currency: "IDR"}) + `</h2> 

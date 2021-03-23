@@ -21,7 +21,8 @@
                 </div>
                 <div class="col-lg-5"></div>
                 <div class="col-lg-2 float-right">
-                    <button class="btn dropdown-toggle border" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button class="btn dropdown-toggle border" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">
                         Urutkan: Paling Sesuai
                     </button>
                     <div class="dropdown-menu">
@@ -34,8 +35,8 @@
             <div class="row my-2 pb-2 pt-3">
                 <div class="col-lg-3 pb-3">
                     <div class="card shadow-1">
-                        <form action="{{ route('filter-product') }}">
-                            <input type="hidden" name="param" value="{{ request()->param }}">
+                        <!-- <form action="{{ route('filter-product') }}"> -->
+                            <input type="hidden" name="param" value="{{ request()->param }}" id="input-hidden-param">
                             <div class="card-body">
                                 <div class="option">
                                     <h4 class="py-0 weight-600">Kategori Barang</h4>
@@ -48,7 +49,7 @@
                                     </li>
                                 @endforeach
                                 </ul>
-                                <input type="hidden" name="categoryFilter" id="input-hidden-category">
+                                
                                 <hr>
                                 <div class="option">
                                 <h4 class="py-0 weight-600">Brand</h4>
@@ -61,7 +62,7 @@
                                     </li>
                                 @endforeach
                                 </ul>
-                                <input type="hidden" name="categoryBrand" id="input-hidden-brand">
+                                
                                 <hr>
                                 <div class="option">
                                 <h5 class="py-0 weight-600">Harga</h5>
@@ -74,7 +75,7 @@
                                             <div class="input-group-text" style="background:#F2F2F2">Min</div>
                                         </div>
                                         <input type="text" class="form-control input-money" id="min-price" name="" placeholder="Minimum" value="{{ app('request')->input('min-price') ?? '0' }}">
-                                        <input type="hidden" class="form-control" id="min-price-hide" name="min-price" placeholder="Minimum" value="{{ app('request')->input('min-price') ?? '0' }}">
+
                                     </div>
                                 </div>
                                 <div class="col-auto">
@@ -83,48 +84,60 @@
                                             <div class="input-group-text" style="background:#F2F2F2">Max</div>
                                         </div>
                                         <input type="text" class="form-control input-money" id="max-price" name="" placeholder="Maksimum" value="{{ app('request')->input('max-price') ?? '0' }}">
-                                        <input type="hidden" class="form-control" id="max-price-hide" name="max-price" placeholder="Maksimum" value="{{ app('request')->input('max-price') ?? '0' }}">
+                                        
                                     </div>
                                 </div>
-                                <button class="btn btn-orange ml-3 mt-2 text-center" style="width: 15rem">Apply</button>
+                                <button class="btn btn-orange ml-3 mt-2 text-center" style="width: 15rem" id="btn-apply-filter">Apply</button>
                                 
                             </div>
-                        </form>
+                        <!-- </form> -->
 
                     </div>
                 </div>
                 <div class="col-lg-9">
                     <div class="row my-2 ml-2">
                         @forelse($product as $row)
-                            <div class="col">
-                                <div class="f_p_item">
-                                    <div class="f_p_img ">
-                                        <a href="{{ url('/product/' . $row->id) }}">
-                                            <img id="pic{{ $row }}" class="home-product-center-cropped" src="{{ asset('storage/products/' . $row->images->first()->filename) }}" alt="{{ $row->name }}">
-                                        </a>
-                                        <div class="p_icon">
-                                            <button class="btn btn-orange ml-2 mt-2 text-center mb-2" style="">+ Keranjang</button>
-                                        </div>
-                                    </div>
-                                    <a href="{{ url('/product/' . $row->id) }}" class="overflow-auto mb-2">
-                                        <h4 class="text-gray-2 product-name" class="pl-3">{{ $row->name }}</h4>
+                        <div class="col">
+                            <div class="f_p_item">
+                                <div class="f_p_img ">
+                                    <a href="{{ url('/product/' . $row->id) }}">
+                                        <img id="pic{{ $row }}" class="home-product-center-cropped"
+                                            src="{{ asset('storage/products/' . $row->images->first()->filename) }}"
+                                            alt="{{ $row->name }}">
                                     </a>
-                                    @if( number_format($row->variant->first()->price) != number_format($row->variant->last()->price)
-                                    )
-                                    <h5 class="text-gray-1">Rp {{ number_format($row->variant->first()->price) }} - Rp
-                                        {{ number_format($row->variant->last()->price) }}</h5>
-                                    @else
-                                    <h5 class="text-gray-1">Rp {{ number_format($row->variant->first()->price) }}</h5>
-                                    @endif
-                                    @for($i = 0; $i < 5; $i++)
-                                        @if ($i < $row->rate)
-                                        <span class="fa fa-star checked"></span>
-                                        @else
-                                        <span class="fa fa-star"></span>
-                                        @endif
-                                    @endfor
+                                    <div class="p_icon">
+                                        <button onclick="addToCart({{ $row->variant->first()->id }})"
+                                            class="btn btn-orange ml-2 mt-2 text-center mb-2" style="">+
+                                            Keranjang</button>
+                                    </div>
                                 </div>
+                                <a href="{{ url('/product/' . $row->id) }}" class="overflow-auto mb-2">
+                                    <h4 class="text-gray-2 product-name" class="pl-3">{{ $row->name }}</h4>
+                                </a>
+                                @if( $row->variant->first()->promo_price != $row->variant->first()->price )
+                                <h5 class="text-gray-1 d-flex justify-content-center">Rp
+                                    {{ number_format($row->variant->first()->promo_price) }}<span
+                                        class="d-inline-flex align-self-center ml-2"
+                                        style="text-decoration:line-through;"><small>Rp
+                                            {{ number_format($row->variant->first()->price) }}</small></span></h5>
+                                @else
+                                @if( number_format($row->variant->first()->price) !=
+                                number_format($row->variant->last()->price)
+                                )
+                                <h5 class="text-gray-1">Rp {{ number_format($row->variant->first()->price) }} - Rp
+                                    {{ number_format($row->variant->last()->price) }}</h5>
+                                @else
+                                <h5 class="text-gray-1">Rp {{ number_format($row->variant->first()->price) }}</h5>
+                                @endif
+                                @endif
+                                @for($i = 0; $i < 5; $i++) @if ($i < $row->rate)
+                                    <span class="fa fa-star checked"></span>
+                                    @else
+                                    <span class="fa fa-star"></span>
+                                    @endif
+                                    @endfor
                             </div>
+                        </div>
                         @empty
                         @endforelse
                     </div>
@@ -136,7 +149,48 @@
 @endsection
 
 @section('js')
-<script type="text/javascript">
+<script>
+function addToCart(var_id) {
+    if ("{{ auth()->guard('customer')->check() }}") {
+        $.ajax({
+            url: '/cart/quick-add/' + var_id,
+            type: 'GET',
+            data: {
+                id: var_id
+            },
+            success: function(res) {
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    iconColor: '#fff',
+                    title: '<h6 style="color:white">Berhasil masuk keranjang!</h6>',
+                    showConfirmButton: false,
+                    timer: 1500,
+                    toast: true,
+                    background: '#f37020'
+                })
+
+                console.log(res.qty);
+                $("#cart_qty").html(res.qty)
+            }
+        })
+    } else {
+        Swal.fire({
+            position: 'top-end',
+            icon: 'error',
+            title: '<h6 style="color:white">Masuk untuk menambahkan ke keranjang!</h6>',
+            showConfirmButton: false,
+            timer: 1500,
+            toast: true,
+            background: '#d33',
+        }).then(function(e) {
+            e.dismiss;
+        }, function(dismiss) {
+            return false;
+        })
+    }
+}
+
     var selected_category = @json($arrayFilterCategory);
     var selected_brand = @json($arrayFilterBrand);
     $(document).ready(function () {
@@ -197,6 +251,14 @@
                 $(parent).addClass('active');
             }
             set_value_filter()
+        })
+
+        $('#input-search-navbar').change(function(){
+            $('#input-hidden-param').val($(this).val());
+        });
+
+        $('#btn-apply-filter').click(function(){
+            $('#search-navbar').click();
         })
     })
 

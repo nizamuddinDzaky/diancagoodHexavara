@@ -109,17 +109,17 @@ class ProductVariantController extends Controller
             'image' => 'nullable|image|max:500|mimes:png,jpeg,jpg'
         ]);
 
-        $product = ProductVariant::find($id);
-        $filename = $product->image;
+        $variant = ProductVariant::find($id);
+        $filename = $variant->image;
         if ($request->hasFile('image')) {
             $file = $request->file('image');
             $filename = time() . Str::slug($request->name) . '.' . $file->getClientOriginalExtension();
-            $file->storeAs('public/variants', $filename);
-            File::delete(storage_path('app/public/variants/' . $product->image));
+            $file->storeAs('public/storage/products/', $filename);
+            File::delete(storage_path('app/public/storage/products/' . $variant->image));
         }
 
         try{
-            $product->update([
+            $variant->update([
                 'product_id' => $request->product_id,
                 'name' => $request->name,
                 'price' => $request->price,

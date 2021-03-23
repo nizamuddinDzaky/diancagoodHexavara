@@ -446,16 +446,23 @@ $(document).ready(function() {
     })
 
    $(document).on('click', '.delete-address', function () {
-        swal({
-            title: 'Hapus Alamat',
-            text: "Apakah Anda Yakin Menghapus Alamat "+ $(this).data('address-type'),
-            type: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ya',
-            cancelButtonText: 'Tidak'
-        }).then((result) => {
+        // swal({
+        //     title: 'Hapus Alamat',
+        //     text: "Apakah Anda Yakin Menghapus Alamat "+ $(this).data('address-type'),
+        //     type: 'warning',
+        //     showCancelButton: true,
+        //     confirmButtonColor: '#3085d6',
+        //     cancelButtonColor: '#d33',
+        //     confirmButtonText: 'Ya',
+        //     cancelButtonText: 'Tidak'
+        // }).then((result) => {
+        //         // console.log("asd", result);
+        //     if (result.value) {
+        //         window.location.href = $(this).data('url-delete');
+        //     }
+        // })
+
+        sweet_alert("warning", "Hapus Alamat", "Apakah Anda Yakin Menghapus Alamat "+ $(this).data('address-type'), true).then((result) => {
                 // console.log("asd", result);
             if (result.value) {
                 window.location.href = $(this).data('url-delete');
@@ -500,25 +507,26 @@ $(document).ready(function() {
     $("#continue").on('click', function(e) {
         e.preventDefault();
         if($("#courier").val() == "" || $("#duration").val() == ""){
-            swal({
-                title: "Detail Tidak Lengkap",
-                text: "Pilih jasa pengiriman dan durasi pengiriman",
-                type: "warning",
-                reverseButtons: !0
-            }).then(function (e) {
+            // Swal.fire({
+            //     title: "Detail Tidak Lengkap",
+            //     text: "Pilih jasa pengiriman dan durasi pengiriman",
+            //     icon: "warning",
+            //     reverseButtons: !0
+            // }).then(function (e) {
+            //     e.dismiss;
+            // }, function (dismiss) {
+            //     return false;
+            // });
+
+            sweet_alert("warning", "Detail Tidak Lengkap", "Pilih jasa pengiriman dan durasi pengiriman").then(function (e) {
                 e.dismiss;
             }, function (dismiss) {
                 return false;
-            });
+            })
             return false;
         }
         if ($('#address_id').val() == '') {
-            swal({
-                title: "Detail Tidak Lengkap",
-                text: "Alamat Masih Kososng",
-                type: "warning",
-                reverseButtons: !0
-            }).then(function (e) {
+            sweet_alert("warning", "Detail Tidak Lengkap", "Alamat Masih Kososng").then(function (e) {
                 e.dismiss;
             }, function (dismiss) {
                 return false;
