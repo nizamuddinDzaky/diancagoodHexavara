@@ -21,7 +21,7 @@
 </head>
 
 <body>
-    <header class="header_area">
+<header class="header_area">
         <div class="container-fluid overflow-visible-2">
             <nav class="navbar navbar-expand-lg">
                 <a class="navbar-brand logo_h pr-3" href="{{ url('/') }}">
@@ -46,17 +46,22 @@
                         </li>
                         <li class="nav-item h-100 search_bar">
                             <form action="{{ route('filter-product') }}" method="get"
-                                class="form-inline d-inline w-100">
+                                class="form-inline d-inline w-100" id="form-search-navbar">
+                                <input type="hidden" name="categoryFilter" id="input-hidden-category">
+                                <input type="hidden" name="categoryBrand" id="input-hidden-brand">
+                                <input type="hidden" class="form-control" id="min-price-hide" name="min-price" placeholder="Minimum" value="{{ app('request')->input('min-price') ?? '0' }}">
+                                <input type="hidden" class="form-control" id="max-price-hide" name="max-price" placeholder="Maksimum" value="{{ app('request')->input('max-price') ?? '0' }}">
                                 <div class="input-group">
-                                    <input class="form-control" type="text" name="param" placeholder="Search"
+                                    <input class="form-control" type="text" name="param" placeholder="Search" id="input-search-navbar"
                                         aria-label="Search" value="{{ request()->param }}">
                                     <div class="input-group-append">
-                                        <div class="input-group-text py-0">
-                                            <i class="material-icons md-18">search</i>
-                                        </div>
+                                        <!-- <div class="input-group-text py-0"> -->
+                                            <a type="button" class="input-group-text float-right muted" id="search-navbar"><i class="material-icons md-24 py-0">search</i></a>
+                                        <!-- </div> -->
                                     </div>
                                 </div>
                             </form>
+
                         </li>
                         <li class="nav-item align-self-center h-100">
                             @if (!auth()->guard('customer')->check() || (!auth()->guard('customer')->user()->cart))
@@ -98,6 +103,7 @@
             </nav>
         </div>
     </header>
+
 
     {{-- Success Alert --}}
     @if(session('success'))

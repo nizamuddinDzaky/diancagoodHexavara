@@ -27,12 +27,19 @@ class OrderController extends Controller
     public function showCart()
     {
         if(Auth::guard('customer')->check()){
+            $session_cart = [];
+            if(request()->session()->has('id_item_cart')){
+                $session_cart = request()->session()->get('id_item_cart');    
+            }
+
             $cart = Cart::with('details.variant.product', 'details.variant.promo_detail')->with('details', function($query) {
                 $query->orderBy('created_at', 'desc');
             })->where('customer_id', Auth::guard('customer')->user()->id)->first();
+            // echo count($cart);die;
+            // print_r($cart->details[0]->variant->promo_detail);die;
             $str = NULL;
             $cart_json = json_encode($cart);
-            return view('dianca.cart', compact('cart', 'cart_json', 'str'));
+            return view('dianca.cart', compact('cart', 'cart_json', 'str', 'session_cart'));
         }
         return redirect(route('customer.login'));;
     }
@@ -124,12 +131,51 @@ class OrderController extends Controller
         return json_encode($return, JSON_NUMERIC_CHECK);
     }
 
-    public function checkout(Request $request)
+    public function submitItemCart(Request $request)
     {
         if(Auth::guard('customer')->check()) {
             $cart = Cart::where('customer_id', auth()->guard('customer')->user()->id)->first();
 
             $cart_arr = $request->input('cd');
+            $total_cost = 0;
+            $cart_detail = array();
+            $str = NULL;
+            
+            $request->session()->put('id_item_cart', $cart_arr);
+            return redirect()->route('checkout');
+            // foreach($cart_arr as $cd) {
+            //     $cart_detail[] = CartDetail::with('variant.product')->where('is_avail', 1)->where('id', $cd)->first();
+            // }
+            // print_r($cart_arr);die;
+            
+            // foreach($cart_detail as $cd) {
+            //     $total_cost += $cd->price;
+            // }
+            
+            // $address = Address::with('district.city.province')->where('customer_id', auth()->guard('customer')->user()->id)->where('is_main', 1)->first();
+
+            // $provinces = Province::get();
+
+            // return view('dianca.checkout', compact('cart', 'cart_detail', 'address', 'total_cost', 'provinces', 'str'));
+        }
+    }
+
+    public function changeAddress($id)
+    {
+        request()->session()->put('id_address', $id);
+        return redirect()->route('checkout');
+    }
+
+    public function checkout(Request $request)
+    {
+        if(Auth::guard('customer')->check()) {
+
+            if (!$request->session()->has('id_item_cart')) {
+                return redirect()->route('home');
+            }
+            
+            $cart = Cart::where('customer_id', auth()->guard('customer')->user()->id)->first();
+            $cart_arr = $request->session()->get('id_item_cart');
             $total_cost = 0;
             $cart_detail = array();
             $str = NULL;
@@ -142,8 +188,13 @@ class OrderController extends Controller
                 $total_cost += $cd->price;
             }
             
-            $address = Address::with('district.city.province')->where('customer_id', auth()->guard('customer')->user()->id)->where('is_main', 1)->first();
-
+            $address = Address::with('district.city.province')->where('customer_id', auth()->guard('customer')->user()->id);
+            if ($request->session()->has('id_address')) {
+                $address = $address->where('id' , $request->session()->get('id_address'));
+            }else{
+                $address = $address->where('is_main', 1);
+            }
+            $address = $address->first();
             $provinces = Province::get();
 
             return view('dianca.checkout', compact('cart', 'cart_detail', 'address', 'total_cost', 'provinces', 'str'));
@@ -234,7 +285,7 @@ class OrderController extends Controller
 
     public function payment(Request $request)
     {
-        // echo "string";die;
+        
         if(Auth::guard('customer')->check()) {
             $this->validate($request, [
                 'courier' => 'required',
@@ -242,7 +293,6 @@ class OrderController extends Controller
                 'address_id' => 'required|exists:addresses,id',
                 'shipping_cost' => 'required',
                 'subtotal' => 'required',
-                'cd' => 'required'
             ]);
 
             $subtotal = $request->subtotal;
@@ -251,9 +301,8 @@ class OrderController extends Controller
             $total_cost = $request->subtotal + $request->shipping_cost;
             $courier = $request->courier;
             $duration = $request->duration;
-            $cart_detail = $request->input('cd');
             $str = NULL;
-            return view('dianca.payment', compact('subtotal', 'shipping_cost', 'address_id', 'total_cost', 'courier', 'duration', 'cart_detail', 'str'));
+            return view('dianca.payment', compact('subtotal', 'shipping_cost', 'address_id', 'total_cost', 'courier', 'duration','str'));
         }
     }
 
@@ -267,11 +316,10 @@ class OrderController extends Controller
             'duration' => 'required',
             'shipping_cost' => 'required',
             'subtotal' => 'required',
-            'cd' => 'required'
         ]);
 
         $carts = Cart::where('customer_id', auth()->guard('customer')->user()->id)->first();
-        $cart_arr = $request->input('cd');
+        $cart_arr = $request->session()->get('id_item_cart');
 
         $address = Address::where('id', $request->address_id)->first();
         $customer = Customer::where('id', auth()->guard('customer')->user()->id)->first();
@@ -313,6 +361,16 @@ class OrderController extends Controller
                 $variant->save();
 
                 CartDetail::with('variant')->where('id', $cd)->delete();
+            }
+
+            if (request()->session()->has('id_item_cart')) {
+                $request->session()->forget('id_item_cart');
+                $request->session()->save();
+            }
+
+            if (request()->session()->has('id_address')) {
+                $request->session()->forget('id_address');
+                $request->session()->save();
             }
 
             $payment = Payment::create([
@@ -492,6 +550,20 @@ class OrderController extends Controller
     public function deleteCart($id)
     {
         if(Auth::guard('customer')->check()){
+            
+            if(request()->session()->has('id_item_cart')){
+                $session_cart = request()->session()->get('id_item_cart');    
+                $key = array_search($id,$session_cart);
+                if(!is_bool($key)){
+                    unset($session_cart[$key]);
+                }
+                if(count($session_cart) == 0 ){
+                    request()->session()->forget('id_item_cart');
+                    request()->session()->save();
+                }else{
+                    request()->session()->put('id_item_cart', $session_cart);
+                }
+            }
             $cart = CartDetail::find($id);
             $cart->delete();
             return redirect()->back();
@@ -502,6 +574,23 @@ class OrderController extends Controller
     {
         $arrayId = explode(',', $request['item-cart']);
         if(Auth::guard('customer')->check()){
+
+            if(request()->session()->has('id_item_cart')){
+                $session_cart = request()->session()->get('id_item_cart');    
+                foreach($arrayId as $id){
+                    $key = array_search($id,$session_cart);
+                    if(!is_bool($key)){
+                        unset($session_cart[$key]);
+                    }
+                }
+                // echo count($session_cart);die;
+                if(count($session_cart) == 0 ){
+                    request()->session()->forget('id_item_cart');
+                    request()->session()->save();
+                }else{
+                    request()->session()->put('id_item_cart', $session_cart);
+                }
+            }
             $cart = CartDetail::whereIn('id', $arrayId);
             $cart->delete();
             return redirect()->back();

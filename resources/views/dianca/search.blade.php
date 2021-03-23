@@ -35,8 +35,8 @@
             <div class="row my-2 pb-2 pt-3">
                 <div class="col-lg-3 pb-3">
                     <div class="card shadow-1">
-                        <form action="{{ route('filter-product') }}">
-                            <input type="hidden" name="param" value="{{ request()->param }}">
+                        <!-- <form action="{{ route('filter-product') }}"> -->
+                            <input type="hidden" name="param" value="{{ request()->param }}" id="input-hidden-param">
                             <div class="card-body">
                                 <div class="option">
                                     <h4 class="py-0 weight-600">Kategori Barang</h4>
@@ -49,7 +49,7 @@
                                     </li>
                                 @endforeach
                                 </ul>
-                                <input type="hidden" name="categoryFilter" id="input-hidden-category">
+                                
                                 <hr>
                                 <div class="option">
                                 <h4 class="py-0 weight-600">Brand</h4>
@@ -62,7 +62,7 @@
                                     </li>
                                 @endforeach
                                 </ul>
-                                <input type="hidden" name="categoryBrand" id="input-hidden-brand">
+                                
                                 <hr>
                                 <div class="option">
                                 <h5 class="py-0 weight-600">Harga</h5>
@@ -75,7 +75,7 @@
                                             <div class="input-group-text" style="background:#F2F2F2">Min</div>
                                         </div>
                                         <input type="text" class="form-control input-money" id="min-price" name="" placeholder="Minimum" value="{{ app('request')->input('min-price') ?? '0' }}">
-                                        <input type="hidden" class="form-control" id="min-price-hide" name="min-price" placeholder="Minimum" value="{{ app('request')->input('min-price') ?? '0' }}">
+
                                     </div>
                                 </div>
                                 <div class="col-auto">
@@ -84,13 +84,13 @@
                                             <div class="input-group-text" style="background:#F2F2F2">Max</div>
                                         </div>
                                         <input type="text" class="form-control input-money" id="max-price" name="" placeholder="Maksimum" value="{{ app('request')->input('max-price') ?? '0' }}">
-                                        <input type="hidden" class="form-control" id="max-price-hide" name="max-price" placeholder="Maksimum" value="{{ app('request')->input('max-price') ?? '0' }}">
+                                        
                                     </div>
                                 </div>
-                                <button class="btn btn-orange ml-3 mt-2 text-center" style="width: 15rem">Apply</button>
+                                <button class="btn btn-orange ml-3 mt-2 text-center" style="width: 15rem" id="btn-apply-filter">Apply</button>
                                 
                             </div>
-                        </form>
+                        <!-- </form> -->
 
                     </div>
                 </div>
@@ -251,6 +251,14 @@ function addToCart(var_id) {
                 $(parent).addClass('active');
             }
             set_value_filter()
+        })
+
+        $('#input-search-navbar').change(function(){
+            $('#input-hidden-param').val($(this).val());
+        });
+
+        $('#btn-apply-filter').click(function(){
+            $('#search-navbar').click();
         })
     })
 

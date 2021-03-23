@@ -31,6 +31,15 @@ class ProfileController extends Controller
         }
     }
 
+    public function listAdressCheckout()
+    {
+        if(Auth::guard('customer')->check()) {
+            $address = Address::where('customer_id', auth()->guard('customer')->user()->id)->get();
+            $html = View('dianca.list-address-checkout', compact('address'))->render();
+            return $html;
+        }
+    }
+
     public function address()
     {
         if(auth()->guard('customer')->check()) {
@@ -153,6 +162,8 @@ class ProfileController extends Controller
             'customer_id' => 'required|exists:customers,id'
         ]);
 
+        // print_r($validator);die;
+
         $address = Address::create([
             'address_type' => $request->address_type,
             'receiver_name' => $request->receiver_name,
@@ -170,7 +181,7 @@ class ProfileController extends Controller
         $customer->update([
             'address' => 1
         ]);
-        return redirect(route('profile-address'));
+        return redirect()->back();
     }
 
     public function updateAddress(Request $request, $id)
@@ -207,7 +218,8 @@ class ProfileController extends Controller
             'is_main' => $is_main,
         ]);
 
-        return redirect(route('profile-address'));
+        return redirect()->back();
+        // return redirect(route('profile-address'));
     }
 
     public function deleteAddress($id)
@@ -217,12 +229,12 @@ class ProfileController extends Controller
 
         $sum = Address::where('customer_id', auth()->guard('customer')->user()->id)->count();
         if($sum == 0){
-            $customer = Customer::where('id', auth()->guard('customer')->user()->id)->first();
-            $customer->update([
-            'address' => 0
-        ]);
+                $customer = Customer::where('id', auth()->guard('customer')->user()->id)->first();
+                $customer->update([
+                'address' => 0
+            ]);
         }
-        return redirect(route('profile-address'));
+        return redirect()->back();
     }
 
     public function getDetailAddreess()

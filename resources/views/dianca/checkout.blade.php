@@ -32,14 +32,13 @@
                         <h3 class="pl-3">Alamat Pengiriman</h3>
                     </div>
                 </div>
-                @if (auth()->guard('customer')->user()->address == 0)
+
                 <div class="row my-2 pb-3" id="noAddress">
                     <div class="col">
-                        <a type="button" class="btn btn-outline-orange" href="" aria-disabled="true" data-toggle="modal"
-                            data-target="#addAddress">Buat Alamat Baru</a>
+                        <a type="button" class="btn btn-outline-orange" href="" aria-disabled="true" data-toggle="modal" id="btn-add-address" data-url-add = "{{ route('profile-address.add') }}">Buat Alamat Baru</a>
                     </div>
                 </div>
-                @endif
+
                 @if (auth()->guard('customer')->user()->address != 0)
                 <div id="hasAddress">
                     <div class="row my-2 pl-3">
@@ -55,8 +54,7 @@
                         <h5 id="receiver_postal_main">, {{ $address->postal_code }}</h5>
                     </div>
                     <div class="row my-2 pl-3">
-                        <a type="button" class="btn btn-outline-orange" href="" aria-disabled="true" data-toggle="modal"
-                            data-target="#editAddress">Edit Alamat</a>
+                        <button type="button" class="btn btn-outline-orange" href="" id="btn-pilih-alamat" data-url="{{ route('checkout.list-address') }}">Pilih Alamat</button>
                     </div>
                 </div>
                 @endif
@@ -100,10 +98,10 @@
                                                     {{ number_format($val['price'], 2, ',', '.') }}</strong></h5>
                                         </div>
                                         <div class="col-lg-3">
-                                            <div id="edit-btn">
+                                            <!-- <div id="edit-btn">
                                                 <a type="button" class="btn btn-outline-orange float-right"
                                                     aria-disabled="true" href="{{ route('cart.show') }}">Edit</a>
-                                            </div>
+                                            </div> -->
                                             <div id="edit-qty" style="display: none;">
                                                 <div class="btn-group btn-group-vertical-center float-right">
                                                     <span class="product_count">
@@ -205,7 +203,8 @@
                                         <h5 id="total"><strong>Rp {{ number_format($total_cost + 17000) }}</strong></h5>
                                     </div>
                                 </div>
-                                <button type="button" id="continue" class="btn btn-orange weight-600 btn-block font-18 py-2" id="payment">Pilih Pembayaran</a>
+                                <button type="button" id="continue" class="btn btn-orange weight-600 btn-block font-18 py-2" id="payment">Pilih Pembayaran</button>
+                                <a type="button" href="{{ route('cart.show') }}" class="btn btn-outline-orange weight-600 btn-block font-18 py-2" id="payment">Ubah Pembelian</a>
                             </div>
                         </div>
                     </div>
@@ -215,12 +214,12 @@
     </div>
 </section>
 
-@if (auth()->guard('customer')->user()->address == 0)
-<div class="modal fade w-100" id="addAddress" role="dialog">
+
+<div class="modal fade w-100" id="modal-form-address" role="dialog" data-is-edit=false>
     <div class="modal-dialog modal-dialog-centered modal-md" role="document">
         <div class="modal-content">
             <div class="modal-header pl-0 pb-4">
-                <h3 class="modal-title w-100 text-center position-absolute">Buat Alamat Baru</h3>
+                <h3 class="modal-title w-100 text-center position-absolute" id="title-modal-form">Buat Alamat Baru</h3>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -228,7 +227,7 @@
             <div class="modal-body">
                 <div class="container">
                     <div class="cart_inner">
-                        <form id="add-address-form">
+                        <form id="form-address" method="POST">
                             @csrf
                             <div class="form-row pl-2 pr-2 pb-3">
                                 <div class="form-group col-md-10">
@@ -313,106 +312,45 @@
         </div>
     </div>
 </div>
-@elseif (auth()->guard('customer')->user()->address != 0)
-<div class="modal fade w-100" id="editAddress" role="dialog">
+
+<div class="modal fade w-100"  role="dialog" id="modal-list-alamat">
     <div class="modal-dialog modal-dialog-centered modal-md" role="document">
         <div class="modal-content">
             <div class="modal-header pl-0 pb-4">
-                <h3 class="modal-title w-100 text-center position-absolute">Edit Alamat</h3>
+                <h3 class="modal-title w-100 text-center position-absolute">Daftar Alamat</h3>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <div class="container">
-                    <div class="cart_inner">
-                        <form id="edit-address-form" onsubmit="editAddress()">
-                            @csrf
-                            <div class="form-row pl-2 pr-2 pb-3">
-                                <div class="form-group col-md-10">
-                                    <label>Jenis Alamat</label><br>
-                                    <input type="text" name="address_type" id="address_type" class="form-control" value="{{ $address->address_type ?? '' }}"
-                                        style="background: #F6F6F6" required>
-                                    <p class="text ml-1" style="color: #828282">Contoh : Alamat Kantor, Alamat Rumah,
-                                        Apartemen</p>
-                                    <input type="hidden" value="{{ auth()->guard('customer')->user()->id }}" id="customer_id" name="customer_id">
-                                    <input type="hidden" value="{{ $address->id }}" id="address_id" name="address_id">
-                                </div>
-                                <div class="col-md-2 form-check">
-                                    <label class="form-check-label" for="is_main">
-                                        Alamat utama?
-                                    </label>
-                                    <input class="form-check-input" type="checkbox" id="is_main" name="is_main">
-                                </div>
-                            </div>
-                            <div class="form-row pl-2 pr-2 pb-3">
-                                <div class="form-group col-md-6">
-                                    <label>Nama Penerima</label>
-                                    <input type="text" class="form-control" id="receiver_name" name="receiver_name" value="{{ $address->receiver_name ?? '' }}"
-                                        style="background: #F6F6F6" required>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label>Nomor Telepon</label>
-                                    <input type="text" class="form-control" id="receiver_phone" name="receiver_phone"
-                                        style="background: #F6F6F6" value="{{ $address->receiver_phone ?? '' }}" required>
-                                    <p class="text ml-1" style="color: #828282">Contoh : 081234567890</p>
-                                </div>
-                            </div>
-                            <div class="form-row pl-2 pr-2 pb-3">
-                                <div class="form-group col-md-6">
-                                    <label>Provinsi</label>
-                                    <select id="province_id" name="province_id" class="form-control bg-light-2">
-                                        <option value="" selected>Pilih</option>
-                                        @foreach($provinces as $p)
-                                        <option value="{{ $p->id }}">{{ $p->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label>Kota/Kabupaten</label>
-                                    <select id="city_id" name="city_id" class="form-control bg-light-2">
-                                        <option value="">Pilih</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-row pl-2 pr-2 pb-3">
-                                <div class="form-group col-md-8">
-                                    <label>Kecamatan</label>
-                                    <select id="district_id" name="district_id" class="form-control bg-light-2">
-                                        <option value="">Pilih</option>
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label>Kode Pos</label>
-                                    <input type="text" class="form-control" id="postal_code" name="postal_code" value="{{ $address->postal_code ?? '' }}"
-                                        style="background: #F6F6F6" required>
-                                </div>
-                            </div>
-                            <div class="form-group pl-2 pr-2 pb-3">
-                                <label>Alamat</label><br>
-                                <textarea name="address" id="address" cols="60" rows="4" class="form-control"
-                                    style="background: #F6F6F6; border: none" required>{{ $address->address ?? '' }}</textarea>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="row float-right">
-                        <div class="col-md-12">
-                            <div class="cart-inner">
-                                <div class="out_button_area">
-                                    <div class="checkout_btn_inner">
-                                        <a class="btn btn-outline-gray" href="" data-dismiss="modal">Batal</a>
-                                        <a type="submit" class="btn btn-orange weight-600" id="edit-address">Simpan</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="cart_inner" id="div-list-alamat">
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-@endif
+
+<div class="modal fade w-100"  role="dialog" id="modal-edit-alamat">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header pl-0 pb-4">
+                <h3 class="modal-title w-100 text-center position-absolute">Daftar Alamat</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="cart_inner" id="div-list-alamat">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @section('js')
@@ -424,7 +362,11 @@ $(document).ready(function() {
         }
     });
 
+    var province_id;
+    var city_id;
+    var district_id;
     $("#province_id").on('change', function() {
+        let isSelected = '';
         $.ajax({
             url: "{{ route('cities') }}",
             type: 'GET',
@@ -435,17 +377,21 @@ $(document).ready(function() {
             success: function(res) {
                 $("#city_id").empty();
                 $.each(res, function(key, item) {
-                    $("#city_id").append('<option value="' + item.id + '">' + item
+                    isSelected = ''
+                    if (item.id == city_id) {
+                        isSelected = 'selected';
+                    }
+                    $("#city_id").append('<option value="' + item.id + '" '+isSelected+'>' + item
                         .type + " " + item.name + '</option>');
                 });
-                @if(auth()->guard('customer')->user()->address != 0)
-                    $('#city_id').val({{ $address->district->city->id }}).change();
-                @endif
+                if (city_id != '' || city_id != undefined) {
+                    $("#city_id").change()
+                }
             },
         });
     });
-
     $("#city_id").on('change', function() {
+        let isSelected = '';
         $.ajax({
             url: "{{ route('districts') }}",
             type: 'GET',
@@ -456,12 +402,13 @@ $(document).ready(function() {
             success: function(res) {
                 $("#district_id").empty();
                 $.each(res, function(key, item) {
+                    isSelected = ''
+                    if (item.id == city_id) {
+                        isSelected = 'selected';
+                    }
                     $("#district_id").append('<option value="' + item.id + '">' +
                         item.name + '</option>');
                 });
-                @if(auth()->guard('customer')->user()->address != 0)
-                    $('#district_id').val({{ $address->district->id }}).change();
-                @endif
             },
         });
     });
@@ -476,114 +423,110 @@ $(document).ready(function() {
     @endif
     
     $("#add-address").on("click", function(e) {
-        e.preventDefault();
+        $('#form-address').submit();
+    });
 
-        var input1 = document.getElementById('address_type');
-        var input2 = document.getElementById('receiver_name');
-        var input3 = document.getElementById('receiver_phone');
-        var input4 = document.getElementById('district_id');
-        var input5 = document.getElementById('postal_code');
-        var input6 = document.getElementById('address');
-        var input7 = 0;
-        if($("#is_main").prop('checked'))
-            input7 = 1;
-        var input8 = document.getElementById('customer_id');
-        var input9 = document.getElementById('province_id');
-        var input10 = document.getElementById('city_id');
-
+    $('#btn-pilih-alamat').click(function () {
         $.ajax({
-            type: "POST",
-            url: "/checkout-address",
-            data: {
-
-                "_token": "{{ csrf_token() }}",
-                "address_type": input1.value,
-                "receiver_name": input2.value,
-                "receiver_phone": input3.value,
-                "district_id": input4.value,
-                "postal_code": input5.value,
-                "address": input6.value,
-                "is_main": input7,
-                "customer_id": input8.value,
-                "province_id" : input9.value,
-                "city_id" : input10.value
-            },
-            dataType: "JSON",
+            type: "GET",
+            url: $(this).data('url'),
+            // data: ,
+            // dataType: "JSON",
             success: function(res) {
-                $("#close-add-address").click();
-                location.reload();
+                // console.log(res);
+                // $('')
+                $('#div-list-alamat').html(res);
+                $('#modal-list-alamat').modal('toggle');
+                $('#modal-list-alamat').modal('show');
             },
             error: function(xhr, status, err) {
                 console.log(err);
             }
         });
-    });
+    })
 
-    $("#edit-address").on("click", function(e) {
-        e.preventDefault();
+   $(document).on('click', '.delete-address', function () {
+        // swal({
+        //     title: 'Hapus Alamat',
+        //     text: "Apakah Anda Yakin Menghapus Alamat "+ $(this).data('address-type'),
+        //     type: 'warning',
+        //     showCancelButton: true,
+        //     confirmButtonColor: '#3085d6',
+        //     cancelButtonColor: '#d33',
+        //     confirmButtonText: 'Ya',
+        //     cancelButtonText: 'Tidak'
+        // }).then((result) => {
+        //         // console.log("asd", result);
+        //     if (result.value) {
+        //         window.location.href = $(this).data('url-delete');
+        //     }
+        // })
 
-        var input1 = document.getElementById('address_type');
-        var input2 = document.getElementById('address_id');
-        var input3 = document.getElementById('receiver_name');
-        var input4 = document.getElementById('receiver_phone');
-        var input5 = document.getElementById('district_id');
-        var input6 = document.getElementById('postal_code');
-        var input7 = document.getElementById('address');
-        var input8 = document.getElementById('is_main');
-
-        $.ajax({
-            type: "POST",
-            url: "/checkout-address-edit",
-            data: {
-                "_token": "{{ csrf_token() }}",
-                "address_type": input1.value,
-                "address_id": input2.value,
-                "receiver_name": input3.value,
-                "receiver_phone": input4.value,
-                "district_id": input5.value,
-                "postal_code": input6.value,
-                "address": input7.value,
-                "is_main": input8.value,
-            },
-            dataType: "JSON",
-            success: function(res) {
-                $("#editAddress").modal('hide');
-                document.getElementById("receiver_name_main").innerHTML = "<strong>" + res
-                    .receiver_name + "</strong>" + " (" + res.address_type + ")";
-                document.getElementById("receiver_phone_main").innerHTML = res
-                    .receiver_phone;
-                document.getElementById("receiver_address_main").innerHTML = res.address;
-                document.getElementById("receiver_city_main").innerHTML = ", " + res.district.city.type + " " + res.district.city.name;
-                document.getElementById("receiver_postal_main").innerHTML = ", " + res.postal_code;
-            },
-            error: function(xhr, status, err) {
-                console.log(xhr.responseText);
+        sweet_alert("warning", "Hapus Alamat", "Apakah Anda Yakin Menghapus Alamat "+ $(this).data('address-type'), true).then((result) => {
+                // console.log("asd", result);
+            if (result.value) {
+                window.location.href = $(this).data('url-delete');
             }
-        });
+        })
+    })
+
+   $(document).on('click', '.update-alamat', function () {
+        reset_form();
+        $('#modal-list-alamat').data('to-open-form', true)
+        get_detail_address($(this).data("url-detail"), $(this).data("id"), $(this).data('url-edit'))
+        
+   });
+
+
+   $('#btn-add-address').click(function () {
+        reset_form();
+        $('#form-address').attr('action', $(this).data('url-add'));
+        $('#title-modal-form').text('Buat Alamat Baru');
+        open_modal_form(false)
+
+   })
+
+   $('#modal-form-address').on('hidden.bs.modal', function () {
+        if ($(this).data('is-edit')) {
+            $('#modal-list-alamat').modal('toggle');
+            $('#modal-list-alamat').modal('show');
+        }
     });
+
+   $('#modal-list-alamat').on('hidden.bs.modal', function () {
+        if ($(this).data('to-open-form')) {
+            open_modal_form(true)
+        }
+    });
+
+   $('#modal-list-alamat').on('shown.bs.modal', function () {
+        $(this).data('to-open-form', false)
+    });
+   
     
     $("#continue").on('click', function(e) {
         e.preventDefault();
         if($("#courier").val() == "" || $("#duration").val() == ""){
-            Swal.fire({
-                title: "Detail Tidak Lengkap",
-                text: "Pilih jasa pengiriman dan durasi pengiriman",
-                icon: "warning",
-                reverseButtons: !0
-            }).then(function (e) {
+            // Swal.fire({
+            //     title: "Detail Tidak Lengkap",
+            //     text: "Pilih jasa pengiriman dan durasi pengiriman",
+            //     icon: "warning",
+            //     reverseButtons: !0
+            // }).then(function (e) {
+            //     e.dismiss;
+            // }, function (dismiss) {
+            //     return false;
+            // });
+
+            sweet_alert("warning", "Detail Tidak Lengkap", "Pilih jasa pengiriman dan durasi pengiriman").then(function (e) {
                 e.dismiss;
             }, function (dismiss) {
                 return false;
-            });
+            })
             return false;
         }
         if ($('#address_id').val() == '') {
-            swal({
-                title: "Detail Tidak Lengkap",
-                text: "Alamat Masih Kososng",
-                type: "warning",
-                reverseButtons: !0
-            }).then(function (e) {
+            sweet_alert("warning", "Detail Tidak Lengkap", "Alamat Masih Kososng").then(function (e) {
                 e.dismiss;
             }, function (dismiss) {
                 return false;
@@ -593,6 +536,57 @@ $(document).ready(function() {
         $("#checkout-form").submit();
     })
 })
+
+async function get_detail_address(url, id, url_form) {
+    await $.ajax({
+        url: url,
+        type: 'GET',
+        data: {
+            id: id
+        },
+        dataType: "JSON",
+        success: function(res) {
+            if (res.status) {
+                province_id = res.data.province_id;
+                city_id = res.data.city_id;
+                district_id = res.data.district_id;
+
+                if (res.data.is_main == 1) {
+                   $('#is_main').prop( "checked", true ); 
+                }else{
+                    $('#is_main').prop( "checked", false ); 
+                }
+                $('#address_type').val(res.data.address_type);
+                $('#receiver_name').val(res.data.receiver_name);
+                $('#receiver_phone').val(res.data.receiver_phone)
+                $('#province_id').val(res.data.province_id).change();
+                $('#form-address').attr('action', url_form);
+                $('#postal_code').val(res.data.postal_code);
+                $('#address').val(res.data.address);
+                $('#title-modal-form').text('Ubah Alamat');
+            }
+        },
+    });
+    $('#modal-list-alamat').modal('toggle');
+    await $('#modal-list-alamat').modal('hide');
+}
+
+function open_modal_form(is_edit) {
+    $('#modal-form-address').data('is-edit', is_edit);
+    $('#modal-form-address').modal('toggle');
+    $('#modal-form-address').modal('show');
+}
+
+function reset_form() {
+    province_id = '';
+    city_id = '';
+    district_id = '';
+    document.getElementById("form-address").reset();
+    $("#city_id").empty();
+    $("#district_id").empty();
+    $("#city_id").append('<option value="" >Pilih</option>');
+    $("#district_id").append('<option value="" >Pilih</option>');
+}
 
 </script>
 @endsection

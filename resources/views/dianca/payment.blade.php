@@ -62,9 +62,6 @@
                                         <input type="hidden" name="subtotal" value="{{ $subtotal }}">
                                         <input type="hidden" name="shipping_cost" value="{{ $shipping_cost }}">
                                         <input type="hidden" name="address_id" value="{{ $address_id }}">
-                                        @foreach ($cart_detail as $val)
-                                        <input type="hidden" name="cd[]" value="{{ $val }}">
-                                        @endforeach
                                     </form>
                                 </div>
                             </div>
