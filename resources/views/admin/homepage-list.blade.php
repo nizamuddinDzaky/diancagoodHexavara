@@ -176,7 +176,7 @@
                         </div>
                         <div class="form-group px-2 text-center">
                             <button class="btn btn-outline-gray" data-dismiss="modal">Batal</button>
-                            <button type="submit" id="product_update" class="btn btn-orange">Update Promo</button>
+                            <button type="submit" id="product_update" class="btn btn-orange">Update Produk</button>
                         </div>
                     </form>
                 </div>

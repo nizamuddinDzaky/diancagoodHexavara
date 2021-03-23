@@ -23,7 +23,7 @@
     <header class="header_area">
         <div class="container overflow-visible-2">
             <nav class="navbar navbar-expand-lg">
-                <a class="navbar-brand logo_h pr-3" href="{{ url('/') }}">
+                <a class="navbar-brand logo_h pr-3" href="{{ url('/admin/orders') }}">
                     <img src="{{ asset('img/logo-1x.png') }}" alt="logo">
                 </a>
                 @if (auth()->guard('web')->check())
@@ -91,6 +91,9 @@
     </section>
     @endif
     @yield('content')
+
+    <section class="section_gap mt-4 pb-3">
+    </section>
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
