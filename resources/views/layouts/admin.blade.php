@@ -13,8 +13,9 @@
     <link rel="stylesheet" href="{{ asset('css/responsive.css') }}">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/10.15.5/sweetalert2.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/10.15.5/sweetalert2.min.js"></script>
     @yield('css')
 
 </head>
@@ -76,13 +77,13 @@
             <div class="container-fluid text-gray-2">
                 <div class="row">
                     <div class="col-lg-12">
-                        <div class="btn-toolbar mb-3" role="toolbar">
-                            <a type="button" id="order" class="btn btn-outline-gray-2 weight-600 mr-4" href="{{ route('administrator.orders') }}">Order</a>
-                            <a type="button" id="product" class="btn btn-outline-gray-2 weight-600 mr-4" href="{{ route('administrator.products') }}">Produk</a>
-                            <a type="button" id="tracking" class="btn btn-outline-gray-2 weight-600 mr-4" href="{{ route('administrator.tracking', 0) }}">Tracking</a>
-                            <a type="button" id="promo" class="btn btn-outline-gray-2 weight-600 mr-4" href="{{ route('administrator.promo', 'all') }}">Promo</a>
-                            <a type="button" id="report" class="btn btn-outline-gray-2 weight-600 mr-4" href="{{ route('administrator.all_report') }}">Laporan</a>
-                            <a type="button" id="homepage" class="btn btn-outline-gray-2 weight-600" href="{{ route('administrator.homepage') }}">Homepage</a>
+                        <div class="btn-toolbar mb-2 admin-menu-group" role="toolbar">
+                            <a type="button" id="order" class="btn btn-outline-gray-2 weight-600 admin-menu" href="{{ route('administrator.orders') }}">Order</a>
+                            <a type="button" id="product" class="btn btn-outline-gray-2 weight-600 admin-menu" href="{{ route('administrator.products') }}">Produk</a>
+                            <a type="button" id="tracking" class="btn btn-outline-gray-2 weight-600 admin-menu" href="{{ route('administrator.tracking', 0) }}">Tracking</a>
+                            <a type="button" id="promo" class="btn btn-outline-gray-2 weight-600 admin-menu" href="{{ route('administrator.promo', 'all') }}">Promo</a>
+                            <a type="button" id="report" class="btn btn-outline-gray-2 weight-600 admin-menu" href="{{ route('administrator.all_report') }}">Laporan</a>
+                            <a type="button" id="homepage" class="btn btn-outline-gray-2 weight-600 admin-menu" href="{{ route('administrator.homepage') }}">Homepage</a>
                         </div>
                     </div>
                 </div>

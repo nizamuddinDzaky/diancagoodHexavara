@@ -578,7 +578,7 @@ $(document).ready(function() {
             return false;
         }
         if ($('#address_id').val() == '') {
-            swal({
+            Swal.fire({
                 title: "Detail Tidak Lengkap",
                 text: "Alamat Masih Kososng",
                 type: "warning",

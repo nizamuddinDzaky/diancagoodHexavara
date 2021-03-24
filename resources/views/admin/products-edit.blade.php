@@ -95,10 +95,7 @@
                                     <div class="col-lg-12">
                                         <div class="form-group">
                                             <label class="form-label" for="description">Deskripsi</label>
-                                            <textarea name="description" class="form-control bg-light-2 no-border"
-                                                rows="5" required>
-                                                {!! $product->description ?? '' !!}
-                                            </textarea>
+                                            <textarea name="description" class="form-control bg-light-2 no-border" rows="5" required>{{ $product->description ?? '' }}</textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -371,12 +368,80 @@
         </div>
     </div>
 </div>
+<div class="modal fade w-100" id="edit_variant" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content">
+            <form id="form-edit-variant">
+                @csrf
+                <input type="hidden" name="product_id" id="edit_product_id">
+                <input type="hidden" name="variant_id" id="edit_variant_id">
+                <div class="modal-header pl-0 pb-4">
+                    <h3 class="modal-title w-100 text-center position-absolute text-gray-2 weight-600">Edit Varian</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row mt-2">
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="form-label" for="name">Nama Varian</label>
+                                    <input type="text" name="name" id="edit-name" class="form-control bg-light-2 no-border" required
+                                        autofocus>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-lg-4">
+                                <label class="form-label">Harga</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text bg-3 border-3">Rp</div>
+                                    </div>
+                                    <input type="text" name="price" id="edit-price" class="form-control border-3">
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <label class="form-label">Berat</label>
+                                <div class="input-group">
+                                    <input type="text" name="weight" id="edit-weight" class="form-control border-3">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text bg-3 border-3">gr</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <label class="form-label">Stok</label>
+                                <input type="text" name="stock" id="edit-stock" class="form-control bg-light-2 no-border" required>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-lg-6">
+                                <label class="form-label">Foto Varian</label>
+                                <div class="images image_variant" id="edit_variant_container">
+                                    <div class="pic" id="edit_variant_placeholder">Drag your image here, or browse
+                                    </div>
+                                    <input type="file" id="edit_variant_input" accept="image/*" name="image"
+                                        style="display:none">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-gray" data-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-orange" id="add-variant-submit">Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('js')
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
-$(document).ready(function() {
     $(".selector").select2({
         width: '100%',
         theme: 'bootstrap'
@@ -387,12 +452,19 @@ $(document).ready(function() {
     $('#brand_id>option[value="' + {{ $product->brand_id }} + '"]').prop('selected', true);
 
     var variants = $("#variant");
+    
     var category_button = $('#category_placeholder');
     var category_uploader = $('#category_input');
     var category_images = $('#category_container');
     var product_button = $('#product_placeholder');
     var product_uploader = $('#product_input');
     var product_images = $('#product_container');
+    var variant_button = $('#variant_placeholder');
+    var variant_uploader = $('#variant_input');
+    var variant_images = $('#variant_container');
+    var edit_variant_button = $('#edit_variant_placeholder');
+    var edit_variant_uploader = $('#edit_variant_input');
+    var edit_variant_images = $('#edit_variant_container');
 
     category_button.on('click', function() {
         category_uploader.click();
@@ -455,6 +527,76 @@ $(document).ready(function() {
     product_images.on('click', '.img', function() {
         $(this).remove();
     })
+
+// Upload variant images
+variant_button.on('click', function() {
+    variant_uploader.click();
+});
+
+variant_uploader.on('change', function() {
+    console.log(variant_uploader.val());
+    $('#img_variant').remove();
+
+    // var reader = new FileReader();
+    var data = $(this)[0].files;
+
+    $.each(data, function(index, file) {
+        if (/(\.|\/)(gif|jpe?g|png)$/i.test(file.type)) {
+            var reader = new FileReader();
+            reader.onload = (function(file) {
+                return function(e) {
+                    var img = $(
+                        '<div class="img" id="img_variant" style="background-image: url(\'' +
+                        e
+                        .target.result +
+                        '\');" rel="' + e.target.result +
+                        '"><span><strong>Hapus</strong></span></div>'
+                    );
+                    variant_images.append(img);
+                };
+            })(file);
+            reader.readAsDataURL(file);
+        }
+    });
+});
+
+variant_images.on('click', '.img', function() {
+    $(this).remove();
+})
+
+// Upload variant images
+edit_variant_button.on('click', function() {
+    edit_variant_uploader.click();
+});
+
+edit_variant_uploader.on('change', function() {
+    console.log(edit_variant_uploader.val());
+    $('#edit_img_variant').remove();
+
+    // var reader = new FileReader();
+    var data = $(this)[0].files;
+
+    $.each(data, function(index, file) {
+        if (/(\.|\/)(gif|jpe?g|png)$/i.test(file.type)) {
+            var reader = new FileReader();
+            reader.onload = (function(file) {
+                return function(e) {
+                    var img = $(
+                        '<div class="img" id="edit_img_variant" style="background-image: url(\'' +
+                        e.target.result +
+                        '\');" rel="' + e.target.result +
+                        '"><span><strong>Hapus</strong></span></div>'
+                    );
+                    edit_variant_images.append(img);
+                };
+            })(file);
+            reader.readAsDataURL(file);
+        }
+    });
+});
+
+edit_variant_images.on('click', '.img', function() {
+    $(this).remove();
 })
 
 $("#category_id").on('change', function() {
@@ -502,6 +644,38 @@ $("#add-variant").on('click', function() {
     $('#modal_variant').modal('show');
 })
 
+$("form#form-variant").submit(function(e) {
+    e.preventDefault();
+    const data = new FormData(this);
+    $.ajax({
+        "_token": "{{ csrf_token() }}",
+        url: "add-variant",
+        type: 'POST',
+        data: data,
+        enctype: 'multipart/form-data',
+        dataType: 'JSON',
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function(res) {
+            console.log(res);
+            const variant = $('<tr class="d-flex"><td class="col-4">' + res.name +
+                '</td><td class="col-2">' + res.price +
+                '</td><td class="col-6"><button type="button" class="btn btn-orange show-variant" onclick="showDetail(' +res.id + ')">Detail</button></td></tr>'
+                )
+            variants.append(`
+                <input type="hidden" name="variants[]" value=` + res.id +`>
+            `);
+            $("#variants-list").append(variant);
+
+            $('#modal_variant').modal('hide');
+        },
+        error: function(xhr, status, err) {
+            console.log(xhr.responseText);
+        }
+    });
+})
+
 function showDetail(id) {
     var variant_id = id;
     $("#detail_variant").modal('show');
@@ -515,9 +689,67 @@ function showDetail(id) {
             $("#detail-stock").html(res.stock);
             $("#detail-weight").html(res.weight + " gr");
             $("#detail-price").html(res.price.toLocaleString("id-ID", { style: "currency", currency: "IDR"}));
-            var path = 'storage/products/' + res.image;
+            var path = 'storage/variants/' + res.image;
             $("#detail-image").html(`<img class="w-100" src="{{ asset('` + path + `') }}">`);
         }
+    })
+}
+
+function editVariant(id) {
+    $("#edit_variant").modal('show');
+    $("#edit_img_variant").remove();
+    
+    $.ajax({
+        url: "/product-variant/" + id,
+        type: "GET",
+        dataType: "JSON",
+        success: function(res){
+            $("#edit-name").val(res.name);
+            $("#edit-stock").val(res.stock);
+            $("#edit-weight").val(res.weight);
+            $("#edit-price").val(res.price);
+            $("#edit_product_id").val(res.product_id);
+            $("#edit_variant_id").val(res.id);
+            var path = '/storage/products/' + res.image;
+            var img = $(
+                        '<div class="img" id="edit_img_variant" style="background-image: url(\'' +
+                        path + '\');" rel="' + path +
+                        '"><span><strong>Hapus</strong></span></div>'
+                    );
+            edit_variant_images.append(img);
+        }
+    })
+}
+
+function deleteVariant(id) {
+    console.log(id);
+    Swal.fire({
+        title: "Hapus varian?",
+        text: "Anda akan menghapus varian",
+        icon: "warning",
+        reverseButtons: !0
+    }).then(function (e) {
+        var data = new FormData();
+        data.append('id', id);
+
+        $.ajax({
+            url: "/product-variant/delete/" + id,
+            type: "POST",
+            data: {
+                '_method': 'DELETE',
+                "_token": "{{ csrf_token() }}",
+            },
+            success: function(res) {
+                $("#edit_variant").modal('hide');
+                $("#rowvar"+id).remove();
+            },
+            error: function(xhr, status, err) {
+                console.log(xhr.responseText);
+            },
+        })
+        e.dismiss;
+    }, function (dismiss) {
+        return false;
     })
 }
 </script>

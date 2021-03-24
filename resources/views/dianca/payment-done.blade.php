@@ -199,10 +199,10 @@
         console.log(parseInt($('#amount-hide').val()));
         console.log(parseInt($('#input-hidden-total-pembayaran').val()));
         if (parseInt($('#amount-hide').val()) > parseInt($('#input-hidden-total-pembayaran').val())) {
-            swal({
+            Swal.fire({
                 title: "Data Tidak Valid",
                 text: "Jumlah Transfer Melebihi Total Pembayaran",
-                type: "warning",
+                icon: "warning",
                 reverseButtons: !0
             }).then(function (e) {
                 e.dismiss;

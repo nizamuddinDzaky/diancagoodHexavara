@@ -12,7 +12,7 @@
 
 @section('content')
 <div class="container-fluid">
-    <div class="row mb-5">
+    <div class="row pb-100">
         <div class="col-lg-12">
             @if (session('error'))
             <div class="alert alert-error">{{ session('error') }}</div>

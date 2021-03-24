@@ -5,67 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\ProductVariant;
+use App\Models\ProductImage;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
+use File;
 
 class ProductVariantController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        
-        // return view('products.variant.create', compact('product'));
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $this->validate($request, [
-            'product_id' => 'required|exists:products,id',
-            'name' => 'required|string|max:100',
-            'price' => 'required|integer',
-            'weight' => 'required|integer',
-            'minimum_stock' => 'required|integer',
-            'stock' => 'required|integer',
-            'image' => 'required|image|max:500|mimes:png,jpeg,jpg'
-        ]);
-
-        if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $filename = time() . Str::slug($request->name) . '.' . $file->getClientOriginalExtension();
-            $file->storeAs('public/variants', $filename);
-
-            $product = ProductVariant::create([
-                'product_id' => $request->product_id,
-                'name' => $request->name,
-                'slug' => $request->name,
-                'price' => $request->price,
-                'weight' => $request->weight,
-                'minimum_stock' => $request->minimum_stock,
-                'stock' => $request->stock,
-                'image' => $filename
-            ]);
-            // return redirect(route('product.index'))->with(['success' => 'Varian Produk Baru Ditambahkan!']);
-        }
-    }
-
     /**
      * Display the specified resource.
      *
@@ -97,25 +43,30 @@ class ProductVariantController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         $this->validate($request, [
-            'product_id' => 'required|exists:products,id',
+            'product_id' => 'nullable|exists:products,id',
+            'variant_id' => 'required|exists:product_variants,id',
             'name' => 'required|string|max:100',
             'price' => 'required|integer',
             'weight' => 'required|integer',
-            'minimum_stock' => 'required|integer',
             'stock' => 'required|integer',
-            'image' => 'nullable|image|max:500|mimes:png,jpeg,jpg'
+            'image' => 'nullable|image|mimes:png,jpeg,jpg'
         ]);
 
-        $variant = ProductVariant::find($id);
+        $variant = ProductVariant::find($request->variant_id);
         $filename = $variant->image;
         if ($request->hasFile('image')) {
+            File::delete(storage_path('app/public/products/' . $variant->image));
+
             $file = $request->file('image');
-            $filename = time() . Str::slug($request->name) . '.' . $file->getClientOriginalExtension();
-            $file->storeAs('public/storage/products/', $filename);
-            File::delete(storage_path('app/public/storage/products/' . $variant->image));
+            $filename = time() . $variant->id . Str::slug($request->name) . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('public/variants/', $filename);
+
+            $variant_image = ProductImage::where('product_variant_id', $variant->id)->first();
+            $variant_image->filename = $filename;
+            $variant_image->save();
         }
 
         try{
@@ -124,15 +75,14 @@ class ProductVariantController extends Controller
                 'name' => $request->name,
                 'price' => $request->price,
                 'weight' => $request->weight,
-                'minimum_stock' => $request->minimum_stock,
                 'stock' => $request->stock,
                 'image' => $filename
             ]);
         } catch (Exception $e) {
-            // return redirect(route('product.index'))->with(['error' => $e->getMessage()]);
+            return json_encode($e->getMessage());
         }
         
-        // return redirect(route('product.index'))->with(['success' => 'Data Varian Produk Diperbaharui!']);
+        return json_encode($variant);
     }
 
     /**
@@ -144,9 +94,12 @@ class ProductVariantController extends Controller
     public function destroy($id)
     {
         $variant = ProductVariant::find($id);
+        $variant_image = ProductImage::where('product_variant_id', $variant->id)->where('filename', $variant->image)->first();
         File::delete(storage_path('app/public/products/variants' . $variant->image));
         $variant->delete();
-        // return redirect(route('product.index'))->with(['success' => 'Varian Produk Sudah Dihapus']);
+        $variant_image->delete();
+
+        return true;
     }
 
     public function getDetail($id)

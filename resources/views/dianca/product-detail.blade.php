@@ -53,6 +53,12 @@
                         <img id="img{{ $i->id }}" class="product-image" src="{{ asset('storage/products/' . $i->filename) }}">
                     </div>
                     @endforeach
+                    @forelse($product->variant as $pd)
+                    <div class="gallery">
+                        <img id="imgvar{{ $pd->id }}" class="product-image" src="{{ asset('storage/variants/' . $pd->image) }}">
+                    </div>
+                    @empty
+                    @endforelse
                     <div></div>
                 </div>
             </div>
@@ -73,7 +79,7 @@
                             @endif
                         @endfor
                     </div>
-                    <div id="price" class="mb-0">Rp {{ number_format($product->variant->first()->price, 2, ',', '.') }}</div>
+                    <div id="price" class="mb-0">Rp {{ number_format($product->variant->first()->price ?? '0', 2, ',', '.') }}</div>
                     <form method="POST" action="{{ route('cart.add') }}">
                         @csrf
                         <div class="product_variant">
@@ -145,9 +151,7 @@
         <div class="row my-4">
             <div class="col-lg-12">
                 <h4 class="text-gray-2 weight-600 font-24">Deskripsi</h4>
-                <p class="text-gray-3 font-14" style="white-space: pre-wrap">
-                    {{ $product->description }}
-                </p>
+                <p class="text-gray-3 font-14" style="white-space: pre-wrap">{!! $product->description !!}</p>
             </div>
         </div>
         <hr/>
@@ -173,7 +177,7 @@
                                     @endif
                                 @endfor
                             </div>
-                            <h5 class="text-gray-3 weight-400 ml-1">{{ $rev->text}}</h5>
+                            <h5 class="text-gray-3 weight-400 ml-1">{{ $rev->text }}</h5>
                         </div>
                     </div>
                 <hr>
@@ -187,11 +191,13 @@
 @section('js')
 <script>
     $(document).ready(function() {
+        @if($product->variant->all() != NULL)
         const firstVariant = {{ $product->variant->first()->id }};
         $("#var"+firstVariant).prop("checked", true).trigger("change");
         $("#stock").html({{ $product->variant->first()->stock }});
         $("#weight").html({{ $product->variant->first()->weight }}); 
         console.log($("#display-product-image").attr('src'));
+        @endif
     });
 
     $(document).ready(function() {

@@ -6405,7 +6405,6 @@ h6 {
     color: #828282;
     font-size: 14px;
     padding: 7px 25px 7px 25px;
-    margin-right: 10px;
     transition: color 0.3s ease-in-out border-color 0.3s ease-in-out;
 }
 
@@ -6441,27 +6440,31 @@ h6 {
 }
 
 .font-24 {
-    font-size: 24px;
+    font-size: 24px !important;
 }
 
 .font-20 {
-    font-size: 20px;
+    font-size: 20px !important;
 }
 
 .font-18 {
-    font-size: 18px;
+    font-size: 18px !important;
 }
 
 .font-16 {
-    font-size: 16px;
+    font-size: 16px !important;
 }
 
 .font-14 {
-    font-size: 14px;
+    font-size: 14px !important;
+}
+
+.font-12 {
+    font-size: 12px !important;
 }
 
 .font-8 {
-    font-size: 8px;
+    font-size: 8px !important;
 }
 
 .btn-orange {
@@ -6919,3 +6922,36 @@ div.stars {
     content: '\f006';
     font-family: FontAwesome;
   }
+
+.pb-100 {
+    padding-bottom: 100px;
+}
+
+.admin-menu {
+    margin-bottom: 10px;
+    margin-right: 10px;
+}
+
+.order-group {
+    display: flex;
+}
+
+@media(max-width:768px) {
+    .admin-menu-group {
+        justify-content: center;
+    }
+
+    .order-group {
+        overflow: scroll;
+    }
+    .order-group > .btn {
+        margin-right: 0px;
+        margin-left: 0px;
+    }
+}
+
+.td-wrap {
+    text-overflow:ellipsis;
+    overflow: hidden;
+    white-space:normal;
+}

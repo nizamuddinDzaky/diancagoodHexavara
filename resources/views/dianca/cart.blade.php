@@ -179,46 +179,6 @@ $("#select-all").click(function() {
     $("input[type=checkbox]").prop('checked', $(this).prop('checked'));
 });
 
-function selectCart(id) {
-    var input = document.getElementById('qty' + id);
-
-    if ($("#check" + id).prop('checked')) {
-        $.ajax({
-            type: "POST",
-            url: "/cart/semi-update",
-            data: {
-                add: 1,
-                id: id,
-                qty: input.value,
-                curr_qty: document.getElementById("qty").innerHTML,
-                curr_total: parseInt(document.getElementById("total_cost").innerHTML.replace(/[^0-9-,]/g, ''))
-            },
-            dataType: "JSON",
-            success: function(res) {
-                $("#total_cost").html(res.totalcost.toLocaleString("id-ID", myObj));
-                $("#qty").html(res.qty);
-            }
-        });
-    } else {
-        $.ajax({
-            type: "POST",
-            url: "/cart/semi-update",
-            data: {
-                add: 0,
-                id: id,
-                qty: input.value,
-                curr_qty: document.getElementById("qty").innerHTML,
-                curr_total: parseInt(document.getElementById("total_cost").innerHTML.replace(/[^0-9-,]/g, ''))
-            },
-            dataType: "JSON",
-            success: function(res) {
-                $("#total_cost").html(res.totalcost.toLocaleString("id-ID", myObj));
-                $("#qty").html(res.qty);
-            }
-        });
-    }
-}
-
     $("#select-all").click(function() {
         $("input[type=checkbox]").prop('checked', $(this).prop('checked'));
     });
@@ -282,10 +242,10 @@ function selectCart(id) {
     $('.delete-cart').click(function () {
         let id = $(this).data('id');
         let name = $(this).data('product-name');
-        swal({
+        Swal.fire({
             title: name,
             text: "Apakah Anda Yakin ?",
-            type: 'warning',
+            icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
@@ -308,10 +268,10 @@ function selectCart(id) {
             }
         })
         if (array_selected.length == 0) {
-            swal({
+            Swal.fire({
                 title: "Tidak Ada Item yang Terpilih",
                 text: "Silahkan Pilih Item Yang ingin dihapus",
-                type: "warning",
+                icon: "warning",
                 reverseButtons: !0
             }).then(function (e) {
                 e.dismiss;
@@ -319,10 +279,10 @@ function selectCart(id) {
                 return false;
             });
         }else{
-            swal({
+            Swal.fire({
                 title: 'Hapus Beberapa Item',
                 text: "Apakah Anda Yakin Menghapus Item Yang Terpilih?",
-                type: 'warning',
+                icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
@@ -344,7 +304,6 @@ function selectCart(id) {
         $('#form-item-cart').submit();
     }
 
-}
 
 $("#continue").on('click', function(e) {
     e.preventDefault();

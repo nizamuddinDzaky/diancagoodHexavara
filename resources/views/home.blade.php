@@ -99,6 +99,7 @@
                         <a href="{{ url('/product/' . $row->id) }}">
                             <h4 class="text-gray-2" class="pl-3">{{ $row->name }}</h4>
                         </a>
+                        @if($row->variant->all() != NULL)
                         @if($row->variant->first()->promo_price == 0)
                         <h5 class="text-gray-1">Rp {{ number_format($row->variant->first()->price) }}</h5>
                         @else
@@ -107,6 +108,7 @@
                                 class="d-inline-flex align-self-center ml-2"
                                 style="text-decoration:line-through;"><small>Rp
                                     {{ number_format($row->variant->first()->price) }}</small></h5>
+                        @endif
                         @endif
                         <h6>
                             @for($i = 0; $i < 5; $i++) @if ($i < $row->rate)
@@ -152,6 +154,7 @@
                                             </a>
                                         </div>
                                         <div class="row ml-2 pt-2">
+                                            @if($row->variant->all() != NULL)
                                             @if( number_format($row->variant->first()->price) !=
                                             number_format($row->variant->last()->price))
                                             <h5 class="text-gray-2 weight-700 font-20">Rp
@@ -160,6 +163,7 @@
                                             @else
                                             <h5 class="text-gray-2 weight-700 font-20">Rp
                                                 {{ number_format($row->variant->first()->price) }}</h5>
+                                            @endif
                                             @endif
                                         </div>
                                         <div class="row ml-2 mb-2">
@@ -204,6 +208,7 @@
                                             </a>
                                         </div>
                                         <div class="row ml-2 pt-2">
+                                        @if($row->variant->all() != NULL)
                                             @if( number_format($row->variant->first()->price) !=
                                             number_format($row->variant->last()->price)
                                             )
@@ -214,6 +219,7 @@
                                             <h5 class="text-gray-2 weight-700 font-20">Rp
                                                 {{ number_format($row->variant->first()->price) }}</h5>
                                             @endif
+                                        @endif
                                         </div>
                                         <div class="row ml-2 mb-2">
                                             @for($i = 0; $i < 5; $i++) @if ($i < $row->rate)

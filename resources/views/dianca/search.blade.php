@@ -114,28 +114,23 @@
                                 <a href="{{ url('/product/' . $row->id) }}" class="overflow-auto mb-2">
                                     <h4 class="text-gray-2 product-name" class="pl-3">{{ $row->name }}</h4>
                                 </a>
-                                @if( $row->variant->first()->promo_price != $row->variant->first()->price )
+                                @if( $row->variant->first()->promo_price != 0 )
                                 <h5 class="text-gray-1 d-flex justify-content-center">Rp
-                                    {{ number_format($row->variant->first()->promo_price) }}<span
+                                    {{ number_format($row->variant->first()->price - $row->variant->first()->promo_price) }}<span
                                         class="d-inline-flex align-self-center ml-2"
                                         style="text-decoration:line-through;"><small>Rp
                                             {{ number_format($row->variant->first()->price) }}</small></span></h5>
                                 @else
-                                @if( number_format($row->variant->first()->price) !=
-                                number_format($row->variant->last()->price)
-                                )
-                                <h5 class="text-gray-1">Rp {{ number_format($row->variant->first()->price) }} - Rp
-                                    {{ number_format($row->variant->last()->price) }}</h5>
-                                @else
                                 <h5 class="text-gray-1">Rp {{ number_format($row->variant->first()->price) }}</h5>
                                 @endif
-                                @endif
-                                @for($i = 0; $i < 5; $i++) @if ($i < $row->rate)
+                                
+                                @for($i = 0; $i < 5; $i++) 
+                                    @if ($i < $row->rate)
                                     <span class="fa fa-star checked"></span>
                                     @else
                                     <span class="fa fa-star"></span>
                                     @endif
-                                    @endfor
+                                @endfor
                             </div>
                         </div>
                         @empty

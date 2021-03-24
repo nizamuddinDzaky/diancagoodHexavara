@@ -160,11 +160,8 @@ class DashboardController extends Controller
 
                 foreach($request->variants as $v) {
                     $variant = ProductVariant::where('id', $v)->first();
-                    $image = ProductImage::where('product_variant_id', $variant->id)->first();
                     $variant->product_id = $product->id;
                     $variant->save();
-                    $image->product_id = $product->id;
-                    $image->save();
                 }
 
                 return redirect(route('administrator.products'))->with(['success' => 'Produk dan Varian Baru Ditambahkan!']);
@@ -218,13 +215,12 @@ class DashboardController extends Controller
 
                 $product->save();
 
-                foreach($request->variants as $v) {
-                    $variant = ProductVariant::where('id', $v)->first();
-                    $image = ProductImage::where('product_variant_id', $variant->id)->first();
-                    $variant->product_id = $product->id;
-                    $variant->save();
-                    $image->product_id = $product->id;
-                    $image->save();
+                if($request->variants != "") {
+                    foreach($request->variants as $v) {
+                        $variant = ProductVariant::where('id', $v)->first();
+                        $variant->product_id = $product->id;
+                        $variant->save();
+                    }
                 }
 
                 return redirect(route('administrator.products'))->with(['success' => 'Produk Berhasil Diperbarui!']);
@@ -256,7 +252,7 @@ class DashboardController extends Controller
             if ($request->hasFile('image_variant')) {
                 $file = $request->file('image_variant');
                 $name = time() . $product_variant->id . Str::slug($request->name) . '.' . $file->getClientOriginalExtension();
-                $file->storeAs('public/products', $name);
+                $file->storeAs('public/variants', $name);
 
                 $product_image = ProductImage::create([
                     'product_variant_id' => $product_variant->id,
@@ -348,7 +344,12 @@ class DashboardController extends Controller
     {
         if(Auth::guard('web')->check()) {
             $orders = Order::where('status', $status)->orderBy('created_at', 'DESC')->paginate(7);
-            return view('admin.tracking', compact('orders'));
+            $menunggu = Order::where('status', 0)->count();
+            $diproses = Order::where('status', 1)->count();
+            $dikirim = Order::where('status', 2)->count();
+            $selesai = Order::where('status', 3)->count();
+            $batal = Order::where('status', 4)->count();
+            return view('admin.tracking', compact('orders', 'menunggu', 'diproses', 'dikirim', 'selesai', 'batal'));
         }
         return redirect(route('administrator.login'));
     }

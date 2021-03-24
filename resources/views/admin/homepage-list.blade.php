@@ -18,7 +18,7 @@
     </div>
 </div>
 <div class="container-fluid">
-    <div class="row">
+    <div class="row pb-100">
         <div class="col-lg-12 md-12 sm-12">
             <div class="table-responsive curved-border">
                 <table id="myTable" class="table table-bordered text-gray-2 text-center">
@@ -52,12 +52,14 @@
                             </td>
                             <td>
                                 <div class="mt-3 pt-4">
+                                @if($row->variant->all() != NULL)
                                     @if( number_format($row->variant->first()->price) != number_format($row->variant->last()->price))
                                     <h5>Rp {{ number_format($row->variant->first()->price) }} - Rp
                                     {{ number_format($row->variant->last()->price) }}</h5>
                                     @else
                                     <h5>Rp {{ number_format($row->variant->first()->price) }}</h5>
                                     @endif
+                                @endif
                                 </div>
                             </td>
                             <td>

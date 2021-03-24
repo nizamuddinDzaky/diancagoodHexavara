@@ -6,18 +6,16 @@
 
 @section('content')
 <div class="container-fluid">
-    <div class="row">
+    <div class="row pb-100">
         <div class="col-lg-12">
             <div class="table-responsive curved-border">
                 <table class="table table-bordered text-gray-2">
-                    <thead class="font-18">
-                        <tr class="d-flex">
-                            <th class="col-6 product-toggle" id="all-products" onclick="showAllProducts()">
-                                <span>Semua Produk</span>
-                            </th>
-                            <th class="col-6 product-toggle" id="new-products" onclick="showNewProducts()">
-                                <span>Produk Terbaru</span>
-                            </th>
+                    <thead class="font-14">
+                        <tr>
+                            <th class="px-3 text-center">Produk</th>
+                            <th class="px-3">Harga</th>
+                            <th class="px-3">Stok</th>
+                            <th class="px-3"></th>
                         </tr>
                     </thead>
                     <tbody id="product-list">
@@ -25,8 +23,7 @@
                     </tbody>
                     <tfoot>
                         <tr class="d-flex">
-                            <td class="col-10"></td>
-                            <td class="col-2">
+                            <td>
                                 <a href="{{ route('administrator.add_product.show') }}" class="btn btn-orange">
                                     <span><i class="material-icons md-18">add</i></span>Tambah Produk
                                 </a>

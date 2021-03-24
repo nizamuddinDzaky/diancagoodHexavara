@@ -57,11 +57,13 @@ Route::get('/finish-payment/{id}', [OrderController::class, 'paymentDone'])->nam
 Route::post('/process-payment', [OrderController::class, 'makePayment'])->name('payment.done.process');
 Route::get('/cancel-order/{id}', [OrderController::class, 'cancelOrder'])->name('order.cancel');
 Route::get('/delete-cart/{id}', [OrderController::class, 'deleteCart'])->name('delete.cart');
-Route::post('/delete-car', [OrderController::class, 'deleteMultipleCart'])->name('delete.multiple.cart');
+Route::post('/delete-cart', [OrderController::class, 'deleteMultipleCart'])->name('delete.multiple.cart');
 Route::get('/transactions/{status}', [TransactionController::class, 'index'])->name('transaction.list');
 
 Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
 Route::get('/product-variant/{id}', [ProductVariantController::class, 'getDetail'])->name('product_variant.detail');
+Route::post('/product-variant/update', [ProductVariantController::class, 'update'])->name('product_variant.update');
+Route::delete('/product-variant/delete/{id}', [ProductVariantController::class, 'destroy'])->name('product_variant.delete');
 
 Route::get('/profil', [ProfileController::class, 'index'])->name('profile');
 Route::post('/profil-edit', [ProfileController::class, 'editProfile'])->name('edit.profile');

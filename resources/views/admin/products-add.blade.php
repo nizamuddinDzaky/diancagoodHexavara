@@ -105,9 +105,9 @@
                                             <table class="table table-bordered text-gray-2">
                                                 <thead>
                                                     <tr class="d-flex">
-                                                        <th class="col-6">Nama Varian</th>
-                                                        <th class="col-3">Harga</th>
-                                                        <th class="col-3"></th>
+                                                        <th class="col-4">Nama Varian</th>
+                                                        <th class="col-2">Harga</th>
+                                                        <th class="col-6"></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="variants-list">
@@ -382,6 +382,75 @@
         </div>
     </div>
 </div>
+<div class="modal fade w-100" id="edit_variant" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content">
+            <form id="form-edit-variant">
+                @csrf
+                <input type="hidden" name="product_id" id="edit_product_id">
+                <input type="hidden" name="variant_id" id="edit_variant_id">
+                <div class="modal-header pl-0 pb-4">
+                    <h3 class="modal-title w-100 text-center position-absolute text-gray-2 weight-600">Edit Varian</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row mt-2">
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="form-label" for="name">Nama Varian</label>
+                                    <input type="text" name="name" id="edit-name" class="form-control bg-light-2 no-border" required
+                                        autofocus>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-lg-4">
+                                <label class="form-label">Harga</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text bg-3 border-3">Rp</div>
+                                    </div>
+                                    <input type="text" name="price" id="edit-price" class="form-control border-3">
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <label class="form-label">Berat</label>
+                                <div class="input-group">
+                                    <input type="text" name="weight" id="edit-weight" class="form-control border-3">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text bg-3 border-3">gr</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <label class="form-label">Stok</label>
+                                <input type="text" name="stock" id="edit-stock" class="form-control bg-light-2 no-border" required>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-lg-6">
+                                <label class="form-label">Foto Varian</label>
+                                <div class="images image_variant" id="edit_variant_container">
+                                    <div class="pic" id="edit_variant_placeholder">Drag your image here, or browse
+                                    </div>
+                                    <input type="file" id="edit_variant_input" accept="image/*" name="image"
+                                        style="display:none">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-gray" data-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-orange" id="add-variant-submit">Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('js')
@@ -403,6 +472,9 @@ var product_images = $('#product_container');
 var variant_button = $('#variant_placeholder');
 var variant_uploader = $('#variant_input');
 var variant_images = $('#variant_container');
+var edit_variant_button = $('#edit_variant_placeholder');
+var edit_variant_uploader = $('#edit_variant_input');
+var edit_variant_images = $('#edit_variant_container');
 
 // Upload category images
 category_button.on('click', function() {
@@ -572,10 +644,9 @@ $("form#form-variant").submit(function(e) {
         contentType: false,
         processData: false,
         success: function(res) {
-            console.log(res);
-            const variant = $('<tr class="d-flex"><td class="col-6">' + res.name +
-                '</td><td class="col-3">' + res.price +
-                '</td><td class="col-3"><button type="button" class="btn btn-orange show-variant" onclick="showDetail(' +res.id + ')">Detail</button></td></tr>'
+            const variant = $('<tr class="d-flex" id="rowvar' + res.id + '"><td class="col-4" id="rowvar' + res.id + 'name">' + res.name +
+                '</td><td class="col-2" id="rowvar' + res.id + 'price">' + res.price.toLocaleString("id-ID", { style: "currency", currency: "IDR"} +
+                '</td><td class="col-6"><div class="btn-group" role="group"><button type="button" class="btn btn-outline-orange-2 show-variant" onclick="showDetail(' +res.id + ')">Detail</button><button type="button" class="btn btn-outline-orange-2 edit-variant" onclick="editVariant(' + res.id + ')">Edit</button><button type="button" class="btn btn-outline-orange-2 delete-variant" onclick="deleteVariant(' + res.id + ')"></button></div></td></tr>'
                 )
             variants.append(`
                 <input type="hidden" name="variants[]" value=` + res.id +`>
@@ -603,9 +674,124 @@ function showDetail(id) {
             $("#detail-stock").html(res.stock);
             $("#detail-weight").html(res.weight + " gr");
             $("#detail-price").html(res.price.toLocaleString("id-ID", { style: "currency", currency: "IDR"}));
-            var path = 'storage/products/' + res.image;
+            var path = 'storage/variants/' + res.image;
             $("#detail-image").html(`<img class="w-100" src="{{ asset('` + path + `') }}">`);
         }
+    })
+}
+
+// Upload variant images
+edit_variant_button.on('click', function() {
+    edit_variant_uploader.click();
+});
+
+edit_variant_uploader.on('change', function() {
+    console.log(edit_variant_uploader.val());
+    $('#edit_img_variant').remove();
+
+    // var reader = new FileReader();
+    var data = $(this)[0].files;
+
+    $.each(data, function(index, file) {
+        if (/(\.|\/)(gif|jpe?g|png)$/i.test(file.type)) {
+            var reader = new FileReader();
+            reader.onload = (function(file) {
+                return function(e) {
+                    var img = $(
+                        '<div class="img" id="edit_img_variant" style="background-image: url(\'' +
+                        e.target.result +
+                        '\');" rel="' + e.target.result +
+                        '"><span><strong>Hapus</strong></span></div>'
+                    );
+                    edit_variant_images.append(img);
+                };
+            })(file);
+            reader.readAsDataURL(file);
+        }
+    });
+});
+
+edit_variant_images.on('click', '.img', function() {
+    $(this).remove();
+})
+
+function editVariant(id) {
+    $("#edit_variant").modal('show');
+    $("#edit_img_variant").remove();
+    
+    $.ajax({
+        url: "/product-variant/" + id,
+        type: "GET",
+        dataType: "JSON",
+        success: function(res){
+            $("#edit-name").val(res.name);
+            $("#edit-stock").val(res.stock);
+            $("#edit-weight").val(res.weight);
+            $("#edit-price").val(res.price);
+            $("#edit_product_id").val(res.product_id);
+            $("#edit_variant_id").val(res.id);
+            var path = '/storage/products/' + res.image;
+            var img = $(
+                        '<div class="img" id="edit_img_variant" style="background-image: url(\'' +
+                        path + '\');" rel="' + path +
+                        '"><span><strong>Hapus</strong></span></div>'
+                    );
+            edit_variant_images.append(img);
+        }
+    })
+}
+
+$("form#form-edit-variant").submit(function(e) {
+    e.preventDefault();
+    const data = new FormData(this);
+    $.ajax({
+        url: "/product-variant/update",
+        type: "POST",
+        data: data,
+        enctype: 'multipart/form-data',
+        dataType: 'JSON',
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function(res) {
+            $("#edit_variant").modal('hide');
+            $("#rowvar"+res.id+"name").html(res.name);
+            $("#rowvar"+res.id+"price").html(res.price);
+        },
+        error: function(xhr, status, err) {
+            console.log(xhr.responseText);
+        },
+    })
+})
+
+function deleteVariant(id) {
+    Swal.fire({
+        title: "Hapus varian?",
+        text: "Anda akan menghapus varian",
+        type: "warning",
+        reverseButtons: !0
+    }).then(function (e) {
+        var data = new FormData();
+        data.append('id', id);
+
+        $.ajax({
+            url: "/product-variant/delete/" + id,
+            type: "POST",
+            data: {
+                '_method': 'DELETE',
+                "_token": "{{ csrf_token() }}",
+            },
+            success: function(res) {
+                $("#edit_variant").modal('hide');
+                $("#rowvar"+id).remove();
+            },
+            error: function(xhr, status, err) {
+                console.log(xhr.responseText);
+            },
+        })
+        e.dismiss;
+    }, function (dismiss) {
+        return false;
     })
 }
 
