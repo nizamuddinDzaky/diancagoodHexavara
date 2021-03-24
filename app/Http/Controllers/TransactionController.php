@@ -24,9 +24,14 @@ class TransactionController extends Controller
                 $orders = Order::with('details.variant.product.images', 'payment')->where('customer_id', Auth::guard('customer')->user()->id)->where('status', $status)->orderBy('created_at', 'DESC')->get();
                 // $reviews = OrderDetail::with('order', 'review')->where('order_id', '$orders->id')->get();
             } else {
-                $orders = Order::with('details.variant.product.images', 'payment')->where('customer_id', Auth::guard('customer')->user()->id)->orderBy('status', 'ASC')->get();
+                $orders = Order::with('details.variant.product.images', 'payment')->where('customer_id', Auth::guard('customer')->user()->id)->orderBy('created_at', 'DESC')->get();
             }
             $str = NULL;
+            // print_r($orders[3]);
+            // die;
+            // foreach($orders as $o){
+            //     echo $od->details->count().'<br>';
+            // }die;
             return view('dianca.transaction-list', compact('orders', 'str'));
         }
         return redirect(route('customer.login'));
