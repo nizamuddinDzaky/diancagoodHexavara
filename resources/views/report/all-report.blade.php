@@ -20,18 +20,14 @@
                 <form action="{{ route('administrator.all_report') }}" method="get">
                     <div class="input-group mb-3 float-left">
                         <div class="col-lg-5 md-5 sm-5 mb-3">
-                            <input type="date" name="from_date" id="from_date" class="form-control border" placeholder="From Date">
+                            <input type="date" name="from_date" id="from_date" class="form-control border" placeholder="From Date" value="{{ app('request')->input('from_date') ?? date('Y-m-d') }}">
                         </div>
                         <div class="col-lg-5 md-5 sm-5 mb-3">
-                            <input type="date" name="to_date" id="to_date" class="form-control border" placeholder="To Date">
+                            <input type="date" name="to_date" id="to_date" class="form-control border" placeholder="To Date" value="{{ app('request')->input('to_date') ??  date('Y-m-d', strtotime( date( 'Y-m-d', strtotime( date('Y-m-d') ) ) . '-1 month' ) ) }}">
                         </div>
                         <div class="col-lg-2 md-2 sm-2">
                             <button class="btn btn-orange" type="submit" id="filter">Filter</button>
                         </div>
-                        <!-- <input type="text" id="created_at" name="date" class="form-control"> -->
-                        <!-- <div class="input-group-append">
-                            <button class="btn btn-secondary" type="submit">Filter</button>
-                        </div> -->
                     </div>
                 </form>
             </div>
@@ -51,15 +47,9 @@
             </ul>
         </div>
     </div>
-    <!-- <div class="row float-right mr-1">
-        <div class="col-ld-12 md-12 sm-12">
-            <a type="button" id="all_report_pdf" class="btn btn-orange weight-600 mb-3" href="{{ route('administrator.all_report_pdf', ['from_date' => $start, 'to_date' => $end]) }}">Export PDF</a>
-        </div>
-    </div> -->
 </div>
 <div class="container-fluid">
     <div class="row">
-        <!-- <div class="col-lg-12 md-12 sm-12"> -->
         <div class="col-lg-3 pb-4">
             <div class="card border-orange h-100">
                 <div class="card-body">
@@ -92,7 +82,6 @@
                 </div>
             </div>
         </div>
-        <!-- </div> -->
     </div>
 </div>
 <div class="container-fluid">
@@ -102,14 +91,16 @@
                 <table id="myTable" class="table table-bordered text-gray-2 text-center">
                     <thead class="font-16">
                         <tr>
-                            <th onclick="sortTable(0)">
+                            <th onclick="sortTable(0)" style="cursor: pointer;">
                                 <span>Kode Pesanan</span>
+                                <i class="material-icons md-18">sort</i>
                             </th>
                             <th>
                                 <span>Jenis</span>
                             </th>
-                            <th onclick="sortTable(2)">
+                            <th onclick="sortTable(2)" style="cursor: pointer;">
                                 <span>Tanggal Transaksi</span>
+                                <i class="material-icons md-18">sort</i>
                             </th>
                             <th>
                                 <span>Transaksi</span>

@@ -27,14 +27,14 @@
                     <div class="card shadow-1">
                         <div class="card-body">
                             <div class="row text-center" style="color: #4F4F4F">
-                                <div class="col-lg-4 md-4 sm-4 {{ request()->segment(2) == '' ? 'active' : '' }}">
+                                <div class="col-lg-4 md-4 sm-4">
                                     <a href="{{ route('profile') }}" style="color: #4F4F4F">Biodata Diri</a>
                                 </div>
-                                <div class="col-lg-4 md-4 sm-4 {{ request()->segment(2) == 'alamat' ? 'active' : '' }}">
+                                <div class="col-lg-4 md-4 sm-4">
                                     <a href="{{ route('profile-address') }}" style="color: #4F4F4F">Daftar Alamat</a>
                                 </div>
-                                <div class="col-lg-4 md-4 sm-4 {{ request()->segment(2) == 'rekening' ? 'active' : '' }}">
-                                    <a href="{{ route('profile-rekening') }}" style="color: #4F4F4F">Rekening Bank</a>
+                                <div class="col-lg-4 md-4 sm-4">
+                                    <a href="{{ route('profile-rekening') }}" style="color: #F37020">Rekening Bank</a>
                                 </div>
                             </div>
                             <div class="container">
@@ -60,7 +60,6 @@
                                 <div class="col-lg-9 md-9 sm-9">
                                     <h6 style="color: #828282">{{ $v->bank->name }}</h6>
                                     <h6 style="color: #4F4F4F">{{ $v->account_number }}</h6>
-                                    <!-- <h6 style="color: #828282">a.n <h6 style="color: #4F4F4F">Sdr RANA WIJDAN NAIM</h6></h6> -->
                                 </div>
                                 <div class="col-lg-2 md-2 sm-2">
                                     <form action="{{ route('profile-rekening.delete', $v->id) }}"

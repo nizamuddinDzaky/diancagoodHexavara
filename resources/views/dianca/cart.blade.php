@@ -12,7 +12,7 @@
                 @csrf
                 <input type="hidden" name="item-cart" id="item-cart">
             </form>
-            <form method="POST" action="{{ route('checkout') }}" id="checkout-form">
+            <form method="POST" action="{{ route('checkout.submit-item-cart') }}" id="checkout-form">
                 @csrf
                 <div class="row my-2">
                     <div class="col-lg-8">
@@ -34,10 +34,10 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 @forelse($cart->details as $cd)
-                                <div class="form-check text-gray-2 my-4">
-                                    <input class="form-check-input position-static align-top primary-checkbox"
-                                        type="checkbox" name="cd[]" id="check{{ $cd->id }}" value="{{ $cd->id }}"
-                                        onclick="selectCart({{ $cd->id }})">
+                                <div class="form-check text-gray-2 my-4 card-item-cart">
+                                    <input class="form-check-input position-static align-top primary-checkbox cb-item-cart"
+                                        type="checkbox" name="cd[]" id="check{{ $cd->id }}" value="{{ $cd->id }}" data-id="{{$cd->id}}" 
+                                        data-price="{{ ($cd->variant->promo_price) ? ($cd->variant->price - $cd->variant->promo_price) : $cd->variant->price}}">
                                     <div class="card cart-card shadow-1 w-90">
                                         <div class="card-body">
                                             <div class="row">
@@ -75,22 +75,20 @@
                                                     </p>
                                                 </div>
                                                 <div class="col-lg-6">
-                                                    <div class="btn-group btn-group-vertical-center float-right">
+                                                    <div class="btn-group btn-group-vertical-center float-right div-qty">
                                                         <span class="product_count">
-                                                            <button class="reduced items-count font-10" type="button"
-                                                                onclick="update({{ $cd->id }}, 0)">
+                                                            <button class="reduced items-count font-10 btn-decrement" type="button">
                                                                 <span class="material-icons md-10">remove</span>
                                                             </button>
                                                         </span>
                                                         <span class="product_count">
                                                             <input type="text" name="qty[]" id="qty{{ $cd->id }}"
-                                                                maxlength="3" value="{{ $cd->qty }}"
-                                                                style="height:26px;width:70px" class="input-text"
+                                                                maxlength="3" value="{{ $cd->qty }}" data-id="{{ $cd->id }}"
+                                                                style="height:26px;width:70px" class="input-text input-qty" 
                                                                 required>
                                                         </span>
                                                         <span class="product_count">
-                                                            <button class="increase items-count font-10" type="button"
-                                                                onclick="update({{ $cd->id }}, 1)">
+                                                            <button class="increase items-count font-10 btn-increment" type="button" >
                                                                 <span class="material-icons md-10">add</span>
                                                             </button>
                                                         </span>
@@ -129,132 +127,186 @@
 
 @section('js')
 <script>
-$(document).ready(function() {
-    $(':checkbox:checked').prop('checked', false);
-});
-
-var myObj = {
-    style: "currency",
-    currency: "IDR"
-}
-
-function update(id, isIncrement) {
-    var input = document.getElementById('qty' + id);
-    if (isIncrement)
-        input.value++;
-    else
-        input.value--;
-
-    $.ajax({
-        type: "POST",
-        url: "/cart/update",
-        data: {
-            id: id,
-            qty: input.value
-        },
-        dataType: "JSON",
-        success: function(res) {
-            var total_cost = 0;
-            var qty = 0;
-            res.details.forEach(function(cd) {
-                if ($("#check" + cd.id).prop('checked')) {
-                    total_cost += parseInt(cd.price);
-                    qty += parseInt(cd.qty);
-                }
-
-                if (cd.id == id) {
-                    $("#subtotal" + cd.id).html(cd.price.toLocaleString("id-ID", myObj));
-                }
-            })
-            $("#total_cost").html(parseInt(total_cost).toLocaleString("id-ID", myObj));
-            $("#qty").html(parseInt(qty));
-        },
-        error: function(xhr, status, err) {
-            console.log(err);
-        }
-    })
-}
-
-$("#select-all").click(function() {
-    $("input[type=checkbox]").prop('checked', $(this).prop('checked'));
-});
-
-    $("#select-all").click(function() {
-        $("input[type=checkbox]").prop('checked', $(this).prop('checked'));
+    var selected_category = @json($session_cart);
+    $(document).ready(function() {
+        set_cart_item();
     });
 
-    function selectCart(id) {
+    function set_cart_item(){
+        $('.cb-item-cart').each(function () {
+            let id = $(this).data('id');
+            if(selected_category.indexOf(id.toString()) != -1){
+                $(this).prop('checked', true);
+            }
+        });
+        count_selected_cart();
+    }
+
+    var myObj = {
+        style: "currency",
+        currency: "IDR"
+    }
+
+    function update(id, value) {
+        // var input = document.getElementById('qty' + id);
+        // if (isIncrement)
+        //     input.value++;
+        // else
+        //     input.value--;
+
+        $.ajax({
+            type: "POST",
+            url: "/cart/update",
+            data: {
+                id: id,
+                qty: value
+            },
+            dataType: "JSON",
+            success: function(res) {
+                var total_cost = 0;
+                var qty = 0;
+                let qty_carticon = 0
+                res.details.forEach(function(cd) {
+                    if ($("#check" + cd.id).prop('checked')) {
+                        total_cost += parseInt(cd.price);
+                        qty += parseInt(cd.qty);
+                    }
+                    qty_carticon += parseInt(cd.qty)
+                    if (cd.id == id) {
+                        $("#subtotal" + cd.id).html(cd.price.toLocaleString("id-ID", myObj));
+                    }
+                })
+                $('#cart_qty').text(parseInt(qty_carticon));
+                $("#total_cost").html(parseInt(total_cost).toLocaleString("id-ID", myObj));
+                $("#qty").html(parseInt(qty));
+            },
+            error: function(xhr, status, err) {
+                console.log(err);
+            }
+        })
+    }
+
+
+   
+    $("#select-all").click(function() {
+        $("input[type=checkbox]").prop('checked', $(this).prop('checked'));
+        count_selected_cart();
+    });
+
+    $('.cb-item-cart').change(function(){
+        count_selected_cart();
+    });
+
+    $('.btn-increment').click(function(){
+        let input = $(this).closest('.div-qty').find('.input-qty');
+        let qty = parseInt($(input).val()) + 1;
+        $(input).val(qty);
+        $(input).change();
+    })
+
+    $('.btn-decrement').click(function(){
+        let input = $(this).closest('.div-qty').find('.input-qty');
+        let qty = parseInt($(input).val()) - 1;
+        $(input).val(qty);
+        $(input).change();
+    })
+
+    $('.input-qty').change(function(){
+        update($(this).data('id'), $(this).val());
+    });
+
+    // function selectCart(id) {
+    //     let total_cb_item = $('.cb-item-cart').length;
+    //     let count_checked = 0;
+
+    //     $('.cb-item-cart').each(function () {
+    //         if ($(this).prop('checked')) {
+    //             count_checked++;
+    //         }
+    //     })
+
+    //     if (count_checked == total_cb_item) {
+    //         $('#select-all').prop('checked', true);
+    //     }else{
+    //         $('#select-all').prop('checked', false);
+    //     }
+    //     console.log($('.cb-item-cart').length);
+
+    //     var input = document.getElementById('qty'+id);
+
+    //     if($("#check"+id).prop('checked')) {
+    //         $.ajax({
+    //             type: "POST",
+    //             url: "/cart/semi-update",
+    //             data: {
+    //                 add: 1,
+    //                 id: id,
+    //                 qty: input.value,
+    //                 curr_qty: document.getElementById("qty").innerHTML,
+    //                 curr_total: parseInt(document.getElementById("total_cost").innerHTML.replace(/[^0-9-,]/g, ''))
+    //             },
+    //             dataType: "JSON",
+    //             success: function(res) {
+    //                 $("#total_cost").html(res.totalcost.toLocaleString("id-ID", myObj));
+    //                 $("#qty").html(res.qty);
+    //             }
+    //         });
+    //     } else {
+    //         $.ajax({
+    //             type: "POST",
+    //             url: "/cart/semi-update",
+    //             data: {
+    //                 add: 0,
+    //                 id: id,
+    //                 qty: input.value,
+    //                 curr_qty: document.getElementById("qty").innerHTML,
+    //                 curr_total: parseInt(document.getElementById("total_cost").innerHTML.replace(/[^0-9-,]/g, ''))
+    //             },
+    //             dataType: "JSON",
+    //             success: function(res) {
+    //                 $("#total_cost").html(res.totalcost.toLocaleString("id-ID", myObj));
+    //                 $("#qty").html(res.qty);
+    //             }
+    //         });
+    //     }
+    // }
+
+    function count_selected_cart(){
         let total_cb_item = $('.cb-item-cart').length;
         let count_checked = 0;
-
+        let total_cost = 0
+        let total_qty = 0;
         $('.cb-item-cart').each(function () {
             if ($(this).prop('checked')) {
                 count_checked++;
+                let input = $(this).closest('.card-item-cart').find('.input-qty');
+                total_qty += parseInt($(input).val());
+                let sub_total = parseInt($(this).data('price')) * parseInt($(input).val());
+                total_cost += sub_total;
             }
-        })
+        });
 
-        if (count_checked == total_cb_item) {
-            $('#select-all').prop('checked', true);
+        if(count_checked > 0 ){
+            if (count_checked == total_cb_item) {
+                $('#select-all').prop('checked', true);
+            }else{
+                $('#select-all').prop('checked', false);
+            }
         }else{
             $('#select-all').prop('checked', false);
         }
-        // console.log($('.cb-item-cart').length);
 
-        var input = document.getElementById('qty'+id);
-
-        if($("#check"+id).prop('checked')) {
-            $.ajax({
-                type: "POST",
-                url: "/cart/semi-update",
-                data: {
-                    add: 1,
-                    id: id,
-                    qty: input.value,
-                    curr_qty: document.getElementById("qty").innerHTML,
-                    curr_total: parseInt(document.getElementById("total_cost").innerHTML.replace(/[^0-9-,]/g, ''))
-                },
-                dataType: "JSON",
-                success: function(res) {
-                    $("#total_cost").html(res.totalcost.toLocaleString("id-ID", myObj));
-                    $("#qty").html(res.qty);
-                }
-            });
-        } else {
-            $.ajax({
-                type: "POST",
-                url: "/cart/semi-update",
-                data: {
-                    add: 0,
-                    id: id,
-                    qty: input.value,
-                    curr_qty: document.getElementById("qty").innerHTML,
-                    curr_total: parseInt(document.getElementById("total_cost").innerHTML.replace(/[^0-9-,]/g, ''))
-                },
-                dataType: "JSON",
-                success: function(res) {
-                    $("#total_cost").html(res.totalcost.toLocaleString("id-ID", myObj));
-                    $("#qty").html(res.qty);
-                }
-            });
-        }
+        $("#total_cost").html(total_cost.toLocaleString("id-ID", myObj));
+        $("#qty").html(total_qty);
     }
 
     $('.delete-cart').click(function () {
-        let id = $(this).data('id');
         let name = $(this).data('product-name');
-        Swal.fire({
-            title: name,
-            text: "Apakah Anda Yakin ?",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ya',
-            cancelButtonText: 'Tidak'
-        }).then((result) => {
-                // console.log("asd", result);
-            if (result.value) {
+        sweet_alert("warning", name, "Apakah Anda Yakin ?", true).then((result) => {
+            if (result.isConfirmed) {
                 window.location.href = $(this).data('url-delete');
+            } else if (result.isDismissed) {
+                return false;
             }
         })
     })
@@ -267,36 +319,20 @@ $("#select-all").click(function() {
                 array_selected.push($(this).val());
             }
         })
+        console.log(array_selected);
         if (array_selected.length == 0) {
-            Swal.fire({
-                title: "Tidak Ada Item yang Terpilih",
-                text: "Silahkan Pilih Item Yang ingin dihapus",
-                icon: "warning",
-                reverseButtons: !0
-            }).then(function (e) {
+            sweet_alert("warning", "Tidak Ada Item yang Terpilih", "Silahkan Pilih Item Yang ingin dihapus").then(function (e) {
                 e.dismiss;
             }, function (dismiss) {
                 return false;
-            });
+            })
         }else{
-            Swal.fire({
-                title: 'Hapus Beberapa Item',
-                text: "Apakah Anda Yakin Menghapus Item Yang Terpilih?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Ya',
-                cancelButtonText: 'Tidak'
-            }).then((result) => {
-                    // console.log("asd", result);
+            sweet_alert("warning", "Hapus Beberapa Item", "Apakah Anda Yakin Menghapus Item Yang Terpilih?", true).then((result) => {
                 if (result.value) {
                     submit_delete_multi_cart(array_selected);
-                    // window.location.href = $(this).data('url-delete');
                 }
             })
         }
-        // console.log(array_selected)
     }
 
     function submit_delete_multi_cart(array_selected) {
@@ -305,28 +341,24 @@ $("#select-all").click(function() {
     }
 
 
-$("#continue").on('click', function(e) {
-    e.preventDefault();
-    if ($("#checkout-form input[type=checkbox]:checked").length == 0) {
-        Swal.fire({
-            title: "Tidak bisa lanjut",
-            text: "Pastikan produk yang ingin dibeli sudah tercentang ",
-            icon: "error",
-            reverseButtons: !0
-        }).then(function(e) {
-            e.dismiss;
-        }, function(dismiss) {
-            return false;
-        })
-    } else {
-        $("#checkout-form").submit();
-    }
-})
 
-$.ajaxSetup({
-    headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-});
+    $("#continue").on('click', function(e) {
+        e.preventDefault();
+        if ($("#checkout-form input[type=checkbox]:checked").length == 0) {
+            sweet_alert("error", "Tidak bisa lanjut", "Pastikan produk yang ingin dibeli sudah tercentang ").then(function(e) {
+                e.dismiss;
+            }, function(dismiss) {
+                return false;
+            })
+        } else {
+            $("#checkout-form").submit();
+        }
+    })
+
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
 </script>
 @endsection

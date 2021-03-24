@@ -174,10 +174,11 @@
                         <div class="form-group px-2">
                             <label for="input_name">Produk</label>
                             <input type="text" id="input_name" name="name" class="form-control border-3">
+                            <input type="text" id="input_id" name="id" class="form-control border-3" hidden>
                         </div>
                         <div class="form-group px-2 text-center">
                             <button class="btn btn-outline-gray" data-dismiss="modal">Batal</button>
-                            <button type="submit" id="product_update" class="btn btn-orange">Update Promo</button>
+                            <button type="submit" id="product_update" class="btn btn-orange">Update Produk</button>
                         </div>
                     </form>
                 </div>
@@ -271,6 +272,7 @@
                 success: function(res){
                     console.log(res);
                     $("#input_name").val(res.name);
+                    $("#input_id").val(res.id);
                 },
                 error: function(xhr, status, err) {
                     console.log(xhr.responseText);

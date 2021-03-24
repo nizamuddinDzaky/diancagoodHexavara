@@ -38,7 +38,7 @@
         </div>
     </div>
     <div class="row mb-1 float-right">
-        <div class="col-lg-5 md-5 sm-5">
+        <div class="col-lg-12 md-12 sm-12">
             <ul class="" style="list-style-type:none;">
                 <li class="nav-item h-100">
                     <a href="" class="nav-link dropdown-toggle border" data-toggle="dropdown"
@@ -46,19 +46,6 @@
                     <div class="dropdown-menu">
                         <a class="dropdown-item" href="{{ route('administrator.product_report_pdf', ['from_date' => $start, 'to_date' => $end]) }}">PDF</a>
                         <a class="dropdown-item" href="{{ route('administrator.product_report_excel', ['from_date' => $start, 'to_date' => $end]) }}">Excel</a>
-                    </div>
-                </li>
-            </ul>
-        </div>
-        <div class="col-lg-7 md-7 sm-7">
-            <ul class="" style="list-style-type:none;">
-                <li class="nav-item h-100">
-                    <a href="{{ route('administrator.product_report') }}" class="nav-link dropdown-toggle border" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">Semua Produk</a>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" href="{{ route('administrator.product_report') }}">Semua Produk</a>
-                        <a class="dropdown-item" href="{{ route('administrator.product_sold_report') }}">Produk Terjual</a>
-                        <a class="dropdown-item" href="{{ route('administrator.product_soldout_report') }}">Produk Habis</a>
                     </div>
                 </li>
             </ul>

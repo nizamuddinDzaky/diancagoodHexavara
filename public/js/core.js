@@ -16,6 +16,18 @@ function removeA(arr) {
     return arr;
 }
 
+function sweet_alert(icon = 'success', title , text, showCancelButton =  false, cancelButtonText ='Tidak', confirmButtonText = 'OK'){
+    return Swal.fire({
+        title: title,
+        text: text,
+        icon: icon,
+        reverseButtons: !0,
+        showCancelButton : showCancelButton,
+        cancelButtonText : cancelButtonText,
+        confirmButtonText : confirmButtonText
+    })
+}
+
 function copy_to_clipboard(tag) {
 	let elem = document.getElementById(tag);
   var targetId = "_hiddenCopyText_";
