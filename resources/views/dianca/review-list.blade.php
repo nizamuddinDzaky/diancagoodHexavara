@@ -33,18 +33,14 @@
                         <form action="{{ route('reviews.done') }}" method="get">
                             <div class="input-group mb-3 float-left">
                                 <div class="col-lg-5 md-5 sm-5 mb-3">
-                                    <input type="date" name="from_date" id="from_date" class="form-control border" placeholder="From Date">
+                                    <input type="date" name="from_date" id="from_date" class="form-control border" placeholder="From Date" value="{{ app('request')->input('from_date') ?? date('Y-m-d', strtotime( date( 'Y-m-d', strtotime( date('Y-m-d') ) ) . '-1 month' ) ) }}">
                                 </div>
                                 <div class="col-lg-5 md-5 sm-5 mb-3">
-                                    <input type="date" name="to_date" id="to_date" class="form-control border" placeholder="To Date">
+                                    <input type="date" name="to_date" id="to_date" class="form-control border" placeholder="To Date" value="{{ app('request')->input('to_date') ?? date('Y-m-d') }}">
                                 </div>
                                 <div class="col-lg-2 md-2 sm-2">
                                     <button class="btn btn-orange" type="submit" id="filter">Filter</button>
                                 </div>
-                                <!-- <input type="text" id="created_at" name="date" class="form-control"> -->
-                                <!-- <div class="input-group-append">
-                                    <button class="btn btn-secondary" type="submit">Filter</button>
-                                </div> -->
                             </div>
                         </form>
                     </div>
@@ -137,16 +133,4 @@ $(document).ready(function() {
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-<script>
-    $('#filter').click(function() {
-        var from_date = $('#from_date').val();
-        var to_date = $('#to_date').val();
-        if(from_date != '' && to_date != '') {
-            fetch_data(from_date, to_date);
-        }
-        else {
-            alert('Both Date is required');
-        }
-    });
-</script>
 @endsection

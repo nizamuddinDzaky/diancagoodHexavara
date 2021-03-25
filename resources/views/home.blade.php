@@ -5,20 +5,20 @@
 @endsection
 
 @section('content')
-<section class="feature_product_area section_gap pb-3 mt-4">
+<section class="feature_product_area mt-4 pt-4">
     <div class="main_box">
-        <div class="container">
-            <div class="row py-4">
+        <div class="">
+            <div class="container">
                 <img class="hero" src="{{ asset('img/hero-2x.png') }}">
             </div>
-            <hr class="py-2" style="border-color:F2F2F2">
+            <hr style="border-color:F2F2F2">
         </div>
     </div>
 </section>
 <section class="feature_product_area">
     <div class="main_box">
         <div class="container">
-            <div class="row my-2 py-4 pl-2">
+            <div class="row my-2 py-2 pl-2">
                 <div class="main_title">
                     <h2>Kategori apa yang kamu cari?</h2>
                 </div>
@@ -41,7 +41,7 @@
 
                 @endforelse
             </div>
-            <hr class="py-2" style="border-color:F2F2F2">
+            <hr style="border-color:F2F2F2">
         </div>
     </div>
 </section>
@@ -49,7 +49,7 @@
 <section class="feature_product_area">
     <div class="main_box">
         <div class="container">
-            <div class="row my-2 py-4 pl-2">
+            <div class="row my-2 py-2 pl-2">
                 <div class="main_title">
                     <h2>{{ $p->name }}</h2>
                 </div>
@@ -62,6 +62,11 @@
                             <a href="{{ url('/product/'. $pd->variant->product->id) }}">
                                 <img class="promo-product" src="{{ asset('storage/products/' . $pd->variant->product->images->first()->filename) }}" alt="{{ $pd->variant->product->name }}">
                             </a>
+                            <div class="p_icon">
+                                <button onclick="addToCart({{ $row->variant->first()->id }})"
+                                    class="btn btn-orange ml-2 mt-2 text-center mb-2" style="">+
+                                    Keranjang</button>
+                            </div>
                         </div>
                         <a href="{{ url('/product/'. $pd->variant->product->id) }}">
                             <h4 class="text-gray-2" class="pl-3">{{ $pd->variant->product->name }} {{ $pd->variant->name }}</h4>
@@ -80,14 +85,14 @@
 <section class="feature_product_area">
     <div class="main_box">
         <div class="container">
-            <div class="row my-2 py-4 pl-2">
+            <div class="row my-2 py-2 pl-2">
                 <div class="main_title">
                     <h2>Produk Baru</h2>
                 </div>
             </div>
             <div class="row my-2">
                 @forelse($newproducts as $row)
-                <div class="col-lg-3">
+                <div class="col">
                     <div class="f_p_item">
                         <div class="f_p_img">
                             <a href="{{ url('/product/' . $row->id) }}">
@@ -95,6 +100,11 @@
                                     src="{{ asset('storage/products/' . $row->images->first()->filename) }}"
                                     alt="{{ $row->name }}">
                             </a>
+                            <div class="p_icon">
+                                <button onclick="addToCart({{ $row->variant->first()->id }})"
+                                    class="btn btn-orange ml-2 mt-2 text-center mb-2" style="">+
+                                    Keranjang</button>
+                            </div>
                         </div>
                         <a href="{{ url('/product/' . $row->id) }}">
                             <h4 class="text-gray-2" class="pl-3">{{ $row->name }}</h4>
@@ -123,14 +133,14 @@
                 @empty
                 @endforelse
             </div>
-            <hr class="pb-4" style="border-color:F2F2F2">
+            <hr style="border-color:F2F2F2">
         </div>
     </div>
 </section>
 <section class="feature_product_area">
     <div class="main_box">
         <div class="container">
-            <div class="row my-2 py-4 pl-2">
+            <div class="row my-2 py-2 pl-2">
                 <div class="col-lg-6">
                     <div class="main_title">
                         <h3>Produk Terlaris</h3>
@@ -246,45 +256,95 @@
 </section>
 <section class="feature_product_area section_gap testimoni">
     <div class="main_box">
-        <div class="container">
+        <div class="container-fluid">
             <div class="row my-2">
                 <div class="main_title">
                     <h2>Testimoni</h2>
                 </div>
             </div>
-            <div class="row my-2">
-                <div class="col-lg-4 pb-4">
-                    <div class="card shadow-1">
-                        <div class="card-body">
-                            <h4 class="weight-600">Testimoni 1</h4>
-                            <p class="text-gray-3 font-14">Lorem Ipsum is simply dummy text of the printing and
-                                typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since
-                                the 1500s,</p>
+            <div class="row my-2" style="display: flex;overflow-x: auto;overflow-y: hidden;max-height:350px">
+            @forelse($reviews as $row)
+                <div class="col">
+                    <div class="f_p_item" style="background: #FFFFFF; height:350px">
+                        <div class="row">
+                            <div class="col-lg-4 md-4 sm-4 mb-2 pl-4">
+                                <a href="{{ url('/product/' . $row->product->id) }}">
+                                    <img class="home-product-center-cropped pt-2"
+                                        src="{{ asset('storage/products/' . $row->product->images->first()->filename) }}"
+                                        alt="{{ $row->name }}" style="height:75px; width:75px">
+                                </a>
+                            </div>
+                            <div class="col-lg-8 md-8 sm-8 mt-2 pl-4 pr-4">
+                                <a href="{{ url('/product/' . $row->product->id) }}">
+                                    <p class="text-gray-2 weight-600" style="text-align:left; vertical-align: middle">{{ $row->product->name }}</p>
+                                </a>
+                            </div>
                         </div>
+                        <hr style="border-color:F2F2F2">
+                        <div class="row ml-3 mb-2">
+                            <h6 class="float-left">
+                                @for($i = 0; $i < 5; $i++) 
+                                @if ($i < $row->rate)
+                                    <span class="fa fa-star checked d-inline-flex align-self-end"></span>
+                                    @else
+                                    <span class="fa fa-star"></span>
+                                @endif
+                                @endfor
+                            </h6>
+                        </div>
+                        <p class="text-gray-2 ml-3 mr-3" style="text-align:left">{{ $row->customer->name }}</p>
+                        <p class="text-gray-2 ml-3 mr-3" style="text-align:left">{{ $row->text }}</p>
                     </div>
                 </div>
-                <div class="col-lg-4 pb-4">
-                    <div class="card shadow-1">
-                        <div class="card-body">
-                            <h4 class="weight-600">Testimoni 1</h4>
-                            <p class="text-gray-3 font-14">Lorem Ipsum is simply dummy text of the printing and
-                                typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since
-                                the 1500s,</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 pb-4">
-                    <div class="card shadow-1">
-                        <div class="card-body">
-                            <h4 class="weight-600">Testimoni 1</h4>
-                            <p class="text-gray-3 font-14">Lorem Ipsum is simply dummy text of the printing and
-                                typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since
-                                the 1500s,</p>
-                        </div>
-                    </div>
-                </div>
+                @empty
+                @endforelse
             </div>
         </div>
     </div>
 </section>
+@endsection
+
+@section('js')
+<script>
+function addToCart(var_id) {
+    if ("{{ auth()->guard('customer')->check() }}") {
+        $.ajax({
+            url: '/cart/quick-add/' + var_id,
+            type: 'GET',
+            data: {
+                id: var_id
+            },
+            success: function(res) {
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    iconColor: '#fff',
+                    title: '<h6 style="color:white">Berhasil masuk keranjang!</h6>',
+                    showConfirmButton: false,
+                    timer: 1500,
+                    toast: true,
+                    background: '#f37020'
+                })
+
+                console.log(res.qty);
+                $("#cart_qty").html(res.qty)
+            }
+        })
+    } else {
+        Swal.fire({
+            position: 'top-end',
+            icon: 'error',
+            title: '<h6 style="color:white">Masuk untuk menambahkan ke keranjang!</h6>',
+            showConfirmButton: false,
+            timer: 1500,
+            toast: true,
+            background: '#d33',
+        }).then(function(e) {
+            e.dismiss;
+        }, function(dismiss) {
+            return false;
+        })
+    }
+}
+</script>
 @endsection

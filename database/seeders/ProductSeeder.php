@@ -436,15 +436,6 @@ class ProductSeeder extends Seeder
                 'status' => 1,
             ],
             [
-                'product_id' => 1,
-                'product_variant_id' => 2,
-                'customer_id' => 1,
-                'order_detail_id' => 2,
-                'text' => null,
-                'rate' => 4,
-                'status' => 0,
-            ],
-            [
                 'product_id' => 2,
                 'product_variant_id' => 1,
                 'customer_id' => 1,

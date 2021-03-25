@@ -173,7 +173,7 @@
                                                         data-target="#trackModal">Lacak Pengiriman</button>
                                                     @elseif($order->status == 3)
                                                     <button class="btn btn-orange weight-600 mb-3">Beli Lagi</button>
-                                                    <a class="btn btn-orange weight-600" href="{{ route('reviews.list') }}">Beri Ulasan</a>
+                                                    <a class="btn btn-orange weight-600 mb-3" href="{{ route('reviews.list') }}">Beri Ulasan</a>
                                                     @endif
                                                 </div>
                                             </div>
@@ -279,7 +279,7 @@
                             </div>
                         </div>
                         <div class="col-lg-4">
-                            <a id="modal-cancel" class="btn btn-orange float-right">Batalkan</a>
+                            <a id="modal-cancel" class="btn btn-orange float-right mt-2">Batalkan</a>
                             <button class="btn btn-outline-orange-2 float-right mt-2">Tanya Penjual</button>
                         </div>
                     </div>

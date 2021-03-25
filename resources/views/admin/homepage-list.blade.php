@@ -173,7 +173,7 @@
                         </div>
                         <div class="form-group px-2">
                             <label for="input_name">Produk</label>
-                            <input type="text" id="input_name" name="name" class="form-control border-3">
+                            <input type="text" id="input_name" name="name" class="form-control border-3" disabled>
                             <input type="text" id="input_id" name="id" class="form-control border-3" hidden>
                         </div>
                         <div class="form-group px-2 text-center">

@@ -54,7 +54,11 @@ class ReviewController extends Controller
             if (request()->from_date != '' && request()->to_date != '') {
                 $start = Carbon::parse(request()->from_date)->format('Y-m-d') . ' 00:00:01';
                 $end = Carbon::parse(request()->to_date)->format('Y-m-d') . ' 23:59:59';
-                $orders = Order::with('details.variant.product')->where('status', 3)->where('customer_id', Auth::guard('customer')->user()->id)->whereBetween('created_at', [$start, $end])->get();
+                // $orders = Order::with('details.variant.product')->where('status', 3)->where('customer_id', Auth::guard('customer')->user()->id)->whereBetween('created_at', [$start, $end])->get();
+                
+                $orders = Order::with('details.variant.product')->whereHas('details.review', function($query) {
+                    return $query->where('status', 1);
+                })->where('customer_id', Auth::guard('customer')->user()->id)->where('status', 3)->whereBetween('created_at', [$start, $end])->get();
 
                 return view('dianca.review-list', compact('orders'));
             }
