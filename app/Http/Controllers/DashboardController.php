@@ -40,7 +40,13 @@ class DashboardController extends Controller
     {
         if(Auth::guard('web')->check()) {
             $order = Order::with('details.variant', 'payment', 'address.district.city.province')->where('id', $id)->first();
-            return view('admin.order-show', compact('order'));
+
+            $menunggu = Order::where('status', 0)->count();
+            $diproses = Order::where('status', 1)->count();
+            $dikirim = Order::where('status', 2)->count();
+            $selesai = Order::where('status', 3)->count();
+            $batal = Order::where('status', 4)->count();
+            return view('admin.order-show', compact('order', 'menunggu', 'diproses', 'dikirim', 'selesai', 'batal'));
         }
         return redirect(route('administrator.login'));
     }

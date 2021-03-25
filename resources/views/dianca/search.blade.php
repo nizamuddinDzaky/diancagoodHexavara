@@ -106,14 +106,17 @@
                                             alt="{{ $row->name }}">
                                     </a>
                                     <div class="p_icon">
+                                    @if($row->variant->all() != NULL)
                                         <button onclick="addToCart({{ $row->variant->first()->id }})"
                                             class="btn btn-orange ml-2 mt-2 text-center mb-2" style="">+
                                             Keranjang</button>
+                                    @endif
                                     </div>
                                 </div>
                                 <a href="{{ url('/product/' . $row->id) }}" class="overflow-auto mb-2">
                                     <h4 class="text-gray-2 product-name" class="pl-3">{{ $row->name }}</h4>
                                 </a>
+                                @if($row->variant->all() != NULL)
                                 @if( $row->variant->first()->promo_price != 0 )
                                 <h5 class="text-gray-1 d-flex justify-content-center">Rp
                                     {{ number_format($row->variant->first()->price - $row->variant->first()->promo_price) }}<span
@@ -123,7 +126,7 @@
                                 @else
                                 <h5 class="text-gray-1">Rp {{ number_format($row->variant->first()->price) }}</h5>
                                 @endif
-                                
+                                @endif
                                 @for($i = 0; $i < 5; $i++) 
                                     @if ($i < $row->rate)
                                     <span class="fa fa-star checked"></span>

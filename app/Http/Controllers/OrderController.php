@@ -62,7 +62,8 @@ class OrderController extends Controller
                         'cart_id' => $cart->id,
                         'product_variant_id' => $variant->id,
                         'qty' => $request->qty,
-                        'price' => ($variant->price - $variant->promo_price) * $request->qty
+                        'price' => ($variant->price) * $request->qty,
+                        'promo' => $variant->promo_price
                     ]);
     
                     $cart->total_cost += $cart_detail->price;
@@ -70,10 +71,12 @@ class OrderController extends Controller
                 } else {
                     $cart_variant = CartDetail::where('cart_id', $cart->id)->where('product_variant_id', $variant->id)->first();
                     $cart_variant->qty += $request->qty;
-                    $cart_variant->price += ($variant->price  - $variant->promo_price) * $request->qty;
+                    $cart_variant->price += ($variant->price) * $request->qty;
+                    $cart->variant->promo += $variant->promo_price;
                     $cart_variant->save();
 
                     $cart->total_cost = CartDetail::where('cart_id', $cart->id)->sum('price');
+                    $cart->total_promo = CartDetail::where('cart_id', $cart->id)->sum('promo');
                     $cart->save();
                 }
                 
@@ -92,7 +95,8 @@ class OrderController extends Controller
 
         $carts_variant->update([
             'qty' => $request->qty,
-            'price' => $request->qty * ($product_variant->price - $product_variant->promo_price)
+            'price' => $request->qty * ($product_variant->price),
+            'promo' => $request->qty * $product_variant->promo_price
         ]);
 
         if($product_variant->stock < $carts_variant->qty) {
@@ -106,6 +110,7 @@ class OrderController extends Controller
         $cart = Cart::with('details')->where('customer_id', Auth::guard('customer')->user()->id)->first();
 
         $total_cost = CartDetail::where('cart_id', $cart->id)->sum('price');
+        $promos = CartDetail::where('cart_id', $cart->id)->sum('promo');
         $cart->total_cost = $total_cost;
         $cart->save();
 
@@ -177,6 +182,7 @@ class OrderController extends Controller
             $cart = Cart::where('customer_id', auth()->guard('customer')->user()->id)->first();
             $cart_arr = $request->session()->get('id_item_cart');
             $total_cost = 0;
+            $promos = 0;
             $cart_detail = array();
             $str = NULL;
             
@@ -186,6 +192,7 @@ class OrderController extends Controller
             
             foreach($cart_detail as $cd) {
                 $total_cost += $cd->price;
+                $promos += $cd->promo;
             }
             
             $address = Address::with('district.city.province')->where('customer_id', auth()->guard('customer')->user()->id);
@@ -197,7 +204,7 @@ class OrderController extends Controller
             $address = $address->first();
             $provinces = Province::get();
 
-            return view('dianca.checkout', compact('cart', 'cart_detail', 'address', 'total_cost', 'provinces', 'str'));
+            return view('dianca.checkout', compact('cart', 'cart_detail', 'address', 'total_cost', 'promos', 'provinces', 'str'));
         }
     }
 
@@ -285,14 +292,15 @@ class OrderController extends Controller
 
     public function payment(Request $request)
     {
-        
         if(Auth::guard('customer')->check()) {
+            // dd($request);
             $this->validate($request, [
                 'courier' => 'required',
                 'duration' => 'required',
                 'address_id' => 'required|exists:addresses,id',
                 'shipping_cost' => 'required',
                 'subtotal' => 'required',
+                'promo' => 'integer'
             ]);
 
             $subtotal = $request->subtotal;
@@ -301,8 +309,9 @@ class OrderController extends Controller
             $total_cost = $request->subtotal + $request->shipping_cost;
             $courier = $request->courier;
             $duration = $request->duration;
+            $promos = $request->promo;
             $str = NULL;
-            return view('dianca.payment', compact('subtotal', 'shipping_cost', 'address_id', 'total_cost', 'courier', 'duration','str'));
+            return view('dianca.payment', compact('subtotal', 'shipping_cost', 'address_id', 'total_cost', 'courier', 'duration', 'promos', 'str'));
         }
     }
 
@@ -354,6 +363,7 @@ class OrderController extends Controller
                     'product_variant_id' => $variant->id,
                     'price' => $variant->price,
                     'qty' => $cart_detail->qty,
+                    'promo' => $cart_detail->promo * $cart_detail->qty,
                     'weight' => $variant->weight * $cart_detail->qty,
                 ]);
 

@@ -15,37 +15,37 @@
             @if (session('error'))
                 <div class="alert alert-danger">{{ session('error') }}</div>
             @endif
-            <div class="row my-2">
+            <div class="row mb-2">
                 <div class="main_title">
-                    <h2 class="pl-4">Selesaikan Pembayaran</h2>
+                    <h2>Selesaikan Pembayaran</h2>
                 </div>
             </div>
-            <div class="row pt-2 pl-2">
-                <div class="col-lg-7">
+            <div class="row pt-2">
+                <div class="col-lg-7 col-12 py-2">
                     <div class="card shadow-1">
                         <div class="card-body">
-                            <h5 class="pl-3 text-gray-3 weight-600">Nomor Pemesanan</h5>
-                            <h4 class="pl-3 pb-2 text-orange"><strong>{{ $order->invoice }}</strong></h4>
-                            <h5 class="pl-3 text-gray-3 weight-600">Metode Pembayaran</h5>
-                            <h5 class="pl-3 pb-2 text-gray-2 weight-600">{{ $order->payment->method }}</h5>
-                            <h5 class="pl-3 text-gray-3 weight-600">Nomor Rekening</h5>
-                            <h5 class="pl-3 pb-2 text-gray-2 weight-600"><span class="item-copy" id="span-rekening">800 152 6846</span><span class="text-orange float-right copy-to-clipboart" style="cursor: pointer;" onclick="copy_to_clipboard('span-rekening')">Salin</span></h5>
-                            <h5 class="pl-3 text-gray-3 weight-600">Atas Nama</h5>
-                            <h5 class="pl-3 pb-2 text-gray-2 weight-600">Toko Diancagoods</h5>
-                            <h5 class="pl-3 text-gray-3 weight-600">Batas Pembayaran</h5>
-                            <h5 class="pl-3 pb-2 text-gray-2 weight-600">{{ $order->invalid_at }}</h5>
+                            <h5 class="text-gray-3 weight-600">Nomor Pemesanan</h5>
+                            <h4 class=pb-2 text-orange"><strong>{{ $order->invoice }}</strong></h4>
+                            <h5 class="text-gray-3 weight-600">Metode Pembayaran</h5>
+                            <h5 class=pb-2 text-gray-2 weight-600">{{ $order->payment->method }}</h5>
+                            <h5 class="text-gray-3 weight-600">Nomor Rekening</h5>
+                            <h5 class=pb-2 text-gray-2 weight-600"><span class="item-copy" id="span-rekening">800 152 6846</span><span class="text-orange float-right copy-to-clipboart" style="cursor: pointer;" onclick="copy_to_clipboard('span-rekening')">Salin</span></h5>
+                            <h5 class="text-gray-3 weight-600">Atas Nama</h5>
+                            <h5 class=pb-2 text-gray-2 weight-600">Toko Diancagoods</h5>
+                            <h5 class="text-gray-3 weight-600">Batas Pembayaran</h5>
+                            <h5 class=pb-2 text-gray-2 weight-600">{{ $order->invalid_at }}</h5>
                             <hr>
-                            <h5 class="pl-3 text-gray-3 weight-600">Total Pembayaran</h5>
+                            <h5 class="text-gray-3 weight-600">Total Pembayaran</h5>
                             <input type="hidden" id="input-hidden-total-pembayaran" value="{{ $order->total_cost }}">
-                            <h3 class="pl-3 text-gray-2 weight-600"><span id="span-total-pembayaran">Rp {{ number_format($order->total_cost, 2, ',', '.') }}</span><span class="text-orange float-right font-16" style="cursor: pointer;" onclick="copy_to_clipboard('span-total-pembayaran')">Salin</span></h3>
-                            <h6 class="pl-3 pb-3">Transfer tepat sampai 2 digit terakhir agar mempercepat proses verifikasi</h6>
-                            <div class="pl-3">
+                            <h3 class="text-gray-2 weight-600"><span id="span-total-pembayaran">Rp {{ number_format($order->total_cost, 2, ',', '.') }}</span><span class="text-orange float-right font-16" style="cursor: pointer;" onclick="copy_to_clipboard('span-total-pembayaran')">Salin</span></h3>
+                            <h6 class="pb-3">Transfer tepat sampai 2 digit terakhir agar mempercepat proses verifikasi</h6>
+                            <div>
                                 <a type="button" class="btn btn-outline-orange btn-block font-18" href="#" aria-disabled="true" data-toggle="modal" data-target="#uploadPaymentModal">Upload Bukti Pembayaran</a>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-5">
+                <div class="col-lg-5 col-12 py-2">
                     <div class="card shadow-1">
                         <div class="card-body">
                             <h4 class="weight-600">Petunjuk Pembayaran</h4>

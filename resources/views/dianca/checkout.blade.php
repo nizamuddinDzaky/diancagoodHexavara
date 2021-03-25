@@ -8,20 +8,20 @@
 <section class="feature_product_area section_gap mt-4">
     <div class="main_box pt-4">
         <div class="container">
-            <div class="row my-2">
+            <div class="row mb-2">
                 <div class="main_title">
-                    <h2 class="pl-3">Pembayaran</h2>
-                    <h5 class="pl-3 pt-2">1 dari 2 langkah</h5>
+                    <h2>Pembayaran</h2>
+                    <h4 class="pt-2">1 dari 2 langkah</h4>
                 </div>
             </div>
-            <div class="row my-2">
-                <div class="col-lg-4">
-                    <hr class="rounded" style="border: 5px solid orange">
-                    <h6 style="color: black">1 Checkout</h6>
+            <div class="row mb-4">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-6 px-lg-1 px-3">
+                    <hr class="rounded my-2 p-0 mx-0" style="border: 5px solid #f37020; background-color: #f37020">
+                    <h6><strong>1 Checkout</strong></h6>
                 </div>
-                <div class="col-lg-4">
-                    <hr class="rounded" style="border: 5px solid gray">
-                    <h6 style="color: gray">2 Bayar</h6>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-6 px-lg-1 px-3">
+                    <hr class="rounded my-2 p-0 mx-0" style="border: 5px solid gray; background-color: gray">
+                    <h6>2 Bayar</h6>
                 </div>
                 <hr class="pb-2" style="border-color:F2F2F2">
             </div>
@@ -29,13 +29,13 @@
                 @csrf
                 <div class="row my-2">
                     <div class="main_title text-gray-2">
-                        <h3 class="pl-3">Alamat Pengiriman</h3>
+                        <h3>Alamat Pengiriman</h3>
                     </div>
                 </div>
 
                 <div class="row my-2 pb-3" id="noAddress">
-                    <div class="col">
-                        <a type="button" class="btn btn-outline-orange" href="" aria-disabled="true" data-toggle="modal" id="btn-add-address" data-url-add = "{{ route('profile-address.add') }}">Buat Alamat Baru</a>
+                    <div class="col-12 col-md-4">
+                        <a type="button" class="btn btn-outline-orange btn-block" href="" aria-disabled="true" data-toggle="modal" id="btn-add-address" data-url-add = "{{ route('profile-address.add') }}">Buat Alamat Baru</a>
                     </div>
                 </div>
 
@@ -53,48 +53,47 @@
                         <h5 id="receiver_city_main">, {{ $address->district->city->type }} {{ $address->district->city->name }}</h5>
                         <h5 id="receiver_postal_main">, {{ $address->postal_code }}</h5>
                     </div>
-                    <div class="row my-2 pl-3">
-                        <button type="button" class="btn btn-outline-orange" href="" id="btn-pilih-alamat" data-url="{{ route('checkout.list-address') }}">Pilih Alamat</button>
+                    <div class="row my-2">
+                        <div class="col-12 col-md-4">
+                            <button type="button" class="btn btn-outline-orange btn-block" href="" id="btn-pilih-alamat" data-url="{{ route('checkout.list-address') }}">Pilih Alamat</button>
+                        </div>
                     </div>
                 </div>
                 @endif
                 <input type="hidden" value="{{ (auth()->guard('customer')->user()->address != 0) ? $address->id : '' }}" name="address_id" id="address_id">
                 <hr class="pb-2" style="border-color:F2F2F2">
-                <div class="row pt-2 pl-2">
-                    <div class="col-lg-8">
+                <div class="row pt-2 pl-lg-2 p-0">
+                    <div class="col-lg-8 col-12">
                         <div class="row py-2">
                             <div class="col-lg-12 pb-1">
                                 @if(auth()->guard('customer')->check())
                                 @foreach ($cart_detail as $val)
-                                <div class="card shadow-1 mb-3" style="width: 47rem">
-                                    <div class="row px-4 py-4">
-                                        <div class="col-lg-3">
-                                            <a href="#">
-                                                <img id="image" class="product-img-sm"
+                                <div class="card shadow-1 py-4">
+                                    <div class="row px-4">
+                                        <div class="d-flex prod-in-card">
+                                            <img id="image" class="product-img-sm"
                                                     src="{{ asset('storage/products/' . $val->variant->product->images->first()->filename) }}"
-                                                    alt="Starterkit">
-                                            </a>
-                                        </div>
-                                        <div class="col-lg-8">
-                                            <div class="row ml-2 pt-3">
-                                                <a href="#">
-                                                    <h4 class="text-gray-2 weight-600 font-24">
-                                                        {{ $val->variant->product->name }}</h4>
-                                                </a>
-                                            </div>
-                                            <div class="row ml-2 pt-2">
-                                                <h5>{{ $val->qty }} Barang</h5>
-                                                <h5>({{ $val->variant->weight }} gr)</h5>
-                                            </div>
+                                                    alt="{{ $val->variant->product->name }}">
+                                                    <div class="prod-in-card-details">
+                                                        <a href="#">
+                                                            <h4 class="text-gray-2 weight-600 prod-name">
+                                                                {{ $val->variant->product->name }}</h4>
+                                                        </a>
+                                                        <h5 class="prod-name">{{ $val->qty }} Barang ({{ $val->variant->weight }} gr)</h5>
+                                                    </div>
                                         </div>
                                         <input type="hidden" value="{{ $val->id }}" name="cd[]">
+                                        <input type="hidden" value="17000" name="shipping_cost">
+                                        <input type="hidden" value="{{ $total_cost }}" name="subtotal">
+                                        <input type="hidden" value="{{ $promos }}" name="promo">
+
                                     </div>
                                     <div class="container">
-                                        <hr class="" style="border-color:F2F2F2">
+                                        <hr>
                                     </div>
-                                    <div class="row px-4 py-2" style="height: 60px">
-                                        <div class="col-lg-9">
-                                            <h5 class="ml-2">Sub Total Harga: <strong>Rp
+                                    <div class="row px-4">
+                                        <div class="col-12">
+                                            <h5 class="prod-name">Sub Total Harga: <strong>Rp
                                                     {{ number_format($val['price'], 2, ',', '.') }}</strong></h5>
                                         </div>
                                         <div class="col-lg-3">
@@ -130,55 +129,41 @@
                                 @endif
                             </div>
                         </div>
-                        <hr class="" style="border-color:F2F2F2">
-                        <div class="row py-2 ml-2 pb-4">
-                            <div class="col-lg-6" style="color: #4F4F4F">
-                                <div class="main_title pb-2">
-                                    <h4>Pengiriman</h4>
+                        <hr>
+                        <div class="row my-2">
+                            <div class="col-lg-6 pb-4">
+                                <div class="main_title text-gray-2">
+                                    <h3>Pengiriman</h3>
                                 </div>
-                                <div class="form-group">
-                                    <label>Pilih Jasa Pengiriman</label><br>
-                                    <select id="courier" name="courier" class="form-control border border-secondary"
-                                        style="width:8rem">
+                                <div class="form-group px-lg-0 px-3">
+                                    <label for="courier">Pilih Jasa Pengiriman</label><br>
+                                    <select id="courier" name="courier" class="form-control border border-secondary">
                                         <option value="" selected>Pilih</option>
                                         <option value="JNT">JNT</option>
                                     </select>
                                 </div>
-                                <div class="form-group">
-                                    <label>Pilih Durasi</label><br>
-                                    <select id="duration" name="duration" class="form-control border border-secondary"
-                                        style="width:12rem">
+                                <div class="form-group px-lg-0 px-3">
+                                    <label for="duration">Pilih Durasi</label><br>
+                                    <select id="duration" name="duration" class="form-control border border-secondary">
                                         <option value="" selected>Pilih</option>
                                         <option value="regular">Regular (4-5 hari)</option>
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-lg-6">
-                                <div class="main_title pb-2 ml-2">
-                                    <h4 style="color: #4F4F4F">Ringkasan Pengiriman</h4>
+                            <div class="col-lg-6 pb-4">
+                                <div class="main_title text-gray-2">
+                                    <h3>Ringkasan Pengiriman</h3>
                                 </div>
-                                <div class="row px-4 py-2" style="color: #828282">
-                                    <div class="col-lg-6">
-                                        <div class="row">
-                                            <h6>Jasa Pengiriman</h6>
-                                        </div>
-                                        <div class="row pt-1">
-                                            <h6>Durasi</h6>
-                                        </div>
-                                        <div class="row pt-1">
-                                            <h6>Estimasi Tiba</h6>
-                                        </div>
+                                <div class="row px-lg-0 px-3 pt-1">
+                                    <div class="col-6">
+                                        <h6>Jasa Pengiriman</h6>
+                                        <h6>Durasi</h6>
+                                        <h6>Estimasi Tiba</h6>
                                     </div>
-                                    <div class="col-lg-6">
-                                        <div class="row">
-                                            <h6>JNT (Regular)</h6>
-                                        </div>
-                                        <div class="row pt-1">
-                                            <h6>4 - 5 hari</h6>
-                                        </div>
-                                        <div class="row pt-1">
-                                            <h6>24 - 25 Desember 2020</h6>
-                                        </div>
+                                    <div class="col-6">
+                                        <h6>JNT (Regular)</h6>
+                                        <h6>4 - 5 hari</h6>
+                                        <h6>24 - 25 Desember 2020</h6>
                                     </div>
                                 </div>
                             </div>
@@ -187,22 +172,14 @@
                     <div class="col-lg-4 mt-2">
                         <div class="card shadow-1">
                             <div class="card-body font-18">
-                                <h4 style="color: #828282"><strong>Ringkasan Belanja</strong></h4>
+                                <h4 class="weight-600">Ringkasan Belanja</h4>
                                 <hr>
-                                <div class="row py-2">
-                                    <div class="col-lg-6" style="color: #828282">
-                                        <h5>Total Harga</h5>
-                                        <h5>Ongkos Kirim</h5>
-                                        <h5>Total Tagihan</h5>
-                                    </div>
-                                    <div class="col-lg-6 float-right" style="text-align: right">
-                                        <h5>Rp {{ number_format($total_cost) }}</h5>
-                                        <h5 id="ongkir">Rp 17,000</h5>
-                                        <input type="hidden" value="17000" name="shipping_cost">
-                                        <input type="hidden" value="{{ $total_cost }}" name="subtotal">
-                                        <h5 id="total"><strong>Rp {{ number_format($total_cost + 17000) }}</strong></h5>
-                                    </div>
-                                </div>
+                                <h5>Total Pembelian<strong><span class="float-right" id="total_cost">Rp {{ number_format($total_cost,  2, ',', '.') }}</span></strong></h5>
+                                <h5 class="text-orange">Potongan<strong><span class="float-right" id="promo">Rp {{number_format($promos, 2, ',', '.') }}</span></strong></h5>
+                                <h5>Ongkos Kirim<strong><span class="float-right" id="ongkir">Rp {{ number_format(17000,  2, ',', '.') }}</span></strong></h5>
+                                <hr>
+                                <h5 class="mb-3">Total Harga<strong><span class="float-right" id="total">Rp
+                                            {{ number_format(($total_cost - $promos + 17000), 2, ',', '.') }}</span></strong></h5>
                                 <button type="button" id="continue" class="btn btn-orange weight-600 btn-block font-18 py-2" id="payment">Pilih Pembayaran</button>
                                 <a type="button" href="{{ route('cart.show') }}" class="btn btn-outline-orange weight-600 btn-block font-18 py-2" id="payment">Ubah Pembelian</a>
                             </div>

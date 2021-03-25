@@ -18,6 +18,7 @@ class CreateCartDetailsTable extends Migration
             $table->unsignedBigInteger('cart_id');
             $table->unsignedBigInteger('product_variant_id');
             $table->integer('price');
+            $table->integer('promo')->default(0);
             $table->integer('qty');
             $table->boolean('is_avail')->default(true);
             $table->timestamps();

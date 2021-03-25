@@ -18,7 +18,7 @@
                     <div class="col-lg-8">
                         <div class="row">
                             <div class="col-lg-6">
-                                <div class="form-inline">
+                                <div class="form-inline px-lg-0 px-4">
                                     <input class="form-check-input primary-checkbox" type="checkbox" value=""
                                         id="select-all">
                                     <label class="form-check-label font-16" for="select-all">
@@ -37,41 +37,25 @@
                                 <div class="form-check text-gray-2 my-4 card-item-cart">
                                     <input class="form-check-input position-static align-top primary-checkbox cb-item-cart"
                                         type="checkbox" name="cd[]" id="check{{ $cd->id }}" value="{{ $cd->id }}" data-id="{{$cd->id}}" 
-                                        data-price="{{ ($cd->variant->promo_price) ? ($cd->variant->price - $cd->variant->promo_price) : $cd->variant->price}}">
+                                        data-price="{{ ($cd->variant->price) }}" data-promo="{{ ($cd->promo) }}">
                                     <div class="card cart-card shadow-1 w-90">
                                         <div class="card-body">
                                             <div class="row">
-                                                <div class="col-lg-3">
-                                                    <div class="media">
-                                                        <div class="d-flex">
-                                                            <img src="{{ asset('storage/products/' . $cd->variant->product->images->first()->filename) }}"
-                                                                width="130px" height="130px">
+                                                    <div class="d-flex prod-in-card">
+                                                        <img src="{{ asset('storage/products/' . $cd->variant->product->images->first()->filename) }}" class="product-img-sm">
+                                                        <div class="prod-in-card-details">
+                                                            <h4 class="weight-600 text-truncate">{{ $cd->variant->product->name }}</h4>
+                                                            <p>Varian {{ $cd->variant->name }}</p>
+                                                            <p>Rp {{ number_format(($cd->variant->price - $cd->variant->promo_price), 2, ',', '.') }}<span class="d-inline-flex align-self-center ml-2" style="text-decoration:line-through;"><small>Rp {{ number_format($cd->variant->price, 2, ',', '.') }}</small></span></p>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-lg-9">
-                                                    <h4 class="weight-600">{{ $cd->variant->product->name }}</h4>
-                                                    <p>Varian {{ $cd->variant->name }}</p>
-                                                    @if($cd->variant->promo_price)
-                                                    <p>Rp
-                                                        {{ number_format(($cd->variant->price - $cd->variant->promo_price), 2, ',', '.') }}<span
-                                                            class="d-inline-flex align-self-center ml-2"
-                                                            style="text-decoration:line-through;"><small>Rp
-                                                                {{ number_format($cd->variant->price, 2, ',', '.') }}</small></span>
-                                                    </p>
-                                                    @else
-                                                    <p>Rp
-                                                        {{ number_format($cd->variant->price, 2, ',', '.') }} 
-                                                    </p>
-                                                    @endif
-                                                </div>
                                             </div>
                                             <hr>
                                             <div class="row">
-                                                <div class="col-lg-6 font-16">
-                                                    <p class="align-items-center">Sub Total Harga: <strong><span
+                                                <div class="col-lg-6 prod-name">
+                                                    <p>Sub Total Harga: <strong><span
                                                                 id="subtotal{{ $cd->id }}">Rp
-                                                                {{ number_format(($cd->price), 2, ',', '.') }}</span></strong>
+                                                                {{ number_format(($cd->price - $cd->promo), 2, ',', '.') }}</span></strong>
                                                     </p>
                                                 </div>
                                                 <div class="col-lg-6">
@@ -110,8 +94,11 @@
                             <div class="card-body font-18">
                                 <h4 class="weight-600">Ringkasan Belanja</h4>
                                 <hr>
-                                <p>Total Harga<strong><span class="float-right" id="total_cost">Rp
-                                            {{ number_format(0, 2, ',', '.') }}</span></strong></p>
+                                <h5>Total Pembelian<strong><span class="float-right" id="total_cost">Rp {{ number_format(0,  2, ',', '.') }}</span></strong></h5>
+                                <h5 class="text-orange">Potongan<strong><span class="float-right" id="promo">Rp {{number_format(0, 2, ',', '.') }}</span></strong></h5>
+                                <hr>
+                                <h5 class="mb-3">Total Harga<strong><span class="float-right" id="total">Rp
+                                            {{ number_format(0, 2, ',', '.') }}</span></strong></h5>
                                 <button type="button" id="continue"
                                     class="btn btn-orange weight-600 btn-block font-18 py-2">Beli Sekarang (<span
                                         id="qty">{{ 0 }}</span>)</a>
@@ -148,12 +135,6 @@
     }
 
     function update(id, value) {
-        // var input = document.getElementById('qty' + id);
-        // if (isIncrement)
-        //     input.value++;
-        // else
-        //     input.value--;
-
         $.ajax({
             type: "POST",
             url: "/cart/update",
@@ -165,19 +146,23 @@
             success: function(res) {
                 var total_cost = 0;
                 var qty = 0;
+                var promo = 0;
                 let qty_carticon = 0
                 res.details.forEach(function(cd) {
                     if ($("#check" + cd.id).prop('checked')) {
                         total_cost += parseInt(cd.price);
                         qty += parseInt(cd.qty);
+                        promo += parseInt(cd.promo);
                     }
                     qty_carticon += parseInt(cd.qty)
                     if (cd.id == id) {
-                        $("#subtotal" + cd.id).html(cd.price.toLocaleString("id-ID", myObj));
+                        $("#subtotal" + cd.id).html((cd.price - cd.promo).toLocaleString("id-ID", myObj));
                     }
                 })
                 $('#cart_qty').text(parseInt(qty_carticon));
                 $("#total_cost").html(parseInt(total_cost).toLocaleString("id-ID", myObj));
+                $("#promo").html(parseInt(promo).toLocaleString("id-ID", myObj));
+                $("#total").html(parseInt(total_cost - promo).toLocaleString("id-ID", myObj));
                 $("#qty").html(parseInt(qty));
             },
             error: function(xhr, status, err) {
@@ -215,66 +200,11 @@
         update($(this).data('id'), $(this).val());
     });
 
-    // function selectCart(id) {
-    //     let total_cb_item = $('.cb-item-cart').length;
-    //     let count_checked = 0;
-
-    //     $('.cb-item-cart').each(function () {
-    //         if ($(this).prop('checked')) {
-    //             count_checked++;
-    //         }
-    //     })
-
-    //     if (count_checked == total_cb_item) {
-    //         $('#select-all').prop('checked', true);
-    //     }else{
-    //         $('#select-all').prop('checked', false);
-    //     }
-    //     console.log($('.cb-item-cart').length);
-
-    //     var input = document.getElementById('qty'+id);
-
-    //     if($("#check"+id).prop('checked')) {
-    //         $.ajax({
-    //             type: "POST",
-    //             url: "/cart/semi-update",
-    //             data: {
-    //                 add: 1,
-    //                 id: id,
-    //                 qty: input.value,
-    //                 curr_qty: document.getElementById("qty").innerHTML,
-    //                 curr_total: parseInt(document.getElementById("total_cost").innerHTML.replace(/[^0-9-,]/g, ''))
-    //             },
-    //             dataType: "JSON",
-    //             success: function(res) {
-    //                 $("#total_cost").html(res.totalcost.toLocaleString("id-ID", myObj));
-    //                 $("#qty").html(res.qty);
-    //             }
-    //         });
-    //     } else {
-    //         $.ajax({
-    //             type: "POST",
-    //             url: "/cart/semi-update",
-    //             data: {
-    //                 add: 0,
-    //                 id: id,
-    //                 qty: input.value,
-    //                 curr_qty: document.getElementById("qty").innerHTML,
-    //                 curr_total: parseInt(document.getElementById("total_cost").innerHTML.replace(/[^0-9-,]/g, ''))
-    //             },
-    //             dataType: "JSON",
-    //             success: function(res) {
-    //                 $("#total_cost").html(res.totalcost.toLocaleString("id-ID", myObj));
-    //                 $("#qty").html(res.qty);
-    //             }
-    //         });
-    //     }
-    // }
-
     function count_selected_cart(){
         let total_cb_item = $('.cb-item-cart').length;
         let count_checked = 0;
-        let total_cost = 0
+        let total_cost = 0;
+        let promo = 0;
         let total_qty = 0;
         $('.cb-item-cart').each(function () {
             if ($(this).prop('checked')) {
@@ -283,6 +213,8 @@
                 total_qty += parseInt($(input).val());
                 let sub_total = parseInt($(this).data('price')) * parseInt($(input).val());
                 total_cost += sub_total;
+                console.log($(this));
+                promo += parseInt($(this).data('promo'))
             }
         });
 
@@ -298,6 +230,8 @@
 
         $("#total_cost").html(total_cost.toLocaleString("id-ID", myObj));
         $("#qty").html(total_qty);
+        $("#promo").html(promo.toLocaleString("id-ID", myObj));
+        $("#total").html((total_cost - promo).toLocaleString("id-ID", myObj));
     }
 
     $('.delete-cart').click(function () {

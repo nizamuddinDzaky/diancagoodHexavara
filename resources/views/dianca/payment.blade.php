@@ -8,36 +8,34 @@
 <section class="feature_product_area section_gap mt-4" style="height: 240px">
     <div class="main_box pt-4">
         <div class="container">
-            <div class="row my-2">
+            <div class="row mb-2">
                 <div class="main_title">
-                    <h2 class="pl-3">Pembayaran</h2>
-                    <h5 class="pl-3 pt-2">2 dari 2 langkah</h5>
+                    <h2>Pembayaran</h2>
+                    <h5 class="pt-2">2 dari 2 langkah</h5>
                 </div>
             </div>
-            <div class="row my-2">
-                <div class="col-lg-4">
-                    <hr class="rounded" style="border: 5px solid orange">
+            <div class="row mb-4">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-6 px-lg-1 px-3">
+                    <hr class="rounded my-2 p-0 mx-0" style="border: 5px solid gray; background-color: gray">
                     <h6>1 Checkout</h6>
                 </div>
-                <div class="col-lg-4">
-                    <hr class="rounded" style="border: 5px solid orange">
-                    <h6>2 Bayar</h6>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-6 px-lg-1 px-3">
+                    <hr class="rounded my-2 p-0 mx-0" style="border: 5px solid #f37020; background-color: #f37020">
+                    <h6><strong>2 Bayar</strong></h6>
                 </div>
+                <hr class="pb-2" style="border-color:F2F2F2">
             </div>
         </div>
     </div>
 </section>
-<div class="container">
-    <hr class="pb-2" style="border-color:F2F2F2">
-</div>
 <section class="feature_product_area">
     <div class="main_box">
         <div class="container">
-            <div class="row pt-2 pl-2">
+            <div class="row pt-2">
                 <div class="col-lg-8">
                     <div class="row py-2">
                         <div class="col-lg-12 pb-2">
-                            <div class="card shadow-1" style="width: 47rem">
+                            <div class="card shadow-1">
                                 <div class="card-body">
                                     <form action="{{ route('checkout.process') }}" method="POST" id="payment-form">
                                         @csrf
@@ -71,44 +69,17 @@
                 <div class="col-lg-4">
                     <div class="row py-2">
                         <div class="col-lg-12 pb-4">
-                            <div class="card shadow-1" style="width: 22rem; height:20rem">
-                                <div class="row px-4 py-4 ml-2" style="height: 50px">
-                                    <div class="">
-                                        <h4><strong>Ringkasan Belanja</strong></h4>
-                                    </div>
-                                </div>
-                                <div class="container">
-                                    <hr class="" style="border-color:F2F2F2">
-                                </div>
-                                <div class="row px-4 py-2">
-                                    <div class="col-lg-6">
-                                        <div class="row ml-2">
-                                            <h5>Total Harga</h5>
-                                        </div>
-                                        <div class="row ml-2 pt-1 pb-2">
-                                            <h5>Ongkos Kirim</h5>
-                                        </div>
-                                        <div class="row ml-2 pt-3">
-                                            <h5>Total Tagihan</h5>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="row mr-2 float-right">
-                                            <h5>Rp {{number_format($subtotal, 2, ',', '.')}}</h5>
-                                        </div>
-                                        <div class="row mr-2 pt-1 pb-2 float-right">
-                                            <h5>Rp {{ number_format($shipping_cost, 2, ',', '.') }}</h5>
-                                        </div>
-                                        <br>
-                                        <div class="row mr-2 pt-3 float-right">
-                                            <h5><strong>Rp {{number_format($total_cost, 2, ',', '.')}}</strong></h5>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row justify-content-center pt-4">
-                                    <div class="col-lg-10">
-                                        <a type="button" id="submit_btn" class="btn btn-block btn-orange" aria-disabled="true">Bayar</a>
-                                    </div>
+                            <div class="card shadow-1">
+                                <div class="card-body font-18">
+                                    <h4 class="weight-600">Ringkasan Belanja</h4>
+                                    <hr>
+                                    <h5>Total Pembelian<strong><span class="float-right" id="total_cost">Rp {{ number_format($subtotal,  2, ',', '.') }}</span></strong></h5>
+                                    <h5 class="text-orange">Potongan<strong><span class="float-right" id="promo">Rp {{number_format($promos, 2, ',', '.') }}</span></strong></h5>
+                                    <h5>Ongkos Kirim<strong><span class="float-right" id="ongkir">Rp {{ number_format(17000,  2, ',', '.') }}</span></strong></h5>
+                                    <hr>
+                                    <h5 class="mb-3">Total Harga<strong><span class="float-right" id="total">Rp
+                                                {{ number_format(($total_cost - $promos), 2, ',', '.') }}</span></strong></h5>
+                                    <a type="button" id="submit_btn" class="btn btn-block btn-orange weight-600 font-18 py-2" aria-disabled="true">Bayar</a>
                                 </div>
                             </div>
                         </div>

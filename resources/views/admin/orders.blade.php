@@ -16,6 +16,7 @@
                             <th class="px-3">Nama</th>
                             <th class="px-3">Alamat</th>
                             <th class="px-3">Tanggal</th>
+                            <th class="px-3">Promo</th>
                             <th class="px-3">Status</th>
                         </tr>
                     </thead>
@@ -26,6 +27,7 @@
                             <td class="font-14 px-3">{{ $o->customer_name }}</td>
                             <td class="font-14 px-3">{{ $o->address->address }}</td>
                             <td class="font-14 px-3">{{ date("d F Y, H:i:s", strtotime($o->created_at)) }}</td>
+                            <td class="font-14 px-3">Rp {{ number_format($o->details->sum('promo'), 2, ',', '.') }}</td>
                             <td class="font-14 px-3">{!! $o->status_label !!}</td>
                         </tr>
                         @empty

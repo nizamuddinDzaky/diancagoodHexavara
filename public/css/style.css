@@ -253,6 +253,20 @@ a:focus {
     color: #4f4f4f;
 }
 
+@media (max-width: 576px) {
+    .main_title h2 {
+        font-size: 1.5rem !important;
+    }
+
+    .main_title h4 {
+        font-size: 1rem !important;
+    }
+
+    .main_title h3 {
+        font-size: 1rem !important;
+    }
+}
+
 /* End Main Title Area css
 ============================================================================================ */
 /*---------------------------------------------------- */
@@ -6295,6 +6309,25 @@ h6 {
     height: 150px;
     width: 150px;
     border-radius: 15px;
+}
+
+.prod-name {
+    font-size: 1rem;
+}
+
+.prod-in-card {
+    padding: 0px 1rem;
+}
+
+.prod-in-card-details {
+    padding: 0px 1rem;
+}
+
+@media(max-width: 576px) {
+    .product-img-sm {
+        height: 80px;
+        width: 80px;
+    }
 }
 
 .shadow-1 {

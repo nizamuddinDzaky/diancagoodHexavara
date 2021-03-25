@@ -18,6 +18,7 @@ class CreateOrderDetailsTable extends Migration
             $table->unsignedBigInteger('order_id');
             $table->unsignedBigInteger('product_variant_id');
             $table->integer('price');
+            $table->integer('promo')->default(0);
             $table->integer('qty');
             $table->integer('weight');
             $table->integer('review_status')->default(0);

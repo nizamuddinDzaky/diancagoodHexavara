@@ -17,6 +17,7 @@ class CreateCartsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('customer_id');
             $table->integer('total_cost')->default(0);
+            $table->integer('total_promo')->default(0);
             $table->timestamps();
         });
     }
