@@ -64,7 +64,7 @@
                             </a>
                             <div class="p_icon">
                                 <button onclick="addToCart({{ $pd->variant->first()->id }})"
-                                    class="btn btn-orange " style="">+
+                                    class="btn btn-orange ml-2 mt-2 text-center mb-2" style="">+
                                     Keranjang</button>
                             </div>
                         </div>
@@ -101,8 +101,8 @@
                                     alt="{{ $row->name }}">
                             </a>
                             <div class="p_icon">
-                                <button onclick="addToCart({{ $pd->variant->first()->id }})"
-                                    class="btn btn-orange " style="">+
+                                <button onclick="addToCart({{ $row->variant->first()->id }})"
+                                    class="btn btn-orange ml-2 mt-2 text-center mb-2" style="">+
                                     Keranjang</button>
                             </div>
                         </div>
