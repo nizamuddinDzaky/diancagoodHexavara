@@ -63,8 +63,8 @@
                                 <img class="promo-product" src="{{ asset('storage/products/' . $pd->variant->product->images->first()->filename) }}" alt="{{ $pd->variant->product->name }}">
                             </a>
                             <div class="p_icon">
-                                <button onclick="addToCart({{ $row->variant->first()->id }})"
-                                    class="btn btn-orange ml-2 mt-2 text-center mb-2" style="">+
+                                <button onclick="addToCart({{ $pd->variant->first()->id }})"
+                                    class="btn btn-orange " style="">+
                                     Keranjang</button>
                             </div>
                         </div>
@@ -101,8 +101,8 @@
                                     alt="{{ $row->name }}">
                             </a>
                             <div class="p_icon">
-                                <button onclick="addToCart({{ $row->variant->first()->id }})"
-                                    class="btn btn-orange ml-2 mt-2 text-center mb-2" style="">+
+                                <button onclick="addToCart({{ $pd->variant->first()->id }})"
+                                    class="btn btn-orange " style="">+
                                     Keranjang</button>
                             </div>
                         </div>
@@ -303,7 +303,6 @@
     </div>
 </section>
 @endsection
-
 @section('js')
 <script>
 function addToCart(var_id) {

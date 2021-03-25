@@ -467,6 +467,7 @@ class OrderController extends Controller
     
     public function quickAddToCart($id)
     {
+        echo "asdsa";die;
         if(Auth::guard('customer')->check()){
             $cart = Cart::with('details.variant.product.images')->where('customer_id', Auth::guard('customer')->user()->id)->first();
             
