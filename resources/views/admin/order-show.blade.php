@@ -85,7 +85,7 @@
                                                 <div class="media-body">
                                                     <h4>
                                                         <a class="weight-600 text-orange"
-                                                            href="{{ url('/product/' . $od->variant->product->id) }}">{{ $od->variant->product->name }}</a>
+                                                            href="{{ route('administrator.edit_product', ['id'=> $od->variant->product->id]) }}">{{ $od->variant->product->name }}</a>
                                                     </h4>
                                                     <p>{{ $od->variant->name }}</p>
                                                     <p>Rp {{ number_format($od->price, 2, ',', '.') }}<span
