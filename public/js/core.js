@@ -79,6 +79,39 @@ function copy_to_clipboard(tag) {
 
 }
 
+function addToCart(var_id) {
+    $.ajax({
+        url: '/cart/quick-add/' + var_id,
+        type: 'GET',
+        data: {
+            id: var_id
+        },
+        success: function(res) {
+            let result = JSON.parse(res);
+            let tittle = '<h6 style="color:white">Berhasil masuk keranjang!</h6>';
+            let icon ='success';
+            let background = '#f37020';
+            if(!result.status){
+                tittle = '<h6 style="color:white">Masuk untuk menambahkan ke keranjang!</h6>'
+                icon = 'error';
+                background = '#d33'
+            }
+            Swal.fire({
+                position: 'top-end',
+                icon: icon,
+                iconColor: '#fff',
+                title: tittle,
+                showConfirmButton: false,
+                timer: 1500,
+                toast: true,
+                background: background
+            })
+
+            console.log(result.qty);
+            $("#cart_qty").html(result.qty)
+        }
+    })
+}
 
 $(document).ready(function () {
 	$(".input-money").inputmask({ alias : "currency", prefix: 'Rp ' });

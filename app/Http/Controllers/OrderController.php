@@ -57,6 +57,8 @@ class OrderController extends Controller
             $variant = ProductVariant::where('id', $request->product_variant_id)->first();
 
             if($variant->stock > 0) {
+                // echo $cart->id;die;
+                // var_dump(CartDetail::where('cart_id', $cart->id)->where('product_variant_id', $variant->id)->exists());die;
                 if(!CartDetail::where('cart_id', $cart->id)->where('product_variant_id', $variant->id)->exists()) {
                     $cart_detail = CartDetail::create([
                         'cart_id' => $cart->id,
@@ -72,7 +74,7 @@ class OrderController extends Controller
                     $cart_variant = CartDetail::where('cart_id', $cart->id)->where('product_variant_id', $variant->id)->first();
                     $cart_variant->qty += $request->qty;
                     $cart_variant->price += ($variant->price) * $request->qty;
-                    $cart->variant->promo += $variant->promo_price;
+                    $cart_variant->promo += $variant->promo_price;
                     $cart_variant->save();
 
                     $cart->total_cost = CartDetail::where('cart_id', $cart->id)->sum('price');
@@ -475,41 +477,97 @@ class OrderController extends Controller
         return redirect(route('customer.login'));
     }
     
-    public function quickAddToCart($id)
+    public function quickAddToCart(Request $request, $id)
     {
-        echo "asdsa";die;
-        if(Auth::guard('customer')->check()){
-            $cart = Cart::with('details.variant.product.images')->where('customer_id', Auth::guard('customer')->user()->id)->first();
-            
-            $variant = ProductVariant::where('id', $id)->first();
-
-            if($variant->stock > 0) {
-                if(!CartDetail::where('cart_id', $cart->id)->where('product_variant_id', $variant->id)->exists()) {
-                    $cart_detail = CartDetail::create([
-                        'cart_id' => $cart->id,
-                        'product_variant_id' => $variant->id,
-                        'qty' => 1,
-                        'price' => $variant->price * 1
-                    ]);
-    
-                    $cart->total_cost += $cart_detail->price;
-                    $cart->save();
-                } else {
-                    $cart_variant = CartDetail::where('cart_id', $cart->id)->where('product_variant_id', $variant->id)->first();
-                    $cart_variant->qty += 1;
-                    $cart_variant->price += $variant->price * 1;
-                    $cart_variant->save();
-
-                    $cart->total_cost = CartDetail::where('cart_id', $cart->id)->sum('price');
-                    $cart->save();
-                }
-                
-                return redirect()->route('cart.show', array('qty' => $cart->details->sum('qty')));
+        if(!Auth::guard('customer')->check()){
+            if(!$request->ajax()){
+                return redirect(route('customer.login'));
+            }else{
+                $response = [
+                    'status' => false,
+                    'message' => "Silahkan Login"
+                ];
+                return json_encode($response);
             }
-            
-            return redirect()->back()->with(['error' => 'Produk tidak dapat ditambahkan ke keranjang.']);
         }
-        return redirect(route('customer.login'));
+
+        
+        $cart = Cart::with('details.variant.product.images')->where('customer_id', Auth::guard('customer')->user()->id)->first();
+        
+        $variant = ProductVariant::where('id', $id)->first();
+        if($variant->stock < 0){
+            $message = 'Produk tidak dapat ditambahkan ke keranjang.';
+            if(!$request->ajax()){
+                return redirect()->back()->with(['error' => $message]);
+            }else{
+                $response = [
+                    'status' => false,
+                    'message' => $message
+                ];
+                return json_encode($response);
+            }
+        }
+
+        if(!CartDetail::where('cart_id', $cart->id)->where('product_variant_id', $variant->id)->exists()) {
+            $cart_detail = CartDetail::create([
+                'cart_id' => $cart->id,
+                'product_variant_id' => $variant->id,
+                'qty' => 1,
+                'price' => $variant->price * 1
+            ]);
+            $cart->total_cost += $cart_detail->price;
+        } else {
+            $cart_variant = CartDetail::where('cart_id', $cart->id)->where('product_variant_id', $variant->id)->first();
+            $cart_variant->qty += 1;
+            $cart_variant->price += $variant->price * 1;
+            $cart_variant->save();
+            $cart->total_cost = CartDetail::where('cart_id', $cart->id)->sum('price');
+        }
+        $cart->save();
+        $new_cart = Cart::with('details.variant.product.images')->where('customer_id', Auth::guard('customer')->user()->id)->first();
+        $qty = $new_cart->details->sum('qty');
+        if(!$request->ajax()){
+            return redirect()->route('cart.show', array('qty' => $qty));
+        }else{
+            $response = [
+                'status' => true,
+                'message' => "Berhasil Menambahkan Keranjang",
+                'qty' => $qty
+            ];
+            return json_encode($response);
+        }
+        // if(Auth::guard('customer')->check()){
+        //     $cart = Cart::with('details.variant.product.images')->where('customer_id', Auth::guard('customer')->user()->id)->first();
+            
+        //     $variant = ProductVariant::where('id', $id)->first();
+
+        //     if($variant->stock > 0) {
+        //         if(!CartDetail::where('cart_id', $cart->id)->where('product_variant_id', $variant->id)->exists()) {
+        //             $cart_detail = CartDetail::create([
+        //                 'cart_id' => $cart->id,
+        //                 'product_variant_id' => $variant->id,
+        //                 'qty' => 1,
+        //                 'price' => $variant->price * 1
+        //             ]);
+    
+        //             $cart->total_cost += $cart_detail->price;
+        //             $cart->save();
+        //         } else {
+        //             $cart_variant = CartDetail::where('cart_id', $cart->id)->where('product_variant_id', $variant->id)->first();
+        //             $cart_variant->qty += 1;
+        //             $cart_variant->price += $variant->price * 1;
+        //             $cart_variant->save();
+
+        //             $cart->total_cost = CartDetail::where('cart_id', $cart->id)->sum('price');
+        //             $cart->save();
+        //         }
+        //         // echo $cart->details->sum('qty');die;
+        //         return 
+        //     }
+            
+        //     return redirect()->back()->with(['error' => 'Produk tidak dapat ditambahkan ke keranjang.']);
+        // }
+        // ;
     }
 
     public function getCourier(Request $request)
