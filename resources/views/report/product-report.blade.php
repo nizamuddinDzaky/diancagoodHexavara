@@ -28,10 +28,6 @@
                         <div class="col-lg-2 md-2 sm-2">
                             <button class="btn btn-orange" type="submit" id="filter">Filter</button>
                         </div>
-                        <!-- <input type="text" id="created_at" name="date" class="form-control"> -->
-                        <!-- <div class="input-group-append">
-                            <button class="btn btn-secondary" type="submit">Filter</button>
-                        </div> -->
                     </div>
                 </form>
             </div>
@@ -59,11 +55,13 @@
                 <table id="myTable" class="table table-bordered text-gray-2">
                     <thead class="font-16">
                         <tr>
-                            <th onclick="sortTable(0)">
+                            <th onclick="sortTable(0)" style="cursor: pointer;">
                                 <span>Nama Produk</span>
+                                <i class="material-icons md-18">sort</i>
                             </th>
-                            <th onclick="sortTable(1)">
+                            <th onclick="sortTable(1)" style="cursor: pointer;">
                                 <span>SKU</span>
+                                <i class="material-icons md-18">sort</i>
                             </th>
                             <th>
                                 <span>Unit Terjual</span>

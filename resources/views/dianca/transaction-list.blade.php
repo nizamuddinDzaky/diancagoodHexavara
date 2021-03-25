@@ -127,8 +127,8 @@
                                             <hr class="mt-2 mb-3" />
                                             <div class="row">
                                                 <div class="col-lg-5">
-                                                    @foreach($order->details as $od)
-                                                    <div class="row">
+                                                    @foreach($order->details as $keyOD => $od)
+                                                    <div class="row {{ $keyOD > 0 ? 'hidden-item' : '' }}" style="{{ $keyOD > 0 ? 'display :none' : '' }}" >
                                                         <div class="col-lg-12">
                                                             <div class="media">
                                                                 <div class="d-flex">
@@ -158,7 +158,7 @@
                                                     </h4>
                                                 </div>
                                                 <div class="col-lg-2">
-                                                    @if($order->status == 0 && $order->payment->status == 0)
+                                                    @if($order->status == 0 && $order->payment->status == 0 && strtotime(date('Y-m-d H:i:s')) < strtotime($order->invalid_at) )
                                                     <a class="btn btn-orange weight-600"
                                                         href="{{ route('payment.done', $order->id) }}">Bayar
                                                         Sekarang</a>
@@ -173,7 +173,7 @@
                                                         data-target="#trackModal">Lacak Pengiriman</button>
                                                     @elseif($order->status == 3)
                                                     <button class="btn btn-orange weight-600 mb-3">Beli Lagi</button>
-                                                    <a class="btn btn-orange weight-600" href="{{ route('reviews.list') }}">Beri Ulasan</a>
+                                                    <a class="btn btn-orange weight-600 mb-3" href="{{ route('reviews.list') }}">Beri Ulasan</a>
                                                     @endif
                                                 </div>
                                             </div>
@@ -181,6 +181,9 @@
                                             <hr class="mt-2 mb-3" />
                                             <div class="row">
                                                 <div class="col-lg-5">
+                                                    @if($order->details->count() > 1)
+                                                    <button class="btn  weight-600 btn-item-more" data-count-item= "{{$order->details->count()}}"> +{{$order->details->count() -1 }} Item Lainnya</button>
+                                                    @endif
                                                     <button class="btn btn-outline-orange weight-600"
                                                         data-toggle="modal" data-target="#detail_order"
                                                         value="{{ $order->id }}">Detail Pemesanan</button>
@@ -279,7 +282,7 @@
                             </div>
                         </div>
                         <div class="col-lg-4">
-                            <a id="modal-cancel" class="btn btn-orange float-right">Batalkan</a>
+                            <a id="modal-cancel" class="btn btn-orange float-right mt-2">Batalkan</a>
                             <button class="btn btn-outline-orange-2 float-right mt-2">Tanya Penjual</button>
                         </div>
                     </div>
@@ -330,6 +333,27 @@ $.ajaxSetup({
         'X-XSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
 });
+
+$('.btn-item-more').click( async function(){
+    await $($(this).closest('.card-body').find('.hidden-item')).delay(200).slideDown(400, function(){
+        $($(this).closest('.card-body').find('.btn-item-more')).fadeOut(function() {
+            $(this).text("Lihat Lebih Sedikit").fadeIn();
+            $(this).addClass('btn-item-hide')
+            $(this).removeClass('btn-item-more');
+        });
+    });
+});
+$(document).on('click', '.btn-item-hide', async function(){
+    await $($(this).closest('.card-body').find('.hidden-item')).delay(200).slideUp(400, function(){
+        $($(this).closest('.card-body').find('.btn-item-hide')).fadeOut(function() {
+            let count_item = $(this).data('count-item');
+            $(this).text("+"+count_item+" Item Lainnya").fadeIn();
+            $(this).removeClass('btn-item-hide')
+            $(this).addClass('btn-item-more');
+        });
+    });
+})
+
 
 $(document).ready(function() {
     if (window.location.href.indexOf("/0") > -1) {

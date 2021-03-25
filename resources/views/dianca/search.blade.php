@@ -97,7 +97,7 @@
                 <div class="col-lg-9">
                     <div class="row my-2 ml-2">
                         @forelse($product as $row)
-                        <div class="col">
+                        <div class="col-lg-3">
                             <div class="f_p_item">
                                 <div class="f_p_img ">
                                     <a href="{{ url('/product/' . $row->id) }}">
@@ -105,7 +105,7 @@
                                             src="{{ asset('storage/products/' . $row->images->first()->filename) }}"
                                             alt="{{ $row->name }}">
                                     </a>
-                                    <div class="p_icon">
+                                    <div class="p_icon mr-2">
                                     @if($row->variant->all() != NULL)
                                         <button onclick="addToCart({{ $row->variant->first()->id }})"
                                             class="btn btn-orange ml-2 mt-2 text-center mb-2" style="">+

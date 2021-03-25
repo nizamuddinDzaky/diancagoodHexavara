@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\Customer;
 use App\Models\SliderContent;
 use App\Models\Category;
 use App\Models\Product;
@@ -11,20 +12,23 @@ use App\Models\ProductVariant;
 use App\Models\ProductImage;
 use App\Models\Brand;
 use App\Models\Promo;
+use App\Models\Review;
 use Carbon\Carbon;
 
 class HomeController extends Controller
 {
     public function index()
     {
-        $newproducts = Product::where('status', 1)->where('is_featured', 1)->with('variant', 'images')->orderBy('created_at', 'ASC')->limit(4)->get();
+        $newproducts = Product::where('status', 1)->where('is_featured', 1)->with('variant', 'images')->orderBy('created_at', 'ASC')->limit(5)->get();
         $bestseller = Product::where('status', 1)->where('is_featured', 2)->with('variant', 'images')->orderBy('created_at', 'ASC')->limit(3)->get();
         $featured = Product::where('status', 1)->where('is_featured', 3)->with('variant', 'images')->orderBy('created_at', 'ASC')->limit(3)->get();
         $category = Category::with('subcategory')->orderBy('created_at', 'ASC')->limit(4)->get();
         // dd(Promo::where(DB::raw("CONCAT(`end_date`, ' ', `end_time`)"), '>=', Carbon::now()->toDateTimeString())->get());
         $promos = Promo::with('details.variant.product.images')->where('is_published', 1)->where(DB::raw("CONCAT(`end_date`, ' ', `end_time`)"), '>=', Carbon::now()->toDateTimeString())->where(DB::raw("CONCAT(`start_date`, ' ', `start_time`)"), '<=', Carbon::now()->toDateTimeString())->paginate(4);
         $str = NULL;
-        return view('home', compact('category', 'newproducts', 'bestseller', 'featured', 'str', 'promos'));
+
+        $reviews = Review::with('product', 'customer')->orderBy('created_at', 'ASC')->limit(10)->get();
+        return view('home', compact('category', 'newproducts', 'bestseller', 'featured', 'str', 'promos', 'reviews'));
     }
 
     public function aboutUs()
