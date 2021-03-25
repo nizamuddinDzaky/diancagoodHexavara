@@ -39,9 +39,11 @@
                             <input type="hidden" id="input-hidden-total-pembayaran" value="{{ $order->total_cost }}">
                             <h3 class="pl-3 text-gray-2 weight-600"><span id="span-total-pembayaran">Rp {{ number_format($order->total_cost, 2, ',', '.') }}</span><span class="text-orange float-right font-16" style="cursor: pointer;" onclick="copy_to_clipboard('span-total-pembayaran')">Salin</span></h3>
                             <h6 class="pl-3 pb-3">Transfer tepat sampai 2 digit terakhir agar mempercepat proses verifikasi</h6>
+                            @if(strtotime(date('Y-m-d H:i:s')) < strtotime($order->invalid_at))
                             <div class="pl-3">
                                 <a type="button" class="btn btn-outline-orange btn-block font-18" href="#" aria-disabled="true" data-toggle="modal" data-target="#uploadPaymentModal">Upload Bukti Pembayaran</a>
                             </div>
+                            @endif
                         </div>
                     </div>
                 </div>
