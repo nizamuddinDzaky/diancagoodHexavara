@@ -81,7 +81,7 @@
                             <div class="dropdown-menu">
                                 <a href="{{ route('profile') }}" class="dropdown-item">Edit Profil</a>
                                 <div class="dropdown-divider"></div>
-                                <a href="{{ route('transaction.list', 5) }}" class="dropdown-item">Pembelian</a>
+                                <a href="{{ route('transaction.list', 5) }}" class="dropdown-item">Pembelian<span class="badge badge-orange ml-2">2</span></a>
                                 <div class="dropdown-divider"></div>
                                 <a href="{{ route('reviews.list') }}" class="dropdown-item">Ulasan</a>
                                 <div class="dropdown-divider"></div>
@@ -128,55 +128,52 @@
     @yield('content')
 
     <!-- Footer -->
-    <footer class="page-footer font-small py-4 px-5">
+    <footer class="page-footer font-small py-4 px-4">
         <div class="container-fluid text-center text-md-left text-gray-2">
-            <div class="row pl-4">
-                <div class="col-md-3 mt-md-0">
-                    <a class="navbar-brand logo_h pr-3" href="{{ url('/') }}">
-                        <img src="{{ asset('img/logo-1x.png') }}" alt="logo" style="width: 150px">
+            <div class="row">
+                <div class="col-md-3 mt-md-0 justify-content-center">
+                    <a class="navbar-brand logo_h2 m-0" href="{{ url('/') }}">
+                        <img src="{{ asset('img/logo-1x.png') }}" alt="logo">
                     </a>
+                    <hr class="clearfix w-100 d-md-none pb-3">
                 </div>
-                <hr class="clearfix w-100 d-md-none pb-3">
                 <div class="col-md-3 mb-md-0 mb-3">
-                    <h5 class="text-uppercase">CUSTOMER CARE</h5>
+                    <h5 class="text-uppercase weight-600">CUSTOMER CARE</h5>
                     <ul class="list-unstyled">
-                        <li><a href="#!" style="color: black">FAQ</a></li>
-                        <li><a href="#!" style="color: black">How to Order</a></li>
-                        <li><a href="#!" style="color: black">Contact Us</a></li>
+                        <li><a href="#!" class="weight-600 text-orange">FAQ</a></li>
+                        <li><a href="#!" class="weight-600 text-orange">How to Order</a></li>
+                        <li><a href="#!" class="weight-600 text-orange">Contact Us</a></li>
                     </ul>
                 </div>
                 <div class="col-md-3 mb-md-0 mb-3">
-                    <h5 class="text-uppercase">ABOUT US</h5>
+                    <h5 class="text-uppercase weight-600">ABOUT US</h5>
                     <ul class="list-unstyled">
-                        <li><a href="{{ route('about-us') }}" style="color: black">Tentang DiancaGoods</a></li>
-                        <li><a href="{{ route('term-condition') }}" style="color: black">Terms & Condition</a></li>
+                        <li><a href="{{ route('about-us') }}" class="weight-600 text-orange">Tentang DiancaGoods</a></li>
+                        <li><a href="{{ route('term-condition') }}" class="weight-600 text-orange">Terms & Condition</a></li>
                     </ul>
                 </div>
                 <div class="col-md-3 mb-md-0 mb-3">
-                    <h5 class="text-uppercase">DAFTAR UNTUK INFO TERBARU</h5>
+                    <h5 class="text-uppercase weight-600">DAFTAR UNTUK INFO TERBARU</h5>
                     <ul class="list-unstyled">
                         <li>
-                            <div class="input-group lg-form form-2 pl-0 pr-5">
-                                <input class="form-control my-0 py-1 border border-dark" type="text" placeholder="Email"
-                                    aria-label="Email">
-                                <div class="input-group-append bg-black">
-                                    <span class="input-group-text" id="basic-text1"
-                                        style="background: black; color: white">Daftar</span>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input class="form-control border-1" type="text" placeholder="Email" aria-label="Email" name="email">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text bg-3 border-1" id="basic-text1">Daftar</span>
+                                    </div>
                                 </div>
                             </div>
                         </li>
-                        <br>
-                        <li>
-                            <h5 class="text-uppercase">Media Sosial</h5>
-                            <div class="btn-toolbar">
-                                <div class="btn-group">
-                                    <a><img style="width:1.5vw; margin-right:0.5rem;"
+                        <li class="footer-bottom">
+                            <h5 class="text-uppercase weight-600">Media Sosial</h5>
+                            <div class="btn-toolbar footer-social">
+                                <a><img style="width:1.5rem; margin-right:1rem;"
                                             src="{{ asset('img/fb.png') }}"></a>
-                                    <a><img style="width:1.5vw;margin-right:0.5rem;"
+                                <a><img style="width:1.5rem;margin-right:1rem;"
                                             src="{{ asset('img/ig.png') }}"></a>
-                                    <a><img style="width:1.5vw; margin-right:0.5rem;"
+                                <a><img style="width:1.5rem;"
                                             src="{{ asset('img/yt.png') }}"></a>
-                                </div>
                             </div>
                         </li>
                     </ul>

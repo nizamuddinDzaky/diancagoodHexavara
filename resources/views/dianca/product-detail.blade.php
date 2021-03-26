@@ -83,11 +83,11 @@
                     <form method="POST" action="{{ route('cart.add') }}">
                         @csrf
                         <div class="product_variant">
-                            <div class="row mb-2">
-                                <div class="col-lg-4">
+                            <div class="row mb-2 align-items-center">
+                                <div class="col-lg-4 col-2">
                                     <h5>Varian</h5>
                                 </div>                       
-                                <div class="col-lg-8">
+                                <div class="col-lg-8 col-sm-10 col-12">
                                     @forelse($product->variant as $row)
                                     <input type="radio" name="btn_variant" id="var{{ $row->id }}" value="{{ $row->id }}">
                                     <label for="var{{ $row->id }}">{{ $row->name }}</label>
@@ -97,26 +97,19 @@
                                     <input type="hidden" name="product_variant_id" value="" required>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-lg-4">
+                            <div class="row mb-4">
+                                <div class="col-lg-4 col-sm-3 col-12">
                                     <h5>Atur jumlah</h5>
-                                </div>              
-                                <div class="col-lg-1"></div>
-                                <div class="col-lg-6">
-                                    <div class="input-group">
-                                        <span class="product_count">
-                                            <button class="reduced items-count" type="button" onclick="decrement()">
-                                                <span class="material-icons">remove</span>
-                                            </button>
-                                        </span>
-                                        <span class="product_count">
-                                            <input type="text" name="qty" id="qty" maxlength="12" value="1" class="input-text" required>
-                                        </span>
-                                        <span class="product_count">
-                                            <button class="increase items-count" type="button" onclick="increment()">
-                                                <span class="material-icons">add</span>
-                                            </button>
-                                        </span>
+                                </div>
+                                <div class="col-lg-6 col-sm-9 col-12">
+                                    <div class="quantity">
+                                        <button class="plus-btn" type="button" name="button" onclick="increment()">
+                                            <span class="material-icons md-18 p-0">add</span>
+                                        </button>
+                                        <input type="text" name="qty" id="qty" value="1">
+                                        <button class="minus-btn" type="button" name="button" onclick="decrement()">
+                                            <span class="material-icons md-18 p-0">remove</span>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -129,10 +122,16 @@
                                         Dikirim dari <strong>Jakarta Selatan</strong>
                                     </div>
                                     <div class="font-14 my-2">
-                                        Tujuan pengiriman <strong>Sukolilo, Surabaya</strong>
+                                        Tujuan pengiriman
+                                        <select id="city_id" name="city_id" class="form-control bg-light-2">
+                                            <option value="" selected>Pilih</option>
+                                            @foreach($cities as $c)
+                                            <option value="{{ $c->id }}">{{ $c->name }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                     <div class="font-14 my-2">
-                                        Ongkos kirim mulai dari <strong>Rp 18.000</strong>
+                                        Ongkos kirim mulai dari <strong id="delivery_prc">Rp {{ number_format(0, 2, ',', '.') }}</strong>
                                     </div>
                                 </div>
                             </div>
@@ -191,6 +190,8 @@
 @section('js')
 <script>
     $(document).ready(function() {
+        $("#delivery_prc").html((0).toLocaleString("id-ID", {style: "currency", currency: "IDR"}))
+
         @if($product->variant->all() != NULL)
         const firstVariant = {{ $product->variant->first()->id }};
         $("#var"+firstVariant).prop("checked", true).trigger("change");
@@ -263,6 +264,32 @@
         })
     });
 
+    $("#city_id").on('change', function() {
+        $.ajax({
+            "_token": "{{ csrf_token() }}",
+            url: "{{ url('/api/cost') }}",
+            data: {
+                destination: $("#city_id").val(),
+                weight: 1
+            },
+            type: 'POST',
+            enctype: 'multipart/form-data',
+            dataType: 'JSON',
+            success: function(res) {
+                console.log(res);
+                let min_cost = res.data.results[0].cost;
+                $.each(res.data.results, function (key, item) {
+                    if(item.cost < min_cost) {
+                        min_cost = item.cost;
+                    }
+                })
+                $("#delivery_prc").html(min_cost.toLocaleString("id-ID", {style: "currency", currency: "IDR"}));
+            },
+            error: function(xhr, status, err) {
+                console.log(xhr.responseText);
+            }
+        })
+    })
     document.getElementById("quick-add").onclick = function(){
         document.getElementById("quick-add").href = "/cart/quick-add/" + $("input[name=product_variant_id]").val();
         $("#quick-add").click();

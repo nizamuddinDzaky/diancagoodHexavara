@@ -10,6 +10,7 @@ use App\Models\ProductVariant;
 use App\Models\Review;
 use App\Models\Promo;
 use App\Models\PromoDetail;
+use App\Models\City;
 
 class ProductController extends Controller
 {
@@ -122,6 +123,7 @@ class ProductController extends Controller
         $product = Product::where('id', $id)->with('brand', 'variant.reviews', 'images', 'variant.promo_detail', 'category', 'subcategory')->first();
         $reviews = Review::with('product_variant', 'customer', 'order_detail')->where('product_id', $product->id)->orderBy('created_at', 'ASC')->paginate(3);
         $promos = [];
+        $cities = City::get();
         foreach($product->variant as $pv) {
             $details = PromoDetail::with('promo')->where('product_variant_id', $pv->id)->get();
 
@@ -132,7 +134,7 @@ class ProductController extends Controller
             }
         }
         
-        return view('dianca.product-detail', compact('product', 'promos', 'reviews'));
+        return view('dianca.product-detail', compact('product', 'promos', 'reviews', 'cities'));
     }
 
     /**

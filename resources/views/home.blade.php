@@ -7,7 +7,7 @@
 @section('content')
 <section class="feature_product_area mt-4 pt-4">
     <div class="main_box">
-        <div class="">
+        <div class="section_gap">
             <div class="container">
                 <img class="hero" src="{{ asset('img/hero-2x.png') }}">
             </div>
@@ -25,7 +25,7 @@
             </div>
             <div class="row my-2 justify-content-center">
                 @forelse($category as $row)
-                <div class="col">
+                <div class="col-lg-3 col-md-4 col-6">
                     <div class="f_p_item_category">
                         <div class="f_p_img">
                             <a href="{{ url('/category/' . $row->id) }}">
@@ -33,7 +33,7 @@
                             </a>
                         </div>
                         <a href="{{ url('/category/' . $row->id) }}" class="pl-3">
-                            <h4 style="color: black">{{ $row->name }}</h4>
+                            <h4 class="weight-600 text-gray-2">{{ $row->name }}</h4>
                         </a>
                     </div>
                 </div>
@@ -92,7 +92,7 @@
             </div>
             <div class="row my-2">
                 @forelse($newproducts as $row)
-                <div class="col">
+                <div class="col-lg-3 col-md-4 col-6">
                     <div class="f_p_item">
                         <div class="f_p_img">
                             <a href="{{ url('/product/' . $row->id) }}">
@@ -107,7 +107,7 @@
                             </div>
                         </div>
                         <a href="{{ url('/product/' . $row->id) }}">
-                            <h4 class="text-gray-2" class="pl-3">{{ $row->name }}</h4>
+                            <h4 class="text-gray-2 text-truncate-2" class="pl-3">{{ $row->name }}</h4>
                         </a>
                         @if($row->variant->all() != NULL)
                         @if($row->variant->first()->promo_price == 0)
@@ -143,7 +143,7 @@
             <div class="row my-2 py-2 pl-2">
                 <div class="col-lg-6">
                     <div class="main_title">
-                        <h3>Produk Terlaris</h3>
+                        <h2 class="text-lg-left text-center">Produk Terlaris</h2>
                     </div>
                     <div class="row py-2">
                         @forelse($bestseller as $row)
@@ -194,10 +194,11 @@
                         @empty
                         @endforelse
                     </div>
+                    <hr class="clearfix w-100 d-md-none pb-3">
                 </div>
                 <div class="col-lg-6">
                     <div class="main_title">
-                        <h3>Produk Pilihan</h3>
+                        <h2 class="text-lg-left text-center">Produk Pilihan</h2>
                     </div>
                     <div class="row py-2">
                         @forelse($featured as $row)
