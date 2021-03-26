@@ -469,7 +469,7 @@ class OrderController extends Controller
                         $pv = ProductVariant::where('id', $od->product_variant_id)->first();
                         $pv->stock += $od->qty;
                     }
-                    $order->status = 5;
+                    $order->status = 4;
                     $order->save();
 
                     return redirect()->route('transaction.list', ['status' => 4])->with(['success' => 'Pesanan Berhasil Dihapus.']);
