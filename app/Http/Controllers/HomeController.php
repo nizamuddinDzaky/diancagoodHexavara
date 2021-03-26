@@ -115,7 +115,7 @@ class HomeController extends Controller
         }
 
         if ($request->input('param')) {
-            $queryProduct = $queryProduct->where('name', $request->input('param'));
+            $queryProduct = $queryProduct->where('name', 'Like','%'.$request->input('param').'%');
         }
 
         $product = $queryProduct->orderBy('created_at', 'DESC')->get();
