@@ -306,45 +306,6 @@
 @endsection
 @section('js')
 <script>
-function addToCart(var_id) {
-    if ("{{ auth()->guard('customer')->check() }}") {
-        $.ajax({
-            url: '/cart/quick-add/' + var_id,
-            type: 'GET',
-            data: {
-                id: var_id
-            },
-            success: function(res) {
-                Swal.fire({
-                    position: 'top-end',
-                    icon: 'success',
-                    iconColor: '#fff',
-                    title: '<h6 style="color:white">Berhasil masuk keranjang!</h6>',
-                    showConfirmButton: false,
-                    timer: 1500,
-                    toast: true,
-                    background: '#f37020'
-                })
 
-                console.log(res.qty);
-                $("#cart_qty").html(res.qty)
-            }
-        })
-    } else {
-        Swal.fire({
-            position: 'top-end',
-            icon: 'error',
-            title: '<h6 style="color:white">Masuk untuk menambahkan ke keranjang!</h6>',
-            showConfirmButton: false,
-            timer: 1500,
-            toast: true,
-            background: '#d33',
-        }).then(function(e) {
-            e.dismiss;
-        }, function(dismiss) {
-            return false;
-        })
-    }
-}
 </script>
 @endsection
