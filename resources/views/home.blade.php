@@ -7,7 +7,7 @@
 @section('content')
 <section class="feature_product_area mt-4 pt-4">
     <div class="main_box">
-        <div class="section_gap">
+        <div class="mt-4">
             <div class="container">
                 <img class="hero" src="{{ asset('img/hero-2x.png') }}">
                 <hr style="border-color:F2F2F2">
@@ -107,7 +107,7 @@
                             </div>
                         </div>
                         <a href="{{ url('/product/' . $row->id) }}">
-                            <h4 class="text-gray-2 text-truncate-2" class="pl-3">{{ $row->name }}</h4>
+                            <h4 class="text-gray-2" class="pl-3">{{ $row->name }}</h4>
                         </a>
                         @if($row->variant->all() != NULL)
                         @if($row->variant->first()->promo_price == 0)
@@ -149,34 +149,34 @@
                         @forelse($bestseller as $row)
                         <div class="col-lg-12 pb-4">
                             <div class="card bestseller-card">
-                                <div class="row px-4 py-4">
-                                    <div class="col-lg-4">
+                                <div class="row px-3 py-3">
+                                    <div class="col-lg-4 col-4">
                                         <a href="{{ url('/product/' . $row->id) }}">
                                             <img class="product-img-sm"
                                                 src="{{ asset('storage/products/' . $row->images->first()->filename) }}"
                                                 alt="{{ $row->name }}">
                                         </a>
                                     </div>
-                                    <div class="col-lg-7">
-                                        <div class="row ml-2 pt-3">
+                                    <div class="col-lg-7 col-8">
+                                        <div class="row ml-2">
                                             <a href="{{ url('/product/' . $row->id) }}">
                                                 <h4 class="text-gray-2">{{ $row->name }}</h4>
                                             </a>
                                         </div>
-                                        <div class="row ml-2 pt-2">
+                                        <div class="row ml-2 pt-1">
                                             @if($row->variant->all() != NULL)
                                             @if( number_format($row->variant->first()->price) !=
                                             number_format($row->variant->last()->price))
-                                            <h5 class="text-gray-2 weight-700 font-20">Rp
+                                            <h5 class="text-gray-2 weight-700">Rp
                                                 {{ number_format($row->variant->first()->price) }} - Rp
                                                 {{ number_format($row->variant->last()->price) }}</h5>
                                             @else
-                                            <h5 class="text-gray-2 weight-700 font-20">Rp
+                                            <h5 class="text-gray-2 weight-700">Rp
                                                 {{ number_format($row->variant->first()->price) }}</h5>
                                             @endif
                                             @endif
                                         </div>
-                                        <div class="row ml-2 mb-2">
+                                        <div class="row ml-2 pt-1 mb-2">
                                             @for($i = 0; $i < 5; $i++) @if ($i < $row->rate)
                                                 <span class="fa fa-star checked"></span>
                                                 @else
@@ -184,7 +184,7 @@
                                                 @endif
                                                 @endfor
                                         </div>
-                                        <div class="row ml-2">
+                                        <div class="row pt-1 ml-2">
                                             <p>722 Terjual</p>
                                         </div>
                                     </div>
@@ -204,35 +204,35 @@
                         @forelse($featured as $row)
                         <div class="col-lg-12 pb-4">
                             <div class="card bestseller-card">
-                                <div class="row px-4 py-4">
-                                    <div class="col-lg-4">
+                                <div class="row px-3 py-3">
+                                    <div class="col-lg-4 col-4">
                                         <a href="{{ url('/product/' . $row->id) }}">
                                             <img class="product-img-sm"
                                                 src="{{ asset('storage/products/' . $row->images->first()->filename) }}"
                                                 alt="{{ $row->name }}">
                                         </a>
                                     </div>
-                                    <div class="col-lg-7">
-                                        <div class="row ml-2 pt-3">
+                                    <div class="col-lg-7 col-8">
+                                        <div class="row ml-2">
                                             <a href="{{ url('/product/' . $row->id) }}">
                                                 <h4 style="color: black">{{ $row->name }}</h4>
                                             </a>
                                         </div>
-                                        <div class="row ml-2 pt-2">
+                                        <div class="row ml-2 pt-1">
                                         @if($row->variant->all() != NULL)
                                             @if( number_format($row->variant->first()->price) !=
                                             number_format($row->variant->last()->price)
                                             )
-                                            <h5 class="text-gray-2 weight-700 font-20">Rp
+                                            <h5 class="text-gray-2 weight-700">Rp
                                                 {{ number_format($row->variant->first()->price) }} - Rp
                                                 {{ number_format($row->variant->last()->price) }}</h5>
                                             @else
-                                            <h5 class="text-gray-2 weight-700 font-20">Rp
+                                            <h5 class="text-gray-2 weight-700">Rp
                                                 {{ number_format($row->variant->first()->price) }}</h5>
                                             @endif
                                         @endif
                                         </div>
-                                        <div class="row ml-2 mb-2">
+                                        <div class="row ml-2 pt-1 mb-2">
                                             @for($i = 0; $i < 5; $i++) @if ($i < $row->rate)
                                                 <span class="fa fa-star checked"></span>
                                                 @else
@@ -240,7 +240,7 @@
                                                 @endif
                                                 @endfor
                                         </div>
-                                        <div class="row ml-2">
+                                        <div class="row pt-1 ml-2">
                                             <p>378 Terjual</p>
                                         </div>
                                     </div>
@@ -263,26 +263,26 @@
                     <h2>Testimoni</h2>
                 </div>
             </div>
-            <div class="row my-2" style="display: flex;overflow-x: auto;overflow-y: hidden;max-height:350px">
+            <div class="row my-2" style="display: flex;overflow-x: auto;overflow-y: hidden;max-height:300px">
             @forelse($reviews as $row)
                 <div class="col">
-                    <div class="f_p_item" style="background: #FFFFFF; height:350px">
+                    <div class="f_p_item_testimoni" style="background: #FFFFFF;">
                         <div class="row">
-                            <div class="col-lg-4 md-4 sm-4 mb-2 pl-4">
+                            <div class="col-lg-4 col-4 mb-2 pl-4">
                                 <a href="{{ url('/product/' . $row->product->id) }}">
-                                    <img class="home-product-center-cropped pt-2"
+                                    <img class="img-testimoni pt-2"
                                         src="{{ asset('storage/products/' . $row->product->images->first()->filename) }}"
                                         alt="{{ $row->name }}" style="height:75px; width:75px">
                                 </a>
                             </div>
-                            <div class="col-lg-8 md-8 sm-8 mt-2 pl-4 pr-4">
+                            <div class="col-lg-8 col-8 mt-2 pl-4 pr-4">
                                 <a href="{{ url('/product/' . $row->product->id) }}">
                                     <p class="text-gray-2 weight-600" style="text-align:left; vertical-align: middle">{{ $row->product->name }}</p>
                                 </a>
                             </div>
                         </div>
                         <hr style="border-color:F2F2F2">
-                        <div class="row ml-3 mb-2">
+                        <div class="row ml-3 mb-1">
                             <h6 class="float-left">
                                 @for($i = 0; $i < 5; $i++) 
                                 @if ($i < $row->rate)
