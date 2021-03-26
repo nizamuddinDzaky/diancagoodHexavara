@@ -17,6 +17,7 @@ use App\Models\OrderDetail;
 use App\Models\Cart;
 use App\Models\CartDetail;
 use App\Models\Address;
+use App\Models\PromoDetail;
 use Illuminate\Support\Str;
 use GuzzleHttp\Client;
 use Carbon\Carbon;
@@ -319,6 +320,7 @@ class OrderController extends Controller
 
     public function checkoutProcess(Request $request)
     {
+        // echo "asd";die;
         $this->validate($request, [
             'payment_method' => 'required',
             'bank' => 'required',
@@ -352,11 +354,30 @@ class OrderController extends Controller
             ]);
 
             $order_created = Carbon::create($order->created_at->toDateTimeString());
-            $order->invalid_at = $order_created->addMinutes(90)->toDateTimeString();
+            
+            $limit_paymentduration = 90;
+            $is_set_promo = false;
+            $new_limit_paymentduration = 999999999999;
+            foreach($cart_arr as $cd){
+                $cart_detail = CartDetail::with('variant')->where('id', $cd)->first();
+                $promo = PromoDetail::with('promo')->where('product_variant_id', $cart_detail->product_variant_id)->first();
+                if(!$promo){
+                    continue;
+                }
+                if($promo->promo->payment_duration < $new_limit_paymentduration){
+                    $new_limit_paymentduration = $promo->promo->payment_duration;
+                    $is_set_promo = true;
+                }
+            }
+            if($is_set_promo){
+                $limit_paymentduration = $new_limit_paymentduration;
+            }
+            
+            $order->invalid_at = $order_created->addMinutes($limit_paymentduration)->toDateTimeString();
             $order->save();
 
+            // print_r($order_created->addMinutes($promo->promo->payment_duration)->toDateTimeString());die;
             foreach ($cart_arr as $cd) {
-                $cart_detail = CartDetail::where('id', $cd)->first();
 
                 $variant = ProductVariant::where('id', $cart_detail->product_variant_id)->first();
 
