@@ -39,14 +39,27 @@ class DashboardController extends Controller
     public function showOrder($id)
     {
         if(Auth::guard('web')->check()) {
-            $order = Order::with('details.variant', 'payment', 'address.district.city.province')->where('id', $id)->first();
+            $paid = 0;
+            if($status == 'all') {
+                $orders = Order::orderBy('created_at', 'DESC')->paginate(7);
+            } else if ($status == 'paid' || $status == 'all-paid') {
+                $orders = Order::where('status', 1)->orWhere('status', 2)->orderBy('created_at', 'DESC')->paginate(7);
+                $paid = 1;
+            } else {
+                $orders = Order::where('status', $status)->orderBy('created_at', 'DESC')->paginate(7);
+            }
+            
             $all = Order::count();
             $unpaid = Order::where('status', 0)->count();
-            $paid = Order::where('status', 1)->where('status', 2)->count();
+            $paid = Order::where('status', 1)->orWhere('status', 2)->count();
             $dikirim = Order::where('status', 3)->count();
             $selesai = Order::where('status', 4)->count();
             $batal = Order::where('status', 5)->count();
-            return view('admin.order-show', compact('all', 'order', 'unpaid', 'paid', 'dikirim', 'selesai', 'batal'));
+            $all_paid = Order::where('status', 1)->orWhere('status', 2)->count();
+            $unprocessed = Order::where('status', 1)->count();
+            $processed = Order::where('status', 2)->count();
+
+            return view('admin.order-show', compact('all', 'orders', 'unpaid', 'paid', 'dikirim', 'selesai', 'batal', 'all_paid', 'unprocessed', 'processed'));
         }
         return redirect(route('administrator.login'));
     }
@@ -349,20 +362,31 @@ class DashboardController extends Controller
     public function showTracking($status)
     {
         if(Auth::guard('web')->check()) {
-            if($status == 'all') {
+            $paid = 0;
+            if($status == 'all-orders') {
                 $orders = Order::orderBy('created_at', 'DESC')->paginate(7);
-            } else if ($status == 1) {
+                $paid = 0;
+            } else if ($status == 'paid' || $status == 'all-paid') {
                 $orders = Order::where('status', 1)->orWhere('status', 2)->orderBy('created_at', 'DESC')->paginate(7);
+                $paid = 1;
+            } else if ($status == 1 || $status == 2) {
+                $orders = Order::where('status', $status)->orderBy('created_at', 'DESC')->paginate(7);
+                $paid = 1;
             } else {
                 $orders = Order::where('status', $status)->orderBy('created_at', 'DESC')->paginate(7);
+                $paid = 0;
             }
+
             $all = Order::count();
             $unpaid = Order::where('status', 0)->count();
-            $paid = Order::where('status', 1)->orWhere('status', 2)->count();
             $dikirim = Order::where('status', 3)->count();
             $selesai = Order::where('status', 4)->count();
             $batal = Order::where('status', 5)->count();
-            return view('admin.tracking', compact('all', 'orders', 'unpaid', 'paid', 'dikirim', 'selesai', 'batal'));
+            $all_paid = Order::where('status', 1)->orWhere('status', 2)->count();
+            $unprocessed = Order::where('status', 1)->count();
+            $processed = Order::where('status', 2)->count();
+
+            return view('admin.tracking', compact('all', 'orders', 'unpaid', 'paid', 'dikirim', 'selesai', 'batal', 'all_paid', 'unprocessed', 'processed'));
         }
         return redirect(route('administrator.login'));
     }

@@ -22,7 +22,7 @@
                                 id="pending-orders">Belum Bayar <span class="badge badge-orange ml-2">{{ $unpaid }}</span></a>
                             <a href="{{ route('administrator.tracking', 1) }}" type="button" class="btn btn-filter"
                                 id="processed-orders">Perlu Dikirim <span class="badge badge-orange ml-2">{{ $paid }}</span></a>
-                            <a href="{{ route('administrator.tracking', 3) }}" type="button" class="btn btn-filter"
+                            <a href="{{ route('administrator.tracking', 'paid') }}" type="button" class="btn btn-filter"
                                 id="sent-orders">Dikirim <span class="badge badge-orange ml-2">{{ $dikirim }}</span></a>
                             <a href="{{ route('administrator.tracking', 4) }}" type="button" class="btn btn-filter"
                                 id="finished-orders">Selesai <span class="badge badge-orange ml-2">{{ $selesai }}</span></a>
