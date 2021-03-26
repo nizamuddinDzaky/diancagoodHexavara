@@ -16,21 +16,18 @@
                 <div class="row px-4">
                     <div class="col-lg-12 col-xs-12 text-center">
                         <div class="btn-group order-group py-4">
+                            <a href="{{ route('administrator.tracking', 'all') }}" type="button" class="btn btn-filter"
+                                id="all-orders">Semua <span class="badge badge-orange ml-2">{{ $all }}</span></a>
                             <a href="{{ route('administrator.tracking', 0) }}" type="button" class="btn btn-filter"
-                                id="pending-orders">Menunggu Pembayaran <span
-                                    class="badge badge-orange ml-2">{{ $menunggu }}</span></a>
+                                id="pending-orders">Belum Bayar <span class="badge badge-orange ml-2">{{ $unpaid }}</span></a>
                             <a href="{{ route('administrator.tracking', 1) }}" type="button" class="btn btn-filter"
-                                id="processing-orders">Pesanan Diproses <span
-                                    class="badge badge-orange ml-2">{{ $diproses }}</span></a>
-                            <a href="{{ route('administrator.tracking', 2) }}" type="button" class="btn btn-filter"
-                                id="sent-orders">Pesanan Dikirim <span
-                                    class="badge badge-orange ml-2">{{ $dikirim }}</span></a>
+                                id="processed-orders">Perlu Dikirim <span class="badge badge-orange ml-2">{{ $paid }}</span></a>
                             <a href="{{ route('administrator.tracking', 3) }}" type="button" class="btn btn-filter"
-                                id="finished-orders">Pesanan Selesai <span
-                                    class="badge badge-orange ml-2">{{ $selesai }}</span></a>
+                                id="sent-orders">Dikirim <span class="badge badge-orange ml-2">{{ $dikirim }}</span></a>
                             <a href="{{ route('administrator.tracking', 4) }}" type="button" class="btn btn-filter"
-                                id="canceled-orders">Pesanan Dibatalkan <span
-                                    class="badge badge-orange ml-2">{{ $batal }}</span></a>
+                                id="finished-orders">Selesai <span class="badge badge-orange ml-2">{{ $selesai }}</span></a>
+                            <a href="{{ route('administrator.tracking', 5) }}" type="button" class="btn btn-filter"
+                                id="canceled-orders">Dibatalkan <span class="badge badge-orange ml-2">{{ $batal }}</span></a>
                         </div>
                     </div>
                 </div>
@@ -59,12 +56,14 @@
                                             @if($order->status == 0)
                                             Menunggu Pembayaran
                                             @elseif($order->status == 1)
-                                            Pesanan Diproses
+                                            Belum Diproses
                                             @elseif($order->status == 2)
-                                            Pesanan Dikirim
+                                            Telah Diproses
                                             @elseif($order->status == 3)
-                                            Pesanan Selesai
+                                            Pesanan Dikirim
                                             @elseif($order->status == 4)
+                                            Pesanan Selesai
+                                            @elseif($order->status == 5)
                                             Pesanan Dibatalkan
                                             @endif
                                         </strong>
@@ -438,15 +437,15 @@
     });
 
     $(document).ready(function() {
-        @if($order-> status == 0)
+        @if($order->status == 0)
         $("#pending-orders").addClass('filter-active');
-        @elseif($order-> status == 1)
-        $("#processing-orders").addClass('filter-active');
-        @elseif($order-> status == 2)
+        @elseif($order->status == 1)
+        $("#processed-orders").addClass('filter-active');
+        @elseif($order->status == 3)
         $("#sent-orders").addClass('filter-active');
-        @elseif($order-> status == 3)
+        @elseif($order->status == 4)
         $("#finished-orders").addClass('filter-active');
-        @elseif($order-> status == 4)
+        @elseif($order->status == 5)
         $("#canceled-orders").addClass('filter-active');
         @endif
     });

@@ -81,7 +81,7 @@
                             <div class="dropdown-menu">
                                 <a href="{{ route('profile') }}" class="dropdown-item">Edit Profil</a>
                                 <div class="dropdown-divider"></div>
-                                <a href="{{ route('transaction.list', 5) }}" class="dropdown-item">Pembelian<span class="badge badge-orange ml-2">2</span></a>
+                                <a href="{{ route('transaction.list', 5) }}" class="dropdown-item">Pembelian<span class="badge badge-orange ml-2">{{ $order_pending }}</span></a>
                                 <div class="dropdown-divider"></div>
                                 <a href="{{ route('reviews.list') }}" class="dropdown-item">Ulasan</a>
                                 <div class="dropdown-divider"></div>

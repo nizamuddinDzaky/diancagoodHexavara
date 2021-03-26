@@ -10,8 +10,8 @@
         <div class="section_gap">
             <div class="container">
                 <img class="hero" src="{{ asset('img/hero-2x.png') }}">
+                <hr style="border-color:F2F2F2">
             </div>
-            <hr style="border-color:F2F2F2">
         </div>
     </div>
 </section>
@@ -56,7 +56,7 @@
             </div>
             <div class="row my-2">
                 @forelse($p->details as $pd)
-                <div class="col-lg-3">
+                <div class="col">
                     <div class="f_p_item">
                         <div class="f_p_img">
                             <a href="{{ url('/product/'. $pd->variant->product->id) }}">
@@ -92,7 +92,7 @@
             </div>
             <div class="row my-2">
                 @forelse($newproducts as $row)
-                <div class="col-lg-3 col-md-4 col-6">
+                <div class="col">
                     <div class="f_p_item">
                         <div class="f_p_img">
                             <a href="{{ url('/product/' . $row->id) }}">

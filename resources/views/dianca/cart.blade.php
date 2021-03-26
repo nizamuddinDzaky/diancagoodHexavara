@@ -37,7 +37,7 @@
                                 <div class="form-check text-gray-2 my-4 card-item-cart">
                                     <input class="form-check-input position-static align-top primary-checkbox cb-item-cart"
                                         type="checkbox" name="cd[]" id="check{{ $cd->id }}" value="{{ $cd->id }}" data-id="{{$cd->id}}" 
-                                        data-price="{{ ($cd->variant->price) }}" data-promo="{{ ($cd->promo) }}">
+                                        data-price="{{ ($cd->variant->price) }}" data-promo="{{ $cd->promo }}">
                                     <div class="card cart-card shadow-1 w-90">
                                         <div class="card-body">
                                             <div class="row">
@@ -213,10 +213,10 @@
                 total_qty += parseInt($(input).val());
                 let sub_total = parseInt($(this).data('price')) * parseInt($(input).val());
                 total_cost += sub_total;
-                console.log($(this));
-                promo += parseInt($(this).data('promo'))
+                promo += parseInt($(this).attr('data-promo'))
             }
         });
+        console.log("prmoo" + promo);
 
         if(count_checked > 0 ){
             if (count_checked == total_cb_item) {

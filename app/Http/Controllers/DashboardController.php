@@ -40,13 +40,13 @@ class DashboardController extends Controller
     {
         if(Auth::guard('web')->check()) {
             $order = Order::with('details.variant', 'payment', 'address.district.city.province')->where('id', $id)->first();
-
-            $menunggu = Order::where('status', 0)->count();
-            $diproses = Order::where('status', 1)->count();
-            $dikirim = Order::where('status', 2)->count();
-            $selesai = Order::where('status', 3)->count();
-            $batal = Order::where('status', 4)->count();
-            return view('admin.order-show', compact('order', 'menunggu', 'diproses', 'dikirim', 'selesai', 'batal'));
+            $all = Order::count();
+            $unpaid = Order::where('status', 0)->count();
+            $paid = Order::where('status', 1)->where('status', 2)->count();
+            $dikirim = Order::where('status', 3)->count();
+            $selesai = Order::where('status', 4)->count();
+            $batal = Order::where('status', 5)->count();
+            return view('admin.order-show', compact('all', 'order', 'unpaid', 'paid', 'dikirim', 'selesai', 'batal'));
         }
         return redirect(route('administrator.login'));
     }
@@ -64,7 +64,7 @@ class DashboardController extends Controller
             $order->update([
                 'tracking_number' => $request->tracking_number,
                 'shipping_date' => Carbon::createFromFormat('m/d/Y', $request->shipping_date),
-                'status' => 2
+                'status' => 3
             ]);
             
             return redirect()->back()->with(['success' => 'Data Pengiriman Disimpan!']);
@@ -80,7 +80,7 @@ class DashboardController extends Controller
             ]);
 
             $order = Order::where('id', $request->order_id)->first();
-            $order->update(['status' => 1]);
+            $order->update(['status' => 2]);
 
             $payment = Payment::where('order_id', $order->id)->first();
             $payment->update(['status' => 2]);
@@ -349,13 +349,20 @@ class DashboardController extends Controller
     public function showTracking($status)
     {
         if(Auth::guard('web')->check()) {
-            $orders = Order::where('status', $status)->orderBy('created_at', 'DESC')->paginate(7);
-            $menunggu = Order::where('status', 0)->count();
-            $diproses = Order::where('status', 1)->count();
-            $dikirim = Order::where('status', 2)->count();
-            $selesai = Order::where('status', 3)->count();
-            $batal = Order::where('status', 4)->count();
-            return view('admin.tracking', compact('orders', 'menunggu', 'diproses', 'dikirim', 'selesai', 'batal'));
+            if($status == 'all') {
+                $orders = Order::orderBy('created_at', 'DESC')->paginate(7);
+            } else if ($status == 1) {
+                $orders = Order::where('status', 1)->orWhere('status', 2)->orderBy('created_at', 'DESC')->paginate(7);
+            } else {
+                $orders = Order::where('status', $status)->orderBy('created_at', 'DESC')->paginate(7);
+            }
+            $all = Order::count();
+            $unpaid = Order::where('status', 0)->count();
+            $paid = Order::where('status', 1)->orWhere('status', 2)->count();
+            $dikirim = Order::where('status', 3)->count();
+            $selesai = Order::where('status', 4)->count();
+            $batal = Order::where('status', 5)->count();
+            return view('admin.tracking', compact('all', 'orders', 'unpaid', 'paid', 'dikirim', 'selesai', 'batal'));
         }
         return redirect(route('administrator.login'));
     }

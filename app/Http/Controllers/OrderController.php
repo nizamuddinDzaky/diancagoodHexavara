@@ -411,6 +411,7 @@ class OrderController extends Controller
         if(Auth::guard('customer')->check()) {
             $this->validate($request, [
                 'invoice' => 'required|exists:orders,invoice',
+                'order_id' => 'required|exists:orders,id',
                 'transfer_to' => 'required|string',
                 'transfer_from_bank' => 'required|string',
                 'transfer_from_account' => 'required|string',
@@ -421,7 +422,7 @@ class OrderController extends Controller
             ]);
 
             try {
-                $order = Order::where('invoice', $request->invoice)->first();
+                $order = Order::where('id', $request->order_id)->first();
                 $payment = Payment::where('order_id', $order->id)->first();
 
                 $order_invalid = Carbon::createFromFormat('Y-m-d H:i:s', $order->invalid_at);
@@ -437,6 +438,9 @@ class OrderController extends Controller
                         'status' => 1,
                     ]);
                     $payment->save();
+
+                    $order->update(['status' => 1]);
+                    $order->save();
 
                     if($request->hasFile('proof')) {
                         $file = $request->file('proof');
@@ -465,7 +469,7 @@ class OrderController extends Controller
                         $pv = ProductVariant::where('id', $od->product_variant_id)->first();
                         $pv->stock += $od->qty;
                     }
-                    $order->status = 4;
+                    $order->status = 5;
                     $order->save();
 
                     return redirect()->route('transaction.list', ['status' => 4])->with(['success' => 'Pesanan Berhasil Dihapus.']);
@@ -490,7 +494,6 @@ class OrderController extends Controller
                 return json_encode($response);
             }
         }
-
         
         $cart = Cart::with('details.variant.product.images')->where('customer_id', Auth::guard('customer')->user()->id)->first();
         
@@ -513,13 +516,15 @@ class OrderController extends Controller
                 'cart_id' => $cart->id,
                 'product_variant_id' => $variant->id,
                 'qty' => 1,
-                'price' => $variant->price * 1
+                'price' => $variant->price * 1,
+                'promo' => $variant->promo_price * 1
             ]);
             $cart->total_cost += $cart_detail->price;
         } else {
             $cart_variant = CartDetail::where('cart_id', $cart->id)->where('product_variant_id', $variant->id)->first();
             $cart_variant->qty += 1;
             $cart_variant->price += $variant->price * 1;
+            $cart_variant->promo += $variant->promo_price * 1;
             $cart_variant->save();
             $cart->total_cost = CartDetail::where('cart_id', $cart->id)->sum('price');
         }

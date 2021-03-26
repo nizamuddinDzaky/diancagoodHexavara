@@ -96,6 +96,7 @@
                             <div class="form-group px-2">
                                 <label style="color: #4F4F4F">Nomor Pemesanan</label><br>
                                 <input type="text" name="invoice" id="invoice" class="form-control disabled-field" value="{{ $order->invoice }}" readonly>
+                                <input type="hidden" name="order_id" id="order_id" class="form-control disabled-field" value="{{ $order->id }}" readonly>
                             </div>
                             <div class="form-group px-2 pb-1">
                                 <label style="color: #4F4F4F">Bank Tujuan</label>
