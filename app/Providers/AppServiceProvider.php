@@ -26,5 +26,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         View::composer('*', 'App\Http\View\CategoryComposer');
+        View::composer('*', 'App\Http\View\OrderPendingComposer');
     }
 }

@@ -11,16 +11,18 @@
             <div class="row px-4">
                 <div class="col-lg-12 col-xs-12 text-center">
                     <div class="btn-group order-group py-4">
+                        <a href="{{ route('administrator.tracking', 'all') }}" type="button" class="btn btn-filter"
+                            id="all-orders">Semua <span class="badge badge-orange ml-2">{{ $all }}</span></a>
                         <a href="{{ route('administrator.tracking', 0) }}" type="button" class="btn btn-filter"
-                            id="pending-orders">Menunggu Pembayaran <span class="badge badge-orange ml-2">{{ $menunggu }}</span></a>
+                            id="pending-orders">Belum Bayar <span class="badge badge-orange ml-2">{{ $unpaid }}</span></a>
                         <a href="{{ route('administrator.tracking', 1) }}" type="button" class="btn btn-filter"
-                            id="processing-orders">Pesanan Diproses <span class="badge badge-orange ml-2">{{ $diproses }}</span></a>
-                        <a href="{{ route('administrator.tracking', 2) }}" type="button" class="btn btn-filter"
-                            id="sent-orders">Pesanan Dikirim <span class="badge badge-orange ml-2">{{ $dikirim }}</span></a>
+                            id="processed-orders">Perlu Dikirim <span class="badge badge-orange ml-2">{{ $paid }}</span></a>
                         <a href="{{ route('administrator.tracking', 3) }}" type="button" class="btn btn-filter"
-                            id="finished-orders">Pesanan Selesai <span class="badge badge-orange ml-2">{{ $selesai }}</span></a>
+                            id="sent-orders">Dikirim <span class="badge badge-orange ml-2">{{ $dikirim }}</span></a>
                         <a href="{{ route('administrator.tracking', 4) }}" type="button" class="btn btn-filter"
-                            id="canceled-orders">Pesanan Dibatalkan <span class="badge badge-orange ml-2">{{ $batal }}</span></a>
+                            id="finished-orders">Selesai <span class="badge badge-orange ml-2">{{ $selesai }}</span></a>
+                        <a href="{{ route('administrator.tracking', 5) }}" type="button" class="btn btn-filter"
+                            id="canceled-orders">Dibatalkan <span class="badge badge-orange ml-2">{{ $batal }}</span></a>
                     </div>
                 </div>
             </div>
@@ -82,15 +84,17 @@
 @section('js')
 <script>
 $(document).ready(function() {
-    if (window.location.href.indexOf("/0") > -1) {
+    if (window.location.href.indexOf("/all") > -1) {
+        $("#all-orders").addClass('filter-active');
+    } else if (window.location.href.indexOf("/0") > -1) {
         $("#pending-orders").addClass('filter-active');
     } else if (window.location.href.indexOf("/1") > -1) {
-        $("#processing-orders").addClass('filter-active');
-    } else if (window.location.href.indexOf("/2") > -1) {
-        $("#sent-orders").addClass('filter-active');
+        $("#processed-orders").addClass('filter-active');
     } else if (window.location.href.indexOf("/3") > -1) {
-        $("#finished-orders").addClass('filter-active');
+        $("#sent-orders").addClass('filter-active');
     } else if (window.location.href.indexOf("/4") > -1) {
+        $("#finished-orders").addClass('filter-active');
+    } else if (window.location.href.indexOf("/5") > -1) {
         $("#canceled-orders").addClass('filter-active');
     }
 });
